@@ -1,6 +1,6 @@
 <?php namespace Cartalyst\Workshop;
 /**
- * Part of the Themes package.
+ * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Themes
+ * @package    Workshop
  * @version    2.0.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)

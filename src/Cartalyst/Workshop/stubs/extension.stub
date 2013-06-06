@@ -259,7 +259,7 @@ return array(
 	{
 		return array(
 
-			'{{lower_vendor}}/{{lower_name}}::admin.{{name}}Controller@index'  => Lang::get('{{lower_vendor}}/{{lower_name}}::permissions.index'),
+			'{{lower_vendor}}/{{lower_name}}::admin.{{name}}Controller@index' => Lang::get('{{lower_vendor}}/{{lower_name}}::permissions.index'),
 
 		);
 	},
