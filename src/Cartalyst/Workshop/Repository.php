@@ -32,7 +32,7 @@ class Repository extends Package {
 
 	public function formatUriAttribute($uri)
 	{
-		if ( ! is_string($uri) and ! is_numeric($uri))
+		if (( ! is_string($uri) and ! is_numeric($uri)) or ! $uri)
 		{
 			return 'null';
 		}
