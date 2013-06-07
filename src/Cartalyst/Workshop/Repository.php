@@ -28,30 +28,72 @@ class Repository extends Package {
 
 	public $description = '';
 
-	/**
-	 * Create a new package instance.
-	 *
-	 * @param  string  $vendor
-	 * @param  string  $name
-	 * @param  string  $author
-	 * @param  string  $email
-	 * @return void
-	 */
-	public function __construct($vendor, $name, $author, $email, $uri, $version = null, $description = null)
+	public $require = array();
+
+	public function formatUriAttribute($uri)
 	{
-		parent::__construct($vendor, $name, $author, $email);
-
-		$this->uri = $uri;
-
-		if (isset($version))
+		if ( ! is_string($uri) and ! is_numeric($uri))
 		{
-			$this->version = $version;
+			return 'null';
 		}
 
-		if (isset($description))
+		return $this->exportVar($uri);
+	}
+
+	public function formatRequireAttribute(array $require)
+	{
+		if (empty($require))
 		{
-			$this->description = $description;
+			return 'array()';
 		}
+
+		return $this->exportVar($require, 1);
+	}
+
+	/**
+	 * Formats attributes for use within stubs.
+	 */
+	public function getFormattedAttributes()
+	{
+		$me = $this;
+		$attributes = get_object_vars($me);
+
+		array_walk($attributes, function(&$value, $key) use ($me)
+		{
+			if (method_exists($me, $method = 'format'.studly_case($key).'Attribute'))
+			{
+				$value = $me->$method($value);
+			}
+		});
+
+		return $attributes;
+	}
+
+	/**
+	 * Takes var export and tidies it up.
+	 */
+	protected function exportVar($var, $indentNewLines = 0)
+	{
+		$replacements = array(
+			'/[ ]{2}/' => "\t",
+			'/array \(/' => 'array(',
+			'/[0-9]+ =\> /' => '',
+		);
+
+		$exported = var_export($var, true);
+		$exported = preg_replace(array_keys($replacements), array_values($replacements), $exported);
+
+		if ($indentNewLines > 0)
+		{
+			$exported = explode("\n", $exported);
+			array_walk($exported, function(&$line, $key) use ($indentNewLines)
+			{
+				if ($key > 0) $line = str_repeat("\t", $indentNewLines).$line;
+			});
+			$exported = implode("\n", $exported);
+		}
+
+		return $exported;
 	}
 
 }

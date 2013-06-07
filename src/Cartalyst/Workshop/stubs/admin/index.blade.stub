@@ -6,6 +6,10 @@
 @parent
 @stop
 
+{{-- Queue Assets --}}
+{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}-{{lower_name}}::css/style.css', 'bootstrap') }}
+{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}-{{lower_name}}::js/script.js', 'jquery') }}
+
 {{-- Partial Assets --}}
 @section('assets')
 @parent
@@ -28,7 +32,7 @@ jQuery(document).ready(function($) {
 
 {{-- Page content --}}
 @section('content')
-<section id="groups">
+<section id="{{lower_vendor}}-{{lower_name}}">
 
 	<header class="clearfix">
 		<h1>{{ trans('{{lower_vendor}}/{{lower_name}}::general.title') }}</h1>

@@ -1,4 +1,4 @@
-<?php
+<?php namespace {{vendor}}\{{name}}\Widgets;
 /**
  * Part of the Platform application.
  *
@@ -18,8 +18,13 @@
  * @link       http://cartalyst.com
  */
 
-return array(
+use Platform\Routing\Controllers\BaseController;
 
-	'index'  => '{{name}} Administration',
+class Main extends BaseController {
 
-);
+	public function show()
+	{
+		return 'Hello world from ['.__FILE__.']';
+	}
+
+}
