@@ -23,6 +23,16 @@ use Illuminate\Support\ServiceProvider;
 class WorkshopServiceProvider extends ServiceProvider {
 
 	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->package('cartalyst/workshop', 'cartalyst/workshop');
+	}
+
+	/**
 	 * Register the service provider.
 	 *
 	 * @return void
