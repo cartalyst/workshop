@@ -30,24 +30,30 @@ class Repository extends Package {
 
 	public $require = array();
 
-	public function formatUriAttribute($uri)
+	public function mutateUriAttribute(&$attributes, $uri)
 	{
 		if (( ! is_string($uri) and ! is_numeric($uri)) or ! $uri)
 		{
-			return 'null';
+			return $attributes['uriExported'] = 'null';
 		}
-
-		return $this->exportVar($uri);
+		else
+		{
+			$attributes['uriExported'] = $this->exportVar($uri);
+		}
 	}
 
-	public function formatRequireAttribute(array $require)
+	public function mutateRequireAttribute(&$attributes, array $require)
 	{
+		unset($attributes['require']);
+
 		if (empty($require))
 		{
-			return 'array()';
+			$attributes['requireExported'] = 'array()';
 		}
-
-		return $this->exportVar($require, 1);
+		else
+		{
+			$attributes['requireExported'] = $this->exportVar($require, 1);
+		}
 	}
 
 	/**
@@ -58,11 +64,11 @@ class Repository extends Package {
 		$me = $this;
 		$attributes = get_object_vars($me);
 
-		array_walk($attributes, function(&$value, $key) use ($me)
+		array_walk($attributes, function($value, $key) use ($me, &$attributes)
 		{
-			if (method_exists($me, $method = 'format'.studly_case($key).'Attribute'))
+			if (method_exists($me, $method = 'mutate'.studly_case($key).'Attribute'))
 			{
-				$value = $me->$method($value);
+				$me->$method($attributes, $value);
 			}
 		});
 

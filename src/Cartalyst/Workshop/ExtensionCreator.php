@@ -80,8 +80,6 @@ class ExtensionCreator extends PackageCreator {
 	 */
 	public function create(Package $repository, $path, $components = true)
 	{
-		if ($this->files->isDirectory($path)) $this->files->deleteDirectory($path);
-
 		$this->checkRepository($repository);
 
 		if ($components === true)
@@ -115,10 +113,9 @@ class ExtensionCreator extends PackageCreator {
 			// $this->{'create'.studly_case($component).'Component'}($repository, $path);
 		}
 
-		var_dump($this);
-
 		$this->writeComposerFile($repository, $directory, false);
-		$this->writeRootComposerFileAddons($repository, $directory);
+		$this->writeRootWorkbenchComposerFileAddons($repository, $directory);
+		$this->writeRootExtensionsComposerFileAddons($repository, $directory);
 
 		return $directory;
 	}
@@ -421,17 +418,37 @@ class ExtensionCreator extends PackageCreator {
 	 * @param  string  $directory
 	 * @return void
 	 */
-	protected function writeRootComposerFileAddons(Package $repository, $directory)
+	protected function writeRootWorkbenchComposerFileAddons(Package $repository, $directory)
 	{
 		$this->checkRepository($repository);
 
-		$stub = $this->getRootComposerStub();
+		$stub = $this->getRootWorkbenchComposerStub();
 
 		$stub = $this->formatPackageStub($repository, $stub);
 
 		$stub = $this->injectAutoloads($stub, 'workbench/'.$repository->lowerVendor.'/'.$repository->lowerName);
 
-		$this->files->put($directory.'/root.composer.json', $stub);
+		$this->files->put($directory.'/root.workbench.composer.json', $stub);
+	}
+
+	/**
+	 * Write the Composer.json stub file.
+	 *
+	 * @param  \Illuminate\Workbench\Package  $package
+	 * @param  string  $directory
+	 * @return void
+	 */
+	protected function writeRootExtensionsComposerFileAddons(Package $repository, $directory)
+	{
+		$this->checkRepository($repository);
+
+		$stub = $this->getRootExtensionsComposerStub();
+
+		$stub = $this->formatPackageStub($repository, $stub);
+
+		$stub = $this->injectAutoloads($stub, 'extensions/'.$repository->lowerVendor.'/'.$repository->lowerName);
+
+		$this->files->put($directory.'/root.extensions.composer.json', $stub);
 	}
 
 	protected function injectAutoloads($stub, $prefix = null)
@@ -450,9 +467,19 @@ class ExtensionCreator extends PackageCreator {
 	 *
 	 * @return string
 	 */
-	protected function getRootComposerStub()
+	protected function getRootWorkbenchComposerStub()
 	{
-		return $this->files->get(__DIR__.'/stubs/root.composer.json');
+		return $this->files->get(__DIR__.'/stubs/root.workbench.composer.json');
+	}
+
+	/**
+	 * Get the Composer.json stub file contents.
+	 *
+	 * @return string
+	 */
+	protected function getRootExtensionsComposerStub()
+	{
+		return $this->files->get(__DIR__.'/stubs/root.extensions.composer.json');
 	}
 
 	protected function checkRepository(Repository $repository) {}
