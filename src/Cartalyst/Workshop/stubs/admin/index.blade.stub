@@ -7,8 +7,8 @@
 @stop
 
 {{-- Queue Assets --}}
-{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}-{{lower_name}}::css/style.css', 'bootstrap') }}
-{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}-{{lower_name}}::js/script.js', 'jquery') }}
+{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}/{{lower_name}}::css/style.css', 'bootstrap') }}
+{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}/{{lower_name}}::js/script.js', 'jquery') }}
 
 {{-- Partial Assets --}}
 @section('assets')
