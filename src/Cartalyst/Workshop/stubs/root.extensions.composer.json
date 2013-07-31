@@ -15,7 +15,7 @@ Note: This is not a valid composer.json file. If you do not wish to host your
 			{{classmap_autoloads}}
 		],
 		"psr-0": {
-			"{{vendor}}\\{{name}}": "workbench/{{lower_vendor}}/{{lower_name}}/src/"
+			"{{vendor}}\\{{name}}": "extensions/{{lower_vendor}}/{{lower_name}}/src/"
 		}
 	}
 }
