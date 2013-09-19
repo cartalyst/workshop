@@ -1,7 +1,7 @@
 {
 	"name": "{{lower_vendor}}/{{lower_name}}",
 	"type": "platform-extension",
-	"description": "",
+	"description": "{{description}}",
 	"authors": [
 		{
 			"name": "{{author}}",
