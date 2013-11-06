@@ -33,4 +33,9 @@ class RepositoryTest extends PHPUnit_Framework_TestCase {
 		m::close();
 	}
 
+    public function testFoo()
+    {
+
+    }
+
 }
