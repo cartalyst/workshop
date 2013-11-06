@@ -216,13 +216,15 @@ class ExtensionCreator extends PackageCreator {
 
 	protected function writeWidgetClass(Repository $repository, $directory)
 	{
-		$this->files->makeDirectory($directory.'/widgets');
+		$widgetsDirectory = $directory.'/widgets';
+
+		$this->files->makeDirectory($widgetsDirectory);
 
 		$stub = $this->getWidgetStub();
 
 		$stub = $this->formatPackageStub($repository, $stub);
 
-		$this->files->put($directory.'/'.'Main.php', $stub);
+		$this->files->put($widgetsDirectory.'/'.'Main.php', $stub);
 
 		$this->ensureClassMapAutoload('widgets');
 	}
