@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Routing\Controllers\BaseController;
+use Platform\Foundation\Controllers\BaseController;
 
 class {{name}}Controller extends BaseController {
 
