@@ -19,17 +19,18 @@
  */
 
 use Platform\Admin\Controllers\Admin\AdminController;
+use View;
 
 class {{name}}Controller extends AdminController {
 
 	/**
 	 * Return the main administration screen.
 	 *
-	 * @return Illuminate\View\View
+	 * @return \Illuminate\View\View
 	 */
-	public function getIndex()
+	public function index()
 	{
-
+		return View::make('{{lower_vendor}}/{{lower_name}}::index');
 	}
 
 }
