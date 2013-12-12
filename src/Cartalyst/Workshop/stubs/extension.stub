@@ -284,7 +284,7 @@ return array(
 				'slug'  => 'admin-{{lower_vendor}}-{{lower_name}}',
 				'name'  => '{{name}}',
 				'class' => 'icon-circle-blank',
-				'uri'   => '{{uri}}',
+				'uri'   => '{{lower_name}}',
 			),
 
 		),
@@ -295,7 +295,7 @@ return array(
 				'slug'  => 'main-{{lower_vendor}}-{{lower_name}}',
 				'name'  => '{{name}}',
 				'class' => 'icon-circle-blank',
-				'uri'   => '{{uri}}',
+				'uri'   => '{{lower_name}}',
 			),
 
 		),
