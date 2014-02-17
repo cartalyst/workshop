@@ -283,7 +283,7 @@ return array(
 			array(
 				'slug'  => 'admin-{{lower_vendor}}-{{lower_name}}',
 				'name'  => '{{name}}',
-				'class' => 'icon-circle-blank',
+				'class' => 'fa fa-circle-o',
 				'uri'   => '{{lower_name}}',
 			),
 
@@ -294,7 +294,7 @@ return array(
 			array(
 				'slug'  => 'main-{{lower_vendor}}-{{lower_name}}',
 				'name'  => '{{name}}',
-				'class' => 'icon-circle-blank',
+				'class' => 'fa fa-circle-o',
 				'uri'   => '{{lower_name}}',
 			),
 
