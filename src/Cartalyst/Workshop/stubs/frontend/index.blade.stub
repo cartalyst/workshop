@@ -1,8 +1,8 @@
-@extends('layouts/default')
+@extends('templates/default')
 
 {{-- Page title --}}
 @section('title')
-{{ trans('platform/users::groups/general.title') }} ::
+{{ trans('{{lower_vendor}}/{{lower_name}}::general.title') }} ::
 @parent
 @stop
 
