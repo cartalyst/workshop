@@ -203,12 +203,11 @@ return array(
 	| The admin controllers state that permissions should follow the following
 	| structure:
 	|
-	|     vendor/extension::area.controller@method
+	|    Vendor\Namespace\Controller@method
 	|
 	| For example:
 	|
-	|    platform/users::admin.usersController@index
-	|    Platform\Users\Controllers\Admin\UsersController@getIndex
+	|    Platform\Users\Controllers\Admin\UsersController@index
 	|
 	| These are automatically generated for controller routes however you are
 	| free to add your own permissions and check against them at any time.
@@ -223,7 +222,7 @@ return array(
 	{
 		return array(
 
-			'{{lower_vendor}}/{{lower_name}}::admin.{{name}}Controller@index' => '{{name}} Administration',
+			'{{vendor}}\{{name}}\Controllers\Admin\{{name}}Controller@index' => 'List {{name}}',
 
 		);
 	},
