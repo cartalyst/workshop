@@ -1,8 +1,8 @@
-@extends('templates/default')
+@extends('layouts/default')
 
 {{-- Page title --}}
 @section('title')
-{{ trans('platform/users::groups/general.title') }} ::
+{{ trans('{{lower_vendor}}/{{lower_name}}::general.title') }} ::
 @parent
 @stop
 
@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
 @stop
 
 {{-- Page content --}}
-@section('page')
+@section('content')
 <section id="{{lower_vendor}}-{{lower_name}}">
 
 	<header class="clearfix">

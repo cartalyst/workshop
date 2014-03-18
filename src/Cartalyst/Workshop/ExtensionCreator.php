@@ -174,14 +174,11 @@ class ExtensionCreator extends PackageCreator {
 	 */
 	public function writeDatabaseDirectories(Package $package, $directory)
 	{
-		$this->files->makeDirectory($directory.'/database/migrations', 0777, true);
-		$this->files->makeDirectory($directory.'/database/seeds', 0777, true);
+		$this->files->makeDirectory($directory.'/migrations', 0777, true);
 
-		$this->files->put($directory.'/database/migrations/.gitkeep', '');
-		$this->files->put($directory.'/database/seeds/.gitkeep', '');
+		$this->files->put($directory.'/migrations/.gitkeep', '');
 
-		$this->ensureClassMapAutoload('database/migrations');
-		$this->ensureClassMapAutoload('database/seeds');
+		$this->ensureClassMapAutoload('migrations');
 	}
 
 	protected function writeExtensionFile(Repository $repository, $directory)
