@@ -21,7 +21,7 @@
 use Cartalyst\Extensions\ExtensionInterface;
 use Illuminate\Foundation\Application;
 
-return array(
+return [
 
 	/*
 	|--------------------------------------------------------------------------
@@ -185,11 +185,24 @@ return array(
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(array('prefix' => admin_uri().'/{{lower_name}}'), function()
+		Route::group(['prefix' => admin_uri().'/{{lower_name}}'], function()
 		{
 			Route::get('/', '{{vendor}}\{{name}}\Controllers\Admin\{{name}}Controller@index');
 		});
 	},
+
+	/*
+	|--------------------------------------------------------------------------
+	| Database Seeds
+	|--------------------------------------------------------------------------
+	|
+	| Specify all the seeder classes you want to run to seed your database.
+	|
+	*/
+
+	'seeds' => [
+
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -220,11 +233,11 @@ return array(
 
 	'permissions' => function()
 	{
-		return array(
+		return [
 
 			'{{vendor}}\{{name}}\Controllers\Admin\{{name}}Controller@index' => 'List {{name}}',
 
-		);
+		];
 	},
 
 	/*
@@ -240,7 +253,7 @@ return array(
 	|
 	*/
 
-	'widgets' => array(),
+	'widgets' => [],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -275,30 +288,30 @@ return array(
 	|
 	*/
 
-	'menus' => array(
+	'menus' => [
 
-		'admin' => array(
+		'admin' => [
 
-			array(
+			[
 				'slug'  => 'admin-{{lower_vendor}}-{{lower_name}}',
 				'name'  => '{{name}}',
 				'class' => 'fa fa-circle-o',
 				'uri'   => '{{lower_name}}',
-			),
+			],
 
-		),
+		],
 
-		'main' => array(
+		'main' => [
 
-			array(
+			[
 				'slug'  => 'main-{{lower_vendor}}-{{lower_name}}',
 				'name'  => '{{name}}',
 				'class' => 'fa fa-circle-o',
 				'uri'   => '{{lower_name}}',
-			),
+			],
 
-		),
+		],
 
-	),
+	],
 
-);
+];

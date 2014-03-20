@@ -23,8 +23,8 @@
 		"classmap": [
 			{{classmap_autoloads}}
 		],
-		"psr-0": {
-			"{{vendor}}\\{{name}}": "src/"
+		"psr-4": {
+			"{{vendor}}\\{{name}}\\": "src/"
 		}
 	},
 	"minimum-stability": "dev"

@@ -99,6 +99,8 @@ class ExtensionCreator extends PackageCreator {
 
 		$directory = $this->createDirectory($repository, $path);
 
+		$this->files->makeDirectory($directory.'/src');
+
 		foreach ($this->blocks as $block)
 		{
 			$this->{"write{$block}"}($repository, $directory, false);
@@ -144,9 +146,9 @@ class ExtensionCreator extends PackageCreator {
 	 */
 	public function writeControllersDirectory(Repository $repository, $directory)
 	{
-		$this->files->makeDirectory($directory.'/controllers');
+		$this->files->makeDirectory($directory.'/src/Controllers');
 
-		$this->files->put($directory.'/controllers/.gitkeep', '');
+		$this->files->put($directory.'/src/Controllers/.gitkeep', '');
 	}
 
 	/**
@@ -166,7 +168,7 @@ class ExtensionCreator extends PackageCreator {
 	}
 
 	/**
-	 * Create the themes directory for the package.
+	 * Create the database directories for the package.
 	 *
 	 * @param  \Illuminate\Workbench\Package  $package
 	 * @param  string  $directory
@@ -174,11 +176,14 @@ class ExtensionCreator extends PackageCreator {
 	 */
 	public function writeDatabaseDirectories(Package $package, $directory)
 	{
-		$this->files->makeDirectory($directory.'/migrations', 0777, true);
+		$this->files->makeDirectory($directory.'/database/migrations', 0777, true);
+		$this->files->makeDirectory($directory.'/database/seeds', 0777, true);
 
-		$this->files->put($directory.'/migrations/.gitkeep', '');
+		$this->files->put($directory.'/database/migrations/.gitkeep', '');
+		$this->files->put($directory.'/database/seeds/.gitkeep', '');
 
-		$this->ensureClassMapAutoload('migrations');
+		$this->ensureClassMapAutoload('database/migrations');
+		$this->ensureClassMapAutoload('database/seeds');
 	}
 
 	protected function writeExtensionFile(Repository $repository, $directory)
@@ -213,7 +218,7 @@ class ExtensionCreator extends PackageCreator {
 
 	protected function writeWidgetClass(Repository $repository, $directory)
 	{
-		$widgetsDirectory = $directory.'/widgets';
+		$widgetsDirectory = $directory.'/src/Widgets';
 
 		$this->files->makeDirectory($widgetsDirectory);
 
@@ -222,8 +227,6 @@ class ExtensionCreator extends PackageCreator {
 		$stub = $this->formatPackageStub($repository, $stub);
 
 		$this->files->put($widgetsDirectory.'/'.'Main.php', $stub);
-
-		$this->ensureClassMapAutoload('widgets');
 	}
 
 	protected function getWidgetStub()
@@ -240,8 +243,6 @@ class ExtensionCreator extends PackageCreator {
 		$path = $this->createControllerDirectory($repository, $directory, 'admin');
 
 		$this->files->put($path.'/'.$repository->name.'Controller.php', $stub);
-
-		$this->ensureClassMapAutoload('controllers');
 	}
 
 	protected function ensureClassMapAutoload($path)
@@ -275,7 +276,7 @@ class ExtensionCreator extends PackageCreator {
 
 	protected function createControllerDirectory(Repository $repository, $directory, $controllerPath = null)
 	{
-		$path = $directory.'/controllers';
+		$path = $directory.'/src/Controllers';
 		if ($controllerPath)
 		{
 			$controllerPath = implode('/', array_map(function($segment)
