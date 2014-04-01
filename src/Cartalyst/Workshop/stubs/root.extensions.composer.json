@@ -14,8 +14,8 @@ Note: This is not a valid composer.json file. If you do not wish to host your
 		"classmap": [
 			{{classmap_autoloads}}
 		],
-		"psr-0": {
-			"{{vendor}}\\{{name}}": "extensions/{{lower_vendor}}/{{lower_name}}/src/"
+		"psr-4": {
+			"{{vendor}}\\{{name}}\\": "extensions/{{lower_vendor}}/{{lower_name}}/src/"
 		}
 	}
 }
