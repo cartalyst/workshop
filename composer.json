@@ -2,7 +2,7 @@
 	"name": "cartalyst/workshop",
 	"description": "Integration with Cartalyst's Extensions for Laravel's Workbench",
 	"keywords": ["platform", "ecommerce", "laravel", "bootstrap"],
-	"license": "Cartalyst-PSL",
+	"license": "proprietary",
 	"authors": [
 		{
 			"name": "Cartalyst LLC",
