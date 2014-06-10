@@ -8,7 +8,7 @@ Note: This is not a valid composer.json file. If you do not wish to host your
 
 {
 	"require": {
-		"cartalyst/composer-installers": "1.0.*"
+		"cartalyst/composer-installers": "1.1.*"
 	},
 	"autoload": {
 		"classmap": [
