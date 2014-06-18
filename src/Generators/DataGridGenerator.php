@@ -54,7 +54,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($this->dataGridTemplates as $template)
 		{
-			$contents[$template] = $this->processDataGridTemplate($name, $this->files->get($this->basePath.$template));
+			$contents[$template] = $this->processDataGridTemplate($name, $this->files->get($this->stubsPath.$template));
 		}
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
@@ -79,11 +79,11 @@ class DataGridGenerator extends Generator {
 
 		if (in_array($themeType, ['admin', 'frontend',]))
 		{
-			$stub = $this->basePath."view-{$themeType}-index.blade.stub";
+			$stub = $this->stubsPath."view-{$themeType}-index.blade.stub";
 		}
 		else
 		{
-			$stub = $this->basePath.'view-frontend-index.blade.stub';
+			$stub = $this->stubsPath.'view-frontend-index.blade.stub';
 		}
 
 		$includes = implode("\n", $includes);
@@ -102,22 +102,13 @@ class DataGridGenerator extends Generator {
 		$this->files->put($viewPath, $view);
 	}
 
-	public function prepare($path, $file, $args = [])
+	/**
+	 * {@inheritDoc}
+	 */
+	public function prepare($path, $args = [])
 	{
 		return;
 	}
-
-	// public function prepare(Extension $extension, $name)
-	// {
-	// 	foreach ($this->dataGridTemplates as $template)
-	// 	{
-	// 		$files[$template] = $this->processDataGridTemplate($name, $this->files->get($this->basePath.$template));
-	// 	}
-
-	// 	dd($files);
-
-	// 	return $files;
-	// }
 
 	/**
 	 * Process data grid templates.

@@ -84,7 +84,7 @@ class Extension {
 	 * @param  string  $email
 	 * @return void
 	 */
-	public function __construct($vendor, $name, $author, $email, $description, $version = '0.1')
+	public function __construct($vendor, $name, $author = null, $email = null, $description = null, $version = '0.1')
 	{
 		$this->name        = ucfirst($name);
 		$this->email       = $email;

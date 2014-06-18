@@ -83,14 +83,9 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * Prepares the content.
-	 *
-	 * @param  string  $path
-	 * @param  string  $file
-	 * @param  array  $args
-	 * @return string
+	 * {@inheritDoc}
 	 */
-	public function prepare($path, $file, $args = [])
+	public function prepare($path, $args = [])
 	{
 		$content = $this->files->get($path);
 
@@ -179,7 +174,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeComposerFile()
 	{
-		$content = $this->prepare($this->basePath.'composer.json', null);
+		$content = $this->prepare($this->stubsPath.'composer.json', null);
 
 		$autoloads = [
 			'database/migrations',
@@ -199,7 +194,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeExtensionFile()
 	{
-		$content = $this->prepare($this->basePath.'extension.stub', null, [
+		$content = $this->prepare($this->stubsPath.'extension.stub', null, [
 			'require_exported' => '[]',
 		]);
 

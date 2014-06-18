@@ -17,32 +17,42 @@
  * @link       http://cartalyst.com
  */
 
+use Artisan;
 use Cartalyst\Workshop\Extension;
+use LogicException;
 use Str;
 
 class MigrationsGenerator extends Generator {
 
 	protected $table;
+	protected $migrationPath;
+	protected $migrationClass;
+	protected $seederClass;
 	protected $columns;
 	protected $increments;
 	protected $timestamps;
 
 	public function create($table, $columns = null, $increments = true, $timestamps = true)
 	{
-		$this->increments = $increments;
-		$this->timestamps = $timestamps;
-		$this->table = Str::studly($table);
-		$this->columns = $columns;
-		$migrationDate  = date('Y_m_d_His');
-		$migrationClass = 'Create'.$this->table.'Table';
-		$migrationName  = $migrationDate.'_'.snake_case($migrationClass);
+		$this->increments     = $increments;
+		$this->timestamps     = $timestamps;
+		$this->columns        = $columns;
+		$this->table          = Str::studly($table);
+		$this->migrationClass = 'Create'.$this->table.'Table';
+		$migrationDate        = date('Y_m_d_His');
+		$migrationName        = $migrationDate.'_'.snake_case($this->migrationClass);
 
-		$stub = $this->basePath.'migration.stub';
+		if (class_exists($this->migrationClass))
+		{
+			throw new LogicException('This migration already exists.');
+		}
+
+		$stub = $this->stubsPath.'migration.stub';
 
 		$columns = $this->prepareColumns($columns, $increments, $timestamps);
 
-		$content = $this->prepare($stub, 'migration.stub', [
-			'class_name' => $migrationClass,
+		$content = $this->prepare($stub, [
+			'class_name' => $this->migrationClass,
 			'table'      => Str::lower($table),
 			'columns'    => $columns,
 		]);
@@ -58,127 +68,62 @@ class MigrationsGenerator extends Generator {
 
 		$filePath = $dir . $fileName;
 
+		$this->migrationPath = $dir;
+
 		$this->files->put($filePath, $content);
 
-		$ext = $this->path.'/extension.php';
-
-		$extensionContent = $this->files->get($ext);
-
-		$dgSourceStub = $this->basePath.'datagrid-route.stub';
-
-		$dgSource = $this->files->get($dgSourceStub);
-
-		$dgCols = array_keys($this->columns);
-
-		$dgCols = array_map(function($col)
-		{
-			return '\''.$col.'\'';
-		}, $dgCols);
-
-		$dgCols = implode(",\n\t\t", $dgCols).',';
-
-		$modelName = Str::singular($this->table);
-
-		$model = $this->extension->vendor.'\\'.$this->extension->name.'\\'.'Models\\'.$modelName;
-
-		$dgSource = str_replace(["{{model}}", "{{columns}}", "\n"], [$model, $dgCols, "\n\t\t\t"], $dgSource);
-
-		$this->files->put($ext, $extensionContent);
-
-		$extensionContent = str_replace("{{datagrid_source}}", $dgSource, $extensionContent);
-
-		$this->files->put($ext, $extensionContent);
+		Artisan::call('dump-autoload');
 
 		return $this;
 	}
 
 	public function seeder($records = 1)
 	{
-		$seederClass = $this->table.'TableSeeder';
-
-		$stub = $this->basePath.'seeder.stub';
-
-		$loop = 'foreach(range(1, '.$records.') as $index)'."\n\t\t{";
-
-		$endLoop = "}";
-
-		$columns = $this->prepareSeederColumns($this->columns);
-
-		$modelName = Str::singular($this->table);
-
-		$model = $this->extension->vendor.'\\'.$this->extension->name.'\\'.'Models\\'.$modelName;
-
 		$namespace = $this->extension->vendor.'\\'.$this->extension->name.'\\Database\\Seeds';
 
-		$content = $this->prepare($stub, 'seeder.stub', [
+		$seederClass = $this->table.'TableSeeder';
+
+		$this->seederClass = $namespace.'\\'.$seederClass;
+
+		if (class_exists($this->seederClass))
+		{
+			throw new LogicException('This seeder already exists.');
+		}
+
+		$stub    = $this->stubsPath.'seeder.stub';
+		$columns = $this->prepareSeederColumns($this->columns);
+
+		$content = $this->prepare($stub, [
 			'class_name' => $seederClass,
 			'namespace'  => 'namespace '.$namespace.';',
-			'class'      => $modelName,
-			'use'        => "\nuse ".$model.';',
-			'loop'       => $loop,
-			'end_loop'   => $endLoop,
+			'records'    => $records,
 			'table'      => Str::lower($this->table),
 			'columns'    => $columns,
 		]);
 
-		$fileName = $seederClass.'.php';
-
 		$dir = $this->path.'/database/seeds/';
 
-		if ( ! $this->files->isDirectory($dir))
-		{
-			$this->files->makeDirectory($dir, 0777, true);
-		}
+		$filePath = $dir.$seederClass.'.php';
 
-		$filePath = $dir . $fileName;
+		$this->ensureDirectory($filePath);
 
 		$this->files->put($filePath, $content);
 
+		// Add the new seeder to the extension
 		$ext = $this->path.'/extension.php';
 
-		$extensionContent = $this->files->get($ext);
+		$currentSeeds = $this->files->getRequire($ext);
 
-		$dgCols = array_keys($this->columns);
+		$currentSeeds = isset($currentSeeds['seeds']) ? $currentSeeds['seeds'] : [];
 
-		if ($this->increments)
-		{
-			array_unshift($dgCols, "id");
-		}
-
-		if ($this->increments)
-		{
-			array_push($dgCols, "created_at");
-		}
-
-		$dgCols = array_map(function($col)
-		{
-			return '\''.$col.'\'';
-		}, $dgCols);
-
-		$dgCols = implode(",\n\t\t", $dgCols).',';
-
-		$dgSourceStub = $this->basePath.'datagrid-route.stub';
-
-		$dgSource = $this->files->get($dgSourceStub);
-
-		$dgSource = str_replace(["{{model}}", "{{columns}}", "\n"], [$model, $dgCols, "\n\t\t\t"], $dgSource);
-
-		$this->files->put($ext, $extensionContent);
-
-		$extensionContent = str_replace("{{datagrid_source}}", $dgSource, $extensionContent);
-
-		$this->files->put($ext, $extensionContent);
-
-		$curS = $this->files->getRequire($ext);
-
-		$currentSeeds = isset($curS['seeds']) ? $curS['seeds'] : [];
-
-		$seeds = '';
+		$seeds = null;
 
 		foreach ($currentSeeds as $s)
 		{
 			$seeds .= "'$s',\n\t\t";
 		}
+
+		$extensionContent = $this->files->get($ext);
 
 		if ( ! in_array("{$namespace}\\{$seederClass}", $currentSeeds))
 		{
@@ -192,11 +137,25 @@ class MigrationsGenerator extends Generator {
 
 			$this->files->put($ext, $extensionContent);
 		}
+
+		Artisan::call('dump-autoload');
+
+		return $this;
 	}
 
-	protected function datagrid()
+	public function getMigrationPath()
 	{
+		return $this->migrationPath;
+	}
 
+	public function getMigrationClass()
+	{
+		return $this->migrationClass;
+	}
+
+	public function getSeederClass()
+	{
+		return $this->seederClass;
 	}
 
 	protected function prepareSeederColumns($columns)
@@ -234,21 +193,46 @@ class MigrationsGenerator extends Generator {
 
 		foreach ($columns as $name => $type)
 		{
-			if (strpos($type, 'default'))
+			if (strpos($type, 'default') !== false)
 			{
-				$default = last(explode(':', last(explode('|', $type))));
+				$parts = explode('|', $type);
 
-				$default = "->default($default)";
+				foreach ($parts as $part)
+				{
+					if (strpos($part, ':') !== false)
+					{
+						$default = last(explode(':', $part));
+
+						$default = "->default('$default')";
+					}
+				}
+			}
+			else
+			{
+				$default = '';
 			}
 
-			if (strpos($type, '|'))
+			if (strpos($type, 'nullable') !== false)
 			{
-				$type = head(explode('|', $type));
-
 				$nullable = '->nullable()';
 			}
+			else
+			{
+				$nullable = '';
+			}
 
-			$cols[] = '$table->'.$type."('$name'){$nullable}{$default};";
+			if (strpos($type, 'unsigned') !== false)
+			{
+				$unsigned = '->unsigned()';
+			}
+			else
+			{
+				$unsigned = '';
+			}
+
+			$type = head(explode('|', $type));
+
+			$cols[] = '$table->'.$type."('$name'){$nullable}{$default}{$unsigned};";
 		}
 
 		if ($timestamps)
@@ -257,18 +241,6 @@ class MigrationsGenerator extends Generator {
 		}
 
 		return implode("\n\t\t\t", $cols);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function prepare($path, $file, $args = [])
-	{
-		$content = parent::prepare($path, $file, $args);
-
-		$content = str_replace('{{table}}', 'posts', $content);
-
-		return $content;
 	}
 
 }

@@ -25,6 +25,6 @@ interface GeneratorInterface {
 	 * @param  string  $path
 	 * @return string
 	 */
-	public function prepare($path, $file, $args);
+	public function prepare($path, $args);
 
 }

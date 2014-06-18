@@ -16,12 +16,12 @@
  * @copyright  (c) 2011-2014, Cartalyst LLC
  * @link       http://cartalyst.com
  */
-{{use}}
+
 use DB;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
-class {{class_name}} extends Seeder {
+class {{class_name}} {
 
 	/**
 	 * Run the database seeds.
@@ -34,11 +34,12 @@ class {{class_name}} extends Seeder {
 
 		DB::table('{{table}}')->truncate();
 
-		{{loop}}
-			{{class}}::create([
+		foreach(range(1, {{records}}) as $index)
+		{
+			DB::table('{{table}}')->insert([
 				{{columns}}
 			]);
-		{{end_loop}}
+		}
 	}
 
 }

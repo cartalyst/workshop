@@ -22,30 +22,73 @@ use Str;
 
 abstract class Generator implements GeneratorInterface {
 
+	/**
+	 * Platform extension.
+	 *
+	 * @var \Cartalyst\Workshop\Extension
+	 */
 	protected $extension;
-	protected $files;
-	protected $html;
-	protected $form;
-	protected $path;
-	protected $basePath;
 
+	/**
+	 * Filesystem instance.
+	 *
+	 * @var \Illuminate\Filesystem\Filesystem
+	 */
+	protected $files;
+
+	/**
+	 * Html builder instance.
+	 *
+	 * @var \Illuminate\Html\HtmlBuilder
+	 */
+	protected $html;
+
+	/**
+	 * Form builder instance.
+	 *
+	 * @var \Illuminate\Html\FormBuilder
+	 */
+	protected $form;
+
+	/**
+	 * Workbench path.
+	 *
+	 * @var string
+	 */
+	protected $path;
+
+	/**
+	 * Stubs path.
+	 *
+	 * @var string
+	 */
+	protected $stubsPath;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \Cartalyst\Workshop\Extension  $extension
+	 * @param \Illuminate\Filesystem\Filesystem  $files
+	 * @param \Illuminate\Html\HtmlBuilder  $html
+	 * @param \Illuminate\Html\FormBuilder  $form
+	 * @return void
+	 */
 	public function __construct(Extension $extension, $files, $html = null, $form = null)
 	{
 		$this->extension = $extension;
-		$this->files = $files;
-		$this->html = $html;
-		$this->form = $form;
-
-		$this->path = base_path().'/workbench/'.$this->extension->getFullName();
-
-		$this->basePath = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
+		$this->files     = $files;
+		$this->html      = $html;
+		$this->form      = $form;
+		$this->path      = base_path().'/workbench/'.$this->extension->getFullName();
+		$this->stubsPath = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
 	}
 
 	/**
-	 * Create directories hierarchy.
+	 * Process files and directories.
 	 *
-	 * @param  string  $dir
-	 * @param  string  $files
+	 * @param  string  $path
+	 * @param  array  $directories
+	 * @param  array  $args
 	 * @return void
 	 */
 	protected function process($path = null, $dir = [], $args = [])
@@ -56,29 +99,29 @@ abstract class Generator implements GeneratorInterface {
 
 		if (is_array($dir))
 		{
-			foreach ($dir as $key => $d)
+			foreach ($dir as $fileName => $filePath)
 			{
 				$subdir = $path;
 
-				if ( ! is_numeric($key) && is_array($d) && strpos($key, '.stub') === false)
+				if ( ! is_numeric($fileName) && is_array($filePath) && strpos($fileName, '.stub') === false)
 				{
-					$subdir = $path.'/'.$key;
+					$subdir = $path.'/'.$fileName;
 				}
 
-				if ( ! is_array($d) && strpos($d, '.stub') !== false)
+				if ( ! is_array($filePath) && strpos($filePath, '.stub') !== false)
 				{
-					$this->processFile($path, $d, $key, $args);
+					$this->processFile($path, $filePath, $args, $fileName);
 
 					continue;
 				}
 
-				$this->process($subdir, $d, $args);
+				$this->process($subdir, $filePath, $args);
 			}
 
 			return;
 		}
 
-		$this->processFile($path, $dir, null, $args);
+		$this->processFile($path, $dir, $args);
 	}
 
 	/**
@@ -86,9 +129,11 @@ abstract class Generator implements GeneratorInterface {
 	 *
 	 * @param  string  $directory
 	 * @param  string  $file
+	 * @param  array  $args
+	 * @param  string  $overriddenFile
 	 * @return void
 	 */
-	protected function processFile($directory, $file, $overriddenFile = null, $args = [])
+	protected function processFile($directory, $file, $args = [], $overriddenFile = null)
 	{
 		$fileName = ! is_numeric($overriddenFile) && isset($overriddenFile) ? $overriddenFile : $file;
 
@@ -155,6 +200,7 @@ abstract class Generator implements GeneratorInterface {
 
 	/**
 	 * Ensure the directory exists or create it.
+	 *
 	 * @param  string  $path
 	 * @return void
 	 */
@@ -168,7 +214,14 @@ abstract class Generator implements GeneratorInterface {
 		}
 	}
 
-	public function prepare($path, $file, $args = [])
+	/**
+	 * Prepare stub content.
+	 *
+	 * @param  string  $path
+	 * @param  array  $args
+	 * @return string
+	 */
+	public function prepare($path, $args = [])
 	{
 		$content = $this->files->get($path);
 
