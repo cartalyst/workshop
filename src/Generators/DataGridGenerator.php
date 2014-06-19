@@ -18,6 +18,7 @@
  */
 
 use Cartalyst\Workshop\Extension;
+use URL;
 
 class DataGridGenerator extends Generator {
 
@@ -35,21 +36,18 @@ class DataGridGenerator extends Generator {
 			'name'  => 'entries[]',
 			'value' => 'id',
 		],
-		[
-			'type'    => 'a',
-			'href'    => 'admin/blog/<%= r.id %>',
-			'content' => 'title',
-		],
-		[
-			'content' => 'body',
-		],
-		[
-			'content' => 'created_at',
-		],
 	];
 
-	public function create($name, $themeType = 'admin', $theme = 'default')
+	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [])
 	{
+		$this->dataGridColumns[] = [
+			'type'    => 'a',
+			'href'    => URL::toAdmin($this->extension->lowerName).'<%= r.id %>',
+			'content' => 'id',
+		];
+
+		$this->dataGridColumns = array_merge($this->dataGridColumns, $columns);
+
 		$contents = [];
 
 		foreach ($this->dataGridTemplates as $template)
@@ -77,14 +75,7 @@ class DataGridGenerator extends Generator {
 			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::grids/{$name}/{$file}')";
 		}
 
-		if (in_array($themeType, ['admin', 'frontend',]))
-		{
-			$stub = $this->stubsPath."view-{$themeType}-index.blade.stub";
-		}
-		else
-		{
-			$stub = $this->stubsPath.'view-frontend-index.blade.stub';
-		}
+		$stub = $this->stubsPath.'view-datagrid-index.blade.stub';
 
 		$includes = implode("\n", $includes);
 
@@ -97,7 +88,7 @@ class DataGridGenerator extends Generator {
 			$view = str_replace('{{'.snake_case($key).'}}', $value, $view);
 		}
 
-		$viewPath = $basePath.'index.blade.php';
+		$viewPath = $basePath.$viewName.'.blade.php';
 
 		$this->files->put($viewPath, $view);
 	}
@@ -153,7 +144,7 @@ class DataGridGenerator extends Generator {
 
 						$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-						$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\'blog/<%= r.id %>\') }}"', $link);
+						$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/<%= r.id %>\') }}"', $link);
 
 						$el[] = $link;
 					}

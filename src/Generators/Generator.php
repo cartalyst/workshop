@@ -122,6 +122,8 @@ abstract class Generator implements GeneratorInterface {
 		}
 
 		$this->processFile($path, $dir, $args);
+
+		$this->autoloads();
 	}
 
 	/**
