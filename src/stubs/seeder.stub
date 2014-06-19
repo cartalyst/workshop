@@ -18,7 +18,7 @@
  */
 
 use DB;
-use Faker\Factory as Faker;
+// use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class {{class_name}} {
@@ -30,15 +30,15 @@ class {{class_name}} {
 	 */
 	public function run()
 	{
-		$faker = Faker::create();
+		// $faker = Faker::create();
 
 		DB::table('{{table}}')->truncate();
 
 		foreach(range(1, {{records}}) as $index)
 		{
-			DB::table('{{table}}')->insert([
-				{{columns}}
-			]);
+			// DB::table('{{table}}')->insert([
+			// 	{{columns}}
+			// ]);
 		}
 	}
 

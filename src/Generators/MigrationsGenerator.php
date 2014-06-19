@@ -17,7 +17,6 @@
  * @link       http://cartalyst.com
  */
 
-use Artisan;
 use Cartalyst\Workshop\Extension;
 use LogicException;
 use Str;
@@ -28,7 +27,7 @@ class MigrationsGenerator extends Generator {
 	protected $migrationPath;
 	protected $migrationClass;
 	protected $seederClass;
-	protected $columns;
+	protected $columns = [];
 	protected $increments;
 	protected $timestamps;
 
@@ -63,7 +62,12 @@ class MigrationsGenerator extends Generator {
 
 		if ( ! $this->files->isDirectory($dir))
 		{
-			$this->files->makeDirectory($dir, 0777, true);
+			$dir = str_replace('workbench', 'extensions', $dir);
+
+			if ( ! $this->files->isDirectory($dir))
+			{
+				throw new LogicException('Extension does not exist.');
+			}
 		}
 
 		$filePath = $dir . $fileName;
@@ -72,16 +76,18 @@ class MigrationsGenerator extends Generator {
 
 		$this->files->put($filePath, $content);
 
-		Artisan::call('dump-autoload');
+		$this->autoloads();
 
 		return $this;
 	}
 
-	public function seeder($records = 1)
+	public function seeder($records = 1, $table = null)
 	{
 		$namespace = $this->extension->vendor.'\\'.$this->extension->name.'\\Database\\Seeds';
 
-		$seederClass = $this->table.'TableSeeder';
+		$table = $table ? Str::studly($table) : $this->table;
+
+		$seederClass = $table.'TableSeeder';
 
 		$this->seederClass = $namespace.'\\'.$seederClass;
 
@@ -97,20 +103,38 @@ class MigrationsGenerator extends Generator {
 			'class_name' => $seederClass,
 			'namespace'  => 'namespace '.$namespace.';',
 			'records'    => $records,
-			'table'      => Str::lower($this->table),
+			'table'      => Str::lower($table),
 			'columns'    => $columns,
 		]);
 
 		$dir = $this->path.'/database/seeds/';
 
-		$filePath = $dir.$seederClass.'.php';
+		if ( ! $this->files->isDirectory($dir))
+		{
+			$dir = str_replace('workbench', 'extensions', $dir);
 
-		$this->ensureDirectory($filePath);
+			if ( ! $this->files->isDirectory($dir))
+			{
+				throw new LogicException('Extension does not exist.');
+			}
+		}
+
+		$filePath = $dir.$seederClass.'.php';
 
 		$this->files->put($filePath, $content);
 
 		// Add the new seeder to the extension
 		$ext = $this->path.'/extension.php';
+
+		if ( ! $this->files->exists($ext))
+		{
+			$ext = str_replace('workbench', 'extensions', $ext);
+
+			if ( ! $this->files->exists($ext))
+			{
+				throw new LogicException('extension.php could not be found.');
+			}
+		}
 
 		$currentSeeds = $this->files->getRequire($ext);
 
@@ -138,7 +162,7 @@ class MigrationsGenerator extends Generator {
 			$this->files->put($ext, $extensionContent);
 		}
 
-		Artisan::call('dump-autoload');
+		$this->autoloads();
 
 		return $this;
 	}
@@ -169,10 +193,16 @@ class MigrationsGenerator extends Generator {
 
 		foreach ($columns as $name => $type)
 		{
-			$cols[] = "'$name' => ".'$faker->sentence(5)'.",";
+			$cols[] = "'$name' => ".'$faker->sentence()'.",";
 		}
 
-		return implode("\n\t\t\t\t", $cols);
+		if ($this->timestamps)
+		{
+			$cols[] = "'created_at' => ".'$faker->dateTime()'.",";
+			$cols[] = "'updated_at' => ".'$faker->dateTime()'.",";
+		}
+
+		return implode("\n\t\t\t//\t", $cols);
 	}
 
 	protected function prepareColumns($columns, $increments, $timestamps)

@@ -76,6 +76,13 @@ class Extension {
 	public $version;
 
 	/**
+	 * The required dependencies of the extension.
+	 *
+	 * @var string
+	 */
+	public $require;
+
+	/**
 	 * Create a new package instance.
 	 *
 	 * @param  string  $vendor
@@ -84,7 +91,7 @@ class Extension {
 	 * @param  string  $email
 	 * @return void
 	 */
-	public function __construct($vendor, $name, $author = null, $email = null, $description = null, $version = '0.1')
+	public function __construct($vendor, $name, $author = null, $email = null)
 	{
 		$this->name        = ucfirst($name);
 		$this->email       = $email;
@@ -92,8 +99,6 @@ class Extension {
 		$this->author      = $author;
 		$this->lowerName   = snake_case($name, '-');
 		$this->lowerVendor = snake_case($vendor, '-');
-		$this->description = addslashes($description);
-		$this->version = $version;
 	}
 
 	/**

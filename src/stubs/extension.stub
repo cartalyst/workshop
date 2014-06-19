@@ -99,7 +99,7 @@ return [
 	|
 	*/
 
-	'require' => {{require_exported}},
+	'require' => {{require}},
 
 	/*
 	|--------------------------------------------------------------------------
@@ -186,7 +186,6 @@ return [
 	{
 		Route::group(['prefix' => admin_uri().'/{{lower_name}}'], function()
 		{
-			{{datagrid_source}}
 			Route::get('/', '{{vendor}}\{{name}}\Controllers\Admin\{{name}}Controller@index');
 		});
 	},

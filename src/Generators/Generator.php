@@ -193,7 +193,7 @@ abstract class Generator implements GeneratorInterface {
 
 		$this->ensureDirectory($targetPath);
 
-		$content = $this->prepare($stubPath, $file, $args);
+		$content = $this->prepare($stubPath, $args);
 
 		$this->files->put($targetPath, $content);
 	}
@@ -236,6 +236,17 @@ abstract class Generator implements GeneratorInterface {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Dump autoloads.
+	 *
+	 * @return void
+	 */
+	protected function autoloads()
+	{
+		app('composer')->setWorkingPath($this->path);
+		app('composer')->dumpOptimized();
 	}
 
 }

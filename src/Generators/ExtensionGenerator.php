@@ -23,22 +23,7 @@ use InvalidArgumentException;
 
 class ExtensionGenerator extends Generator {
 
-	protected $blocks = [
-		'lang' => [
-			'en' => [
-				'general.stub',
-				'table.stub',
-			]
-		],
-		'database' => [
-			'migrations' => [
-				'.gitkeep',
-			],
-			'seeds' => [
-				'.gitkeep',
-			],
-		],
-	];
+	protected $blocks = [];
 
 	protected $extension;
 
@@ -48,9 +33,11 @@ class ExtensionGenerator extends Generator {
 	 * @param \Illuminate\Filesystem\Filesystem  $files
 	 * @return void
 	 */
-	public function __construct($extension, Filesystem $files, $html = null, $form = null)
+	public function __construct($extension, Filesystem $files, $blocks = [], $html = null, $form = null)
 	{
 		parent::__construct($extension, $files, $html, $form);
+
+		$this->blocks = $blocks;
 	}
 
 	/**
@@ -60,16 +47,6 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function create($model = false, $controllers = false)
 	{
-		if ($model)
-		{
-			$this->createModel();
-		}
-
-		if ($controllers)
-		{
-			$this->createControllers();
-		}
-
 		if ( ! $this->files->isDirectory($this->path))
 		{
 			$this->files->makeDirectory($this->path, 0777, true);
@@ -174,7 +151,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeComposerFile()
 	{
-		$content = $this->prepare($this->stubsPath.'composer.json', null);
+		$content = $this->prepare($this->stubsPath.'composer.json');
 
 		$autoloads = [
 			'database/migrations',
@@ -194,9 +171,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeExtensionFile()
 	{
-		$content = $this->prepare($this->stubsPath.'extension.stub', null, [
-			'require_exported' => '[]',
-		]);
+		$content = $this->prepare($this->stubsPath.'extension.stub');
 
 		$this->files->put($this->path.'/extension.php', $content);
 	}
