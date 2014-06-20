@@ -26,12 +26,24 @@ class FormGenerator extends Generator {
 	 * @param  bool  $interface
 	 * @return void
 	 */
-	public function create($columns = [])
+	public function create($model, $columns = [])
 	{
 		$stub = $this->stubsPath.'form.stub';
 
+		$el = [];
+
+		$inputStub = $this->stubsPath.'form-input.stub';
+
+		foreach ($columns as $col)
+		{
+			$el[] = $this->prepare($inputStub, [
+				'field_name'  => $col['field'],
+				'lower_model' => $model,
+			]);
+		}
+
 		$content = $this->prepare($stub, [
-			'columns' => implode("\n\t\t\t\t", $columns),
+			'columns' => implode("\n\t\t\t\t", $el),
 		]);
 
 		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/form.blade.php');
@@ -63,6 +75,16 @@ class FormGenerator extends Generator {
 		$extensionContent = preg_replace(
 			"/'routes' => function\s*.*?},/s",
 			rtrim($routesReplacement),
+			$extensionContent
+		);
+
+		$bootReplacement = $this->prepare($this->stubsPath.'boot.stub', [
+			'model' => ucfirst($model),
+		]);
+
+		$extensionContent = preg_replace(
+			"/'boot' => function\s*.*?},/s",
+			rtrim($bootReplacement),
 			$extensionContent
 		);
 
