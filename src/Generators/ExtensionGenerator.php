@@ -19,12 +19,21 @@
 
 use Illuminate\Filesystem\Filesystem;
 use Str;
-use InvalidArgumentException;
 
 class ExtensionGenerator extends Generator {
 
-	protected $blocks = [];
+	/**
+	 * Foundation blocks.
+	 *
+	 * @var array
+	 */
+	protected $blocks;
 
+	/**
+	 * Extension instance.
+	 *
+	 * @var \Cartalyst\Workshop\Extension
+	 */
 	protected $extension;
 
 	/**
@@ -52,10 +61,13 @@ class ExtensionGenerator extends Generator {
 			$this->files->makeDirectory($this->path, 0777, true);
 		}
 
+		// Write composer.json
 		$this->writeComposerFile();
 
+		// Write extension.php
 		$this->writeExtensionFile();
 
+		// Process all other blocks
 		$this->process($this->path, $this->blocks);
 	}
 
@@ -147,7 +159,9 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Writes the composer.json file.
+	 *
+	 * @return void
 	 */
 	public function writeComposerFile()
 	{
@@ -167,7 +181,9 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Writes the extension.php file.
+	 *
+	 * @return void
 	 */
 	public function writeExtensionFile()
 	{

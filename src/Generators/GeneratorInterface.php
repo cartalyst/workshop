@@ -20,9 +20,10 @@
 interface GeneratorInterface {
 
 	/**
-	 * Prepares content.
+	 * Prepare stub content.
 	 *
 	 * @param  string  $path
+	 * @param  array  $args
 	 * @return string
 	 */
 	public function prepare($path, $args);

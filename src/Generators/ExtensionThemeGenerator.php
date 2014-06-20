@@ -49,7 +49,7 @@ class ExtensionThemeGenerator extends Generator {
 			],
 		]);
 
-		$this->process(null, [], [
+		$this->process(null, null, [
 			'location' => $location,
 		]);
 	}

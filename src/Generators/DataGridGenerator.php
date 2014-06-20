@@ -22,6 +22,11 @@ use URL;
 
 class DataGridGenerator extends Generator {
 
+	/**
+	 * Data grid templates.
+	 *
+	 * @var array
+	 */
 	protected $dataGridTemplates = [
 		'results.blade.stub',
 		'filters.blade.stub',
@@ -30,6 +35,11 @@ class DataGridGenerator extends Generator {
 		'no_filters.blade.stub',
 	];
 
+	/**
+	 * Data grid columns.
+	 *
+	 * @var array
+	 */
 	protected $dataGridColumns = [
 		[
 			'type'  => 'checkbox',
@@ -38,6 +48,16 @@ class DataGridGenerator extends Generator {
 		],
 	];
 
+	/**
+	 * Create a new data grid.
+	 *
+	 * @param  string  $name
+	 * @param  string  $themeType
+	 * @param  string  $theme
+	 * @param  string  $viewName
+	 * @param  array  $columns
+	 * @return void
+	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [])
 	{
 		$this->dataGridColumns[] = [
@@ -52,7 +72,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($this->dataGridTemplates as $template)
 		{
-			$contents[$template] = $this->processDataGridTemplate($name, $this->files->get($this->stubsPath.$template));
+			$contents[$template] = $this->processDataGridTemplate($name, $this->stubsPath.$template);
 		}
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
@@ -81,12 +101,11 @@ class DataGridGenerator extends Generator {
 
 		$headers = ("<th>".implode("</th>\n\t\t\t<th class=\"sortable\">", $this->prepareColumns(false)).'</th>');
 
-		$view = str_replace(["{{headers}}", "{{includes}}", "{{name}}"], [$headers, $includes, $name], $this->files->get($stub));
-
-		foreach ((array) $this->extension as $key => $value)
-		{
-			$view = str_replace('{{'.snake_case($key).'}}', $value, $view);
-		}
+		$view = $this->prepare($stub, [
+			'headers'   => $headers,
+			'includes'  => $includes,
+			'grid_name' => $name,
+		]);
 
 		$viewPath = $basePath.$viewName.'.blade.php';
 
@@ -94,20 +113,12 @@ class DataGridGenerator extends Generator {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function prepare($path, $args = [])
-	{
-		return;
-	}
-
-	/**
 	 * Process data grid templates.
 	 *
-	 * @param  string $content
+	 * @param  string $stub
 	 * @return string
 	 */
-	protected function processDataGridTemplate($name, $content)
+	protected function processDataGridTemplate($name, $stub)
 	{
 		$el = $this->prepareColumns();
 
@@ -115,7 +126,11 @@ class DataGridGenerator extends Generator {
 
 		$rows = count(head($this->dataGridColumns)) + 1;
 
-		return str_replace(["{{columns}}", "{{name}}", "{{rows}}"], [$columns, $name, $rows], $content);
+		return $this->prepare($stub, [
+			'columns'   => $columns,
+			'rows'      => $rows,
+			'grid_name' => $name,
+		]);
 	}
 
 	/**

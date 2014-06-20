@@ -91,7 +91,7 @@ abstract class Generator implements GeneratorInterface {
 	 * @param  array  $args
 	 * @return void
 	 */
-	protected function process($path = null, $dir = [], $args = [])
+	protected function process($path = null, $dir = null, $args = [])
 	{
 		$path = $path ?: $this->path;
 
@@ -201,27 +201,7 @@ abstract class Generator implements GeneratorInterface {
 	}
 
 	/**
-	 * Ensure the directory exists or create it.
-	 *
-	 * @param  string  $path
-	 * @return void
-	 */
-	protected function ensureDirectory($path)
-	{
-		$dir = array_get(pathinfo($path), 'dirname');
-
-		if ( ! $this->files->isDirectory($dir))
-		{
-			$this->files->makeDirectory($dir, 0777, true);
-		}
-	}
-
-	/**
-	 * Prepare stub content.
-	 *
-	 * @param  string  $path
-	 * @param  array  $args
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function prepare($path, $args = [])
 	{
@@ -238,6 +218,22 @@ abstract class Generator implements GeneratorInterface {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Ensure the directory exists or create it.
+	 *
+	 * @param  string  $path
+	 * @return void
+	 */
+	protected function ensureDirectory($path)
+	{
+		$dir = array_get(pathinfo($path), 'dirname');
+
+		if ( ! $this->files->isDirectory($dir))
+		{
+			$this->files->makeDirectory($dir, 0777, true);
+		}
 	}
 
 	/**

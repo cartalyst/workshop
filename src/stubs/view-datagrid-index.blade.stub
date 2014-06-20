@@ -30,7 +30,7 @@
 <script>
 $(function()
 {
-	var dg = $.datagrid('{{name}}', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
+	var dg = $.datagrid('{{grid_name}}', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
 		loader: '.loading',
 		scroll: '.data-grid',
 		callback: function()
@@ -100,13 +100,13 @@ $(function()
 	<div class="col-lg-7">
 
 		{{-- Data Grid : Applied Filters --}}
-		<div class="data-grid_applied" data-grid="{{name}}"></div>
+		<div class="data-grid_applied" data-grid="{{grid_name}}"></div>
 
 	</div>
 
 	<div class="col-lg-5 text-right">
 
-		<form method="post" action="" accept-charset="utf-8" data-search data-grid="{{name}}" class="form-inline" role="form">
+		<form method="post" action="" accept-charset="utf-8" data-search data-grid="{{grid_name}}" class="form-inline" role="form">
 
 			<div class="form-group">
 
@@ -120,7 +120,7 @@ $(function()
 					{{{ trans('general.filters') }}} <span class="caret"></span>
 				</button>
 
-				<ul class="dropdown-menu" role="menu" data-grid="{{name}}">
+				<ul class="dropdown-menu" role="menu" data-grid="{{grid_name}}">
 					<li><a href="#" data-reset>{{{ trans('general.show_all') }}}</a></li>
 					<li><a href="#" data-filter="enabled:1" data-label="enabled::{{{ trans('general.all_enabled') }}}" data-reset>{{{ trans('general.show_enabled') }}}</a></li>
 					<li><a href="#" data-filter="enabled:0" data-label="enabled::{{{ trans('general.all_disabled') }}}" data-reset>{{{ trans('general.show_disabled') }}}</a></li>
@@ -146,7 +146,7 @@ $(function()
 
 <br />
 
-<table data-source="{{ URL::toAdmin('{{lower_name}}/grid') }}" data-grid="{{name}}" class="data-grid table table-striped table-bordered table-hover">
+<table data-source="{{ URL::toAdmin('{{lower_name}}/grid') }}" data-grid="{{grid_name}}" class="data-grid table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			{{headers}}
@@ -156,7 +156,7 @@ $(function()
 </table>
 
 {{-- Data Grid : Pagination --}}
-<div class="data-grid_pagination" data-grid="{{name}}"></div>
+<div class="data-grid_pagination" data-grid="{{grid_name}}"></div>
 
 {{includes}}
 
