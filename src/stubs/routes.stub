@@ -1,0 +1,22 @@
+'routes' => function(ExtensionInterface $extension, Application $app)
+	{
+		Route::group(['namespace' => '{{vendor}}\{{name}}\Controllers'], function()
+		{
+			Route::group(['prefix' => admin_uri().'/{{lower_name}}', 'namespace' => 'Admin'], function()
+			{
+				Route::get('/', '{{name}}Controller@index');
+				Route::post('/', '{{name}}Controller@executeAction');
+				Route::get('grid', '{{name}}Controller@grid');
+				Route::get('create', '{{name}}Controller@create');
+				Route::post('create', '{{name}}Controller@store');
+				Route::get('{id}/edit', '{{name}}Controller@edit');
+				Route::post('{id}/edit', '{{name}}Controller@update');
+				Route::get('{id}/delete', '{{name}}Controller@delete');
+			});
+
+			Route::group(['prefix' => '{{lower_name}}', 'namespace' => 'Frontend'], function()
+			{
+				Route::get('/', '{{name}}Controller@index');
+			});
+		});
+	},

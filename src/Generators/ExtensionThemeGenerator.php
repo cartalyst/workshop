@@ -28,7 +28,6 @@ class ExtensionThemeGenerator extends Generator {
 	 */
 	public function create($location, $theme = 'default')
 	{
-		// Frontend packages
 		array_set($this->blocks, "themes.{$location}.{$theme}", [
 			'packages' => [
 				$this->extension->lowerVendor => [

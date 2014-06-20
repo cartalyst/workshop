@@ -1,0 +1,220 @@
+<?php namespace {{vendor}}\{{name}}\Repositories;
+/**
+ * Part of the Workshop package.
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Cartalyst PSL License.
+ *
+ * This source file is subject to the Cartalyst PSL License that is
+ * bundled with this package in the license.txt file.
+ *
+ * @package    Workshop
+ * @version    1.0.0
+ * @author     Cartalyst LLC
+ * @license    Cartalyst PSL
+ * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @link       http://cartalyst.com
+ */
+
+use Cartalyst\Interpret\Interpreter;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Filesystem\Filesystem;
+use {{vendor}}\{{name}}\Models\{{model}};
+use Symfony\Component\Finder\Finder;
+use Validator;
+
+class {{class_name}} implements {{repository_interface}} {
+
+	/**
+	 * The Eloquent {{lower_name}} model.
+	 *
+	 * @var string
+	 */
+	protected $model;
+
+	/**
+	 * The event dispatcher instance.
+	 *
+	 * @var \Illuminate\Events\Dispatcher
+	 */
+	protected $dispatcher;
+
+	/**
+	 * Holds the form validation rules.
+	 *
+	 * @var array
+	 */
+	protected $rules = [
+
+	];
+
+	/**
+	 * The Cartalyst interpeter which renders the {{lower_name}}.
+	 *
+	 * @var \Cartalyst\Interpet\Interpreter
+	 */
+	protected $interpreter;
+
+	/**
+	 * The filesystem instance.
+	 *
+	 * @var \Illuminate\Filesystem\Filesystem
+	 */
+	protected $filesystem;
+
+	/**
+	 * Array of paths where file based {{lower_name}} may live.
+	 *
+	 * @var array
+	 */
+	protected $paths = [];
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  string  $model
+	 * @param  \Illuminate\Events\Dispatcher  $dispatcher
+	 * @return void
+	 */
+	public function __construct($model, Dispatcher $dispatcher)
+	{
+		$this->model = $model;
+
+		$this->dispatcher = $dispatcher;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function grid()
+	{
+		return $this
+			->createModel();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function findAll()
+	{
+		return $this
+			->createModel()
+			->newQuery()
+			->get();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function find($id)
+	{
+		return $this
+			->createModel()
+			->where('id', (int) $id)
+			->first();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function validForCreation(array $data)
+	{
+		return $this->validate{{model}}($data);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function validForUpdate($id, array $data)
+	{
+		return $this->validate{{model}}($data);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function create(array $data)
+	{
+		with(${{lower_model}} = $this->createModel())->fill($data)->save();
+
+		$this->dispatcher->fire('{{lower_vendor}}.{{lower_model}}.created', ${{lower_model}});
+
+		return ${{lower_model}};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function update($id, array $data)
+	{
+		${{lower_model}} = $this->find($id);
+
+		${{lower_model}}->fill($data)->save();
+
+		$this->dispatcher->fire('{{lower_vendor}}.{{lower_model}}.updated', ${{lower_model}});
+
+		return ${{lower_model}};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function delete($id)
+	{
+		if (${{lower_model}} = $this->find($id))
+		{
+			$this->dispatcher->fire('{{lower_vendor}}.{{lower_model}}.deleted', ${{lower_model}});
+
+			${{lower_model}}->delete();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function enable($id)
+	{
+		return $this->update($id, ['enabled' => 1]);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function disable($id)
+	{
+		return $this->update($id, ['enabled' => 0]);
+	}
+
+	/**
+	 * Create a new instance of the model.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Model
+	 */
+	public function createModel()
+	{
+		$class = '\\'.ltrim($this->model, '\\');
+
+		return new $class;
+	}
+
+	/**
+	 * Validates a {{lower_name}} entry.
+	 *
+	 * @param  array  $data
+	 * @return \Illuminate\Support\MessageBag
+	 */
+	protected function validate{{model}}($data)
+	{
+		$validator = Validator::make($data, $this->rules);
+
+		$validator->passes();
+
+		return $validator->errors();
+	}
+
+}

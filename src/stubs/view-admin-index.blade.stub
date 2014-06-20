@@ -70,7 +70,7 @@ $(function()
 
 		$.ajax({
 			type: 'POST',
-			url: '{{ URL::toAdmin('pages') }}',
+			url: '{{ URL::toAdmin('{{lower_name}}') }}',
 			data: {
 				action : action,
 				entries: entries

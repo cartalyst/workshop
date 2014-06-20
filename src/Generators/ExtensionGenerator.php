@@ -132,19 +132,26 @@ class ExtensionGenerator extends Generator {
 	 * @param  string  $location
 	 * @return void
 	 */
-	public function createController($name = null, $location = 'Admin')
+	public function createController($name = null, $location = 'Admin', $scaffold = false, $args = [])
 	{
 		$name = ucfirst(($name ?: $this->extension->name).'Controller');
 
 		$location = ucfirst($location);
 
-		if (in_array($location, ['Admin', 'Frontend',]))
+		if ($scaffold)
 		{
-			$stub = Str::lower($location).'-controller.stub';
+			$stub = 'scaffold-admin-controller.stub';
 		}
 		else
 		{
-			$stub = 'controller.stub';
+			if (in_array($location, ['Admin', 'Frontend',]))
+			{
+				$stub = Str::lower($location).'-controller.stub';
+			}
+			else
+			{
+				$stub = 'controller.stub';
+			}
 		}
 
 		array_set($this->blocks, 'src.Controllers', [
@@ -153,9 +160,11 @@ class ExtensionGenerator extends Generator {
 			],
 		]);
 
-		$this->process(null, [], [
+		$args = array_merge($args, [
 			'location' => $location,
 		]);
+
+		$this->process(null, [], $args);
 	}
 
 	/**

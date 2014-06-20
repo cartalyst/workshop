@@ -1,0 +1,273 @@
+<?php namespace {{vendor}}\{{name}}\Controllers\Admin;
+/**
+ * Part of the Workshop package.
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Cartalyst PSL License.
+ *
+ * This source file is subject to the Cartalyst PSL License that is
+ * bundled with this package in the license.txt file.
+ *
+ * @package    Workshop
+ * @version    1.0.0
+ * @author     Cartalyst LLC
+ * @license    Cartalyst PSL
+ * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @link       http://cartalyst.com
+ */
+
+use DataGrid;
+use Input;
+use Lang;
+use Platform\Admin\Controllers\Admin\AdminController;
+use {{vendor}}\{{name}}\Repositories\{{name}}RepositoryInterface;
+use Redirect;
+use Response;
+use View;
+
+class {{name}}Controller extends AdminController {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $csrfWhitelist = [
+		'executeAction',
+	];
+
+	/**
+	 * The {{name}} repository.
+	 *
+	 * @var \Platform\{{name}}\Repositories\{{name}}RepositoryInterface
+	 */
+	protected ${{lower_name}};
+
+	/**
+	 * Holds all the mass actions we can execute.
+	 *
+	 * @var array
+	 */
+	protected $actions = [
+		'delete',
+		'enable',
+		'disable',
+	];
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  \Platform\{{name}}\Repositories\{{name}}RepositoryInterface  ${{lower_name}}
+	 * @return void
+	 */
+	public function __construct({{name}}RepositoryInterface ${{lower_name}})
+	{
+		parent::__construct();
+
+		$this->{{lower_name}} = ${{lower_name}};
+	}
+
+	/**
+	 * Display a listing of {{lower_name}}.
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function index()
+	{
+		return View::make('{{lower_vendor}}/{{lower_name}}::index');
+	}
+
+	/**
+	 * Datasource for the {{lower_name}} Data Grid.
+	 *
+	 * @return \Cartalyst\DataGrid\DataGrid
+	 */
+	public function grid()
+	{
+		$data = $this->{{lower_name}}->grid();
+
+		$columns = [
+			{{columns}}
+		];
+
+		$settings = [
+			'sort'      => 'created_at',
+			'direction' => 'desc',
+		];
+
+		return DataGrid::make($data, $columns, $settings);
+	}
+
+	/**
+	 * Show the form for creating new {{lower_name}}.
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function create()
+	{
+		return $this->showForm('create');
+	}
+
+	/**
+	 * Handle posting of the form for creating new {{lower_name}}.
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function store()
+	{
+		return $this->processForm('create');
+	}
+
+	/**
+	 * Show the form for updating {{lower_name}}.
+	 *
+	 * @param  int  $id
+	 * @return mixed
+	 */
+	public function edit($id)
+	{
+		return $this->showForm('update', $id);
+	}
+
+	/**
+	 * Handle posting of the form for updating {{lower_name}}.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function update($id)
+	{
+		return $this->processForm('update', $id);
+	}
+
+	/**
+	 * Show the form for copying {{lower_name}}.
+	 *
+	 * @param  int  $id
+	 * @return mixed
+	 */
+	public function copy($id)
+	{
+		return $this->showForm('copy', $id);
+	}
+
+	/**
+	 * Remove the specified {{lower_name}}.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function delete($id)
+	{
+		if ($this->{{lower_name}}->delete($id))
+		{
+			$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.success.delete');
+
+			return Redirect::toAdmin('{{lower_name}}')->withSuccess($message);
+		}
+
+		$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.error.delete');
+
+		return Redirect::toAdmin('{{lower_name}}')->withErrors($message);
+	}
+
+	/**
+	 * Executes the mass action.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function executeAction()
+	{
+		$action = Input::get('action');
+
+		if (in_array($action, $this->actions))
+		{
+			foreach (Input::get('entries', []) as $entry)
+			{
+				$this->{{lower_name}}->{$action}($entry);
+			}
+
+			return Response::json('Success');
+		}
+
+		return Response::json('Failed', 500);
+	}
+
+	/**
+	 * Shows the form.
+	 *
+	 * @param  string  $mode
+	 * @param  int  $id
+	 * @return mixed
+	 */
+	protected function showForm($mode, $id = null)
+	{
+		// Do we have a {{lower_name}} identifier?
+		if (isset($id))
+		{
+			if ( ! ${{lower_name}} = $this->{{lower_name}}->find($id))
+			{
+				$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.not_found', compact('id'));
+
+				return Redirect::toAdmin('{{lower_name}}')->withErrors($message);
+			}
+		}
+		else
+		{
+			${{lower_name}} = $this->{{lower_name}}->createModel();
+		}
+
+		// Show the page
+		return View::make('{{lower_vendor}}/{{lower_name}}::form', compact('mode', '{{lower_name}}'));
+	}
+
+	/**
+	 * Processes the form.
+	 *
+	 * @param  string  $mode
+	 * @param  int  $id
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	protected function processForm($mode, $id = null)
+	{
+		// Get the input data
+		$data = Input::all();
+
+		// Do we have a {{lower_name}} identifier?
+		if ($id)
+		{
+			// Check if the data is valid
+			$messages = $this->{{lower_name}}->validForUpdate($id, $data);
+
+			// Do we have any errors?
+			if ($messages->isEmpty())
+			{
+				// Update the {{lower_name}}
+				${{lower_name}} = $this->{{lower_name}}->update($id, $data);
+			}
+		}
+		else
+		{
+			// Check if the data is valid
+			$messages = $this->{{lower_name}}->validForCreation($data);
+
+			// Do we have any errors?
+			if ($messages->isEmpty())
+			{
+				// Create the {{lower_name}}
+				${{lower_name}} = $this->{{lower_name}}->create($data);
+			}
+		}
+
+		// Do we have any errors?
+		if ($messages->isEmpty())
+		{
+			// Prepare the success message
+			$message = Lang::get("{{lower_vendor}}/{{lower_name}}::message.success.{$mode}");
+
+			return Redirect::toAdmin("{{lower_name}}/{${{lower_name}}->id}/edit")->withSuccess($message);
+		}
+
+		return Redirect::back()->withInput()->withErrors($messages);
+	}
+
+}

@@ -62,7 +62,7 @@ class DataGridGenerator extends Generator {
 	{
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
-			'href'    => URL::toAdmin($this->extension->lowerName).'<%= r.id %>',
+			'href'    => URL::toAdmin($this->extension->lowerName).'<%= r.id %>/edit',
 			'content' => 'id',
 		];
 
@@ -99,7 +99,7 @@ class DataGridGenerator extends Generator {
 
 		$includes = implode("\n", $includes);
 
-		$headers = ("<th>".implode("</th>\n\t\t\t<th class=\"sortable\">", $this->prepareColumns(false)).'</th>');
+		$headers = ("<th>".implode("</th>\n\t\t\t<th>", $this->prepareColumns(false)).'</th>');
 
 		$view = $this->prepare($stub, [
 			'headers'   => $headers,
@@ -159,7 +159,7 @@ class DataGridGenerator extends Generator {
 
 						$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-						$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/<%= r.id %>\') }}"', $link);
+						$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/<%= r.id %>/edit\') }}"', $link);
 
 						$el[] = $link;
 					}
@@ -167,7 +167,7 @@ class DataGridGenerator extends Generator {
 					{
 						$value = array_pull($attributes, 'content');
 
-						$content = "{{{ trans('{{lower_vendor}}/{{lower_name}}::table.{$value}') }}}";
+						$content = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::table.{$value}') }}}";
 
 						$el[] = $content;
 					}
@@ -203,7 +203,7 @@ class DataGridGenerator extends Generator {
 				{
 					$value = array_pull($attributes, 'content');
 
-					$el[] = "{{{ trans('{{lower_vendor}}/{{lower_name}}::table.{$value}') }}}";
+					$el[] = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::table.{$value}') }}}";
 				}
 			}
 		}
