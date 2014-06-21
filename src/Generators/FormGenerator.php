@@ -26,12 +26,40 @@ class FormGenerator extends Generator {
 	 * @param  bool  $interface
 	 * @return void
 	 */
-	public function create($columns = [])
+	public function create($model, $columns = [])
 	{
-		$stub = $this->stubsPath.'form.stub';
+		$stub = $this->stubsPath.'form.blade.stub';
+
+		$el = [];
+
+		foreach ($columns as $col)
+		{
+			switch ($col['type']) {
+				case 'text':
+				case 'mediumText':
+				case 'longText':
+					$inputStub = $this->stubsPath.'form-textarea.stub';
+					break;
+
+				case 'boolean':
+				case 'tinyInteger':
+					$inputStub = $this->stubsPath.'form-checkbox.stub';
+					break;
+
+				default:
+				case 'string':
+					$inputStub = $this->stubsPath.'form-input.stub';
+					break;
+			}
+
+			$el[] = $this->prepare($inputStub, [
+				'field_name'  => $col['field'],
+				'lower_model' => $model,
+			]);
+		}
 
 		$content = $this->prepare($stub, [
-			'columns' => implode("\n\t\t\t\t", $columns),
+			'columns' => implode("\n\t\t\t\t", $el),
 		]);
 
 		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/form.blade.php');
@@ -63,6 +91,16 @@ class FormGenerator extends Generator {
 		$extensionContent = preg_replace(
 			"/'routes' => function\s*.*?},/s",
 			rtrim($routesReplacement),
+			$extensionContent
+		);
+
+		$bootReplacement = $this->prepare($this->stubsPath.'boot.stub', [
+			'model' => ucfirst($model),
+		]);
+
+		$extensionContent = preg_replace(
+			"/'boot' => function\s*.*?},/s",
+			rtrim($bootReplacement),
 			$extensionContent
 		);
 

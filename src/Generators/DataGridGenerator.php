@@ -124,7 +124,7 @@ class DataGridGenerator extends Generator {
 
 		$columns = ("<td>".implode("</td>\n\t\t\t<td>", $el).'</td>');
 
-		$rows = count(head($this->dataGridColumns)) + 1;
+		$rows = count($this->dataGridColumns) + 1;
 
 		return $this->prepare($stub, [
 			'columns'   => $columns,

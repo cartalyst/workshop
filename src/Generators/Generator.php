@@ -220,6 +220,11 @@ abstract class Generator implements GeneratorInterface {
 		return $content;
 	}
 
+	public function getPath()
+	{
+		return $this->path;
+	}
+
 	/**
 	 * Ensure the directory exists or create it.
 	 *

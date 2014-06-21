@@ -20,5 +20,12 @@
 return [
 
 	'title'  => '{{name}}',
+	'create' => 'Create {{name}}',
+	'update' => 'Update {{name}}',
+
+	'tabs' => [
+		'general'    => 'General',
+		'attributes' => 'Attributes',
+	],
 
 ];
