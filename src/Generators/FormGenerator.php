@@ -58,6 +58,18 @@ class FormGenerator extends Generator {
 			]);
 		}
 
+		$el = [];
+
+		$inputStub = $this->stubsPath.'form-input.stub';
+
+		foreach ($columns as $col)
+		{
+			$el[] = $this->prepare($inputStub, [
+				'field_name'  => $col['field'],
+				'lower_model' => $model,
+			]);
+		}
+
 		$content = $this->prepare($stub, [
 			'columns' => implode("\n\t\t\t\t", $el),
 		]);
