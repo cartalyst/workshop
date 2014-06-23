@@ -73,9 +73,17 @@ abstract class Generator implements GeneratorInterface {
 	 * @param \Illuminate\Html\FormBuilder  $form
 	 * @return void
 	 */
-	public function __construct(Extension $extension, $files, $html = null, $form = null)
+	public function __construct($extension, $files, $html = null, $form = null)
 	{
-		$this->extension = $extension;
+		if ($extension instanceof Extension)
+		{
+			$this->extension = $extension;
+		}
+		else
+		{
+			$this->extension = new Extension($extension);
+		}
+
 		$this->files     = $files;
 		$this->html      = $html;
 		$this->form      = $form;

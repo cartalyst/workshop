@@ -91,8 +91,12 @@ class Extension {
 	 * @param  string  $email
 	 * @return void
 	 */
-	public function __construct($vendor, $name, $author = null, $email = null)
+	public function __construct($slug, $author = null, $email = null)
 	{
+		$slug = explode(DIRECTORY_SEPARATOR, $slug);
+		$vendor = head($slug);
+		$name = last($slug);
+
 		$this->name        = ucfirst($name);
 		$this->email       = $email;
 		$this->vendor      = ucfirst($vendor);

@@ -30,21 +30,14 @@ class ExtensionGenerator extends Generator {
 	protected $blocks;
 
 	/**
-	 * Extension instance.
-	 *
-	 * @var \Cartalyst\Workshop\Extension
-	 */
-	protected $extension;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param \Illuminate\Filesystem\Filesystem  $files
 	 * @return void
 	 */
-	public function __construct($extension, Filesystem $files, $blocks = [], $html = null, $form = null)
+	public function __construct($slug, Filesystem $files, $blocks = [], $html = null, $form = null)
 	{
-		parent::__construct($extension, $files, $html, $form);
+		parent::__construct($slug, $files, $html, $form);
 
 		$this->blocks = $blocks;
 	}
