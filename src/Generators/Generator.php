@@ -67,10 +67,10 @@ abstract class Generator implements GeneratorInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @param \Cartalyst\Workshop\Extension  $extension
-	 * @param \Illuminate\Filesystem\Filesystem  $files
-	 * @param \Illuminate\Html\HtmlBuilder  $html
-	 * @param \Illuminate\Html\FormBuilder  $form
+	 * @param  \Cartalyst\Workshop\Extension  $extension
+	 * @param  \Illuminate\Filesystem\Filesystem  $files
+	 * @param  \Illuminate\Html\HtmlBuilder  $html
+	 * @param  \Illuminate\Html\FormBuilder  $form
 	 * @return void
 	 */
 	public function __construct($extension, $files, $html = null, $form = null)
@@ -130,8 +130,6 @@ abstract class Generator implements GeneratorInterface {
 		}
 
 		$this->processFile($path, $dir, $args);
-
-		$this->autoloads();
 	}
 
 	/**
@@ -228,11 +226,6 @@ abstract class Generator implements GeneratorInterface {
 		return $content;
 	}
 
-	public function getPath()
-	{
-		return $this->path;
-	}
-
 	/**
 	 * Ensure the directory exists or create it.
 	 *
@@ -247,17 +240,6 @@ abstract class Generator implements GeneratorInterface {
 		{
 			$this->files->makeDirectory($dir, 0777, true);
 		}
-	}
-
-	/**
-	 * Dump autoloads.
-	 *
-	 * @return void
-	 */
-	protected function autoloads()
-	{
-		app('composer')->setWorkingPath($this->path);
-		app('composer')->dumpOptimized();
 	}
 
 }

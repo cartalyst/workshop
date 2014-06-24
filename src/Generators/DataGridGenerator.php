@@ -42,9 +42,10 @@ class DataGridGenerator extends Generator {
 	 */
 	protected $dataGridColumns = [
 		[
-			'type'  => 'checkbox',
-			'name'  => 'entries[]',
-			'value' => 'id',
+			'type'    => 'checkbox',
+			'name'    => 'entries[]',
+			'value'   => 'id',
+			'content' => 'id',
 		],
 	];
 
@@ -60,6 +61,10 @@ class DataGridGenerator extends Generator {
 	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [])
 	{
+		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
+
+		$dir = $basePath.'grids/'.$name.'/';
+
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
 			'href'    => URL::toAdmin($this->extension->lowerName).'<%= r.id %>/edit',
@@ -72,24 +77,21 @@ class DataGridGenerator extends Generator {
 
 		foreach ($this->dataGridTemplates as $template)
 		{
-			$contents[$template] = $this->processDataGridTemplate($name, $this->stubsPath.$template);
+			$templateContent = $this->processDataGridTemplate($name, $this->stubsPath.$template);
+
+			$contents[$template] = $templateContent;
 		}
-
-		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
-
-		$dir = $basePath . 'grids/'.$name.'/';
 
 		foreach ($contents as $file => $content)
 		{
+			// Write data grid templates
 			$file = str_replace('.stub', '.php', $file);
 
-			if ( ! $this->files->isDirectory($dir))
-			{
-				$this->files->makeDirectory($dir, 0777, true);
-			}
+			$this->ensureDirectory($dir.$file);
 
 			$this->files->put($dir.$file, $content);
 
+			// Prepare view includes
 			$file = str_replace('.blade.php', '', $file);
 
 			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::grids/{$name}/{$file}')";
@@ -97,9 +99,24 @@ class DataGridGenerator extends Generator {
 
 		$stub = $this->stubsPath.'view-datagrid-index.blade.stub';
 
-		$includes = implode("\n", $includes);
+		// $headers = ("<th>".implode("</th>\n\t\t\t<th>", $this->prepareColumns(false)).'</th>');
 
-		$headers = ("<th>".implode("</th>\n\t\t\t<th>", $this->prepareColumns(false)).'</th>');
+		$columns = $this->dataGridColumns;
+
+		array_shift($columns);
+
+		$headers = '<th><input type="checkbox" name="checkAll" id="checkAll"></th>';
+
+		foreach ($columns as $column)
+		{
+			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::table.{$column['content']}') }}}";
+
+			$headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
+		}
+
+		$headers = ltrim($headers);
+
+		$includes = implode("\n", $includes);
 
 		$view = $this->prepare($stub, [
 			'headers'   => $headers,

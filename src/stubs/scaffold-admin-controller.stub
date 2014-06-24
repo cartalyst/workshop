@@ -86,7 +86,7 @@ class {{name}}Controller extends AdminController {
 		$data = $this->{{lower_name}}->grid();
 
 		$columns = [
-			{{columns}}
+			'*',
 		];
 
 		$settings = [

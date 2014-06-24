@@ -76,8 +76,6 @@ class MigrationsGenerator extends Generator {
 
 		$this->files->put($filePath, $content);
 
-		$this->autoloads();
-
 		return $this;
 	}
 
@@ -162,8 +160,6 @@ class MigrationsGenerator extends Generator {
 			$this->files->put($ext, $extensionContent);
 		}
 
-		$this->autoloads();
-
 		return $this;
 	}
 
@@ -193,7 +189,50 @@ class MigrationsGenerator extends Generator {
 
 		foreach ($columns as $name => $type)
 		{
-			$cols[] = "'$name' => ".'$faker->sentence()'.",";
+			switch ($type)
+			{
+				case 'tinyInteger':
+				case 'boolean':
+
+					$cols[] = "'$name' => ".'rand(0, 1)'.",";
+					break;
+
+				case 'text':
+				case 'mediumText':
+				case 'longText':
+
+					$cols[] = "'$name' => ".'$faker->text()'.",";
+					break;
+
+				case 'float':
+				case 'double':
+				case 'decimal':
+
+					$cols[] = "'$name' => ".'$faker->randomFloat()'.",";
+					break;
+
+				case 'integer':
+				case 'smallInteger':
+				case 'mediumInteger':
+				case 'bigInteger':
+
+					$cols[] = "'$name' => ".'$faker->randomDigit()'.",";
+					break;
+
+				case 'dateTime':
+
+					$cols[] = "'$name' => ".'$faker->dateTime()'.",";
+					break;
+
+				case 'time':
+
+					$cols[] = "'$name' => ".'$faker->time()'.",";
+					break;
+
+				default:
+					$cols[] = "'$name' => ".'$faker->sentence()'.",";
+					break;
+			}
 		}
 
 		if ($this->timestamps)

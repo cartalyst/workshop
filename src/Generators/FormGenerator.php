@@ -26,7 +26,7 @@ class FormGenerator extends Generator {
 	 * @param  bool  $interface
 	 * @return void
 	 */
-	public function create($model, $columns = [])
+	public function create($model, $columns = [], $view = 'form')
 	{
 		$stub = $this->stubsPath.'form.blade.stub';
 
@@ -46,8 +46,8 @@ class FormGenerator extends Generator {
 					$inputStub = $this->stubsPath.'form-checkbox.stub';
 					break;
 
-				default:
 				case 'string':
+				default:
 					$inputStub = $this->stubsPath.'form-input.stub';
 					break;
 			}
@@ -58,65 +58,13 @@ class FormGenerator extends Generator {
 			]);
 		}
 
-		$el = [];
-
-		$inputStub = $this->stubsPath.'form-input.stub';
-
-		foreach ($columns as $col)
-		{
-			$el[] = $this->prepare($inputStub, [
-				'field_name'  => $col['field'],
-				'lower_model' => $model,
-			]);
-		}
-
 		$content = $this->prepare($stub, [
 			'columns' => implode("\n\t\t\t\t", $el),
 		]);
 
-		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/form.blade.php');
+		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.$view.'.blade.php');
 
-		$this->files->put($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/form.blade.php', $content);
-
-		$this->writeRegisterAndRoutes($this->extension->name);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function writeRegisterAndRoutes($model)
-	{
-		$registerReplacement = $this->prepare($this->stubsPath.'repository-registration.stub', [
-			'model' => ucfirst($model),
-		]);
-
-		$extensionContent = $this->files->get($this->path.'/extension.php');
-
-		$extensionContent = preg_replace(
-			"/'register' => function\s*.*?},/s",
-			rtrim($registerReplacement),
-			$extensionContent
-		);
-
-		$routesReplacement = $this->prepare($this->stubsPath.'routes.stub');
-
-		$extensionContent = preg_replace(
-			"/'routes' => function\s*.*?},/s",
-			rtrim($routesReplacement),
-			$extensionContent
-		);
-
-		$bootReplacement = $this->prepare($this->stubsPath.'boot.stub', [
-			'model' => ucfirst($model),
-		]);
-
-		$extensionContent = preg_replace(
-			"/'boot' => function\s*.*?},/s",
-			rtrim($bootReplacement),
-			$extensionContent
-		);
-
-		$this->files->put($this->path.'/extension.php', $extensionContent);
+		$this->files->put($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.$view.'.blade.php', $content);
 	}
 
 	/**

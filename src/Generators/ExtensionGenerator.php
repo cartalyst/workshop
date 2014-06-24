@@ -194,4 +194,70 @@ class ExtensionGenerator extends Generator {
 		$this->files->put($this->path.'/extension.php', $content);
 	}
 
+	/**
+	 * Writes the routes section.
+	 *
+	 * @return void
+	 */
+	public function writeRoutes()
+	{
+		$extensionContent = $this->files->get($this->path.'/extension.php');
+
+		$routesReplacement = $this->prepare($this->stubsPath.'routes.stub');
+
+		$extensionContent = preg_replace(
+			"/'routes' => function\s*.*?},/s",
+			rtrim($routesReplacement),
+			$extensionContent
+		);
+
+		$this->files->put($this->path.'/extension.php', $extensionContent);
+	}
+
+	/**
+	 * Writes the register section.
+	 *
+	 * @param  string  $model
+	 * @return void
+	 */
+	public function writeRegister($model)
+	{
+		$extensionContent = $this->files->get($this->path.'/extension.php');
+
+		$registerReplacement = $this->prepare($this->stubsPath.'register.stub', [
+			'model' => ucfirst($model),
+		]);
+
+		$extensionContent = preg_replace(
+			"/'register' => function\s*.*?},/s",
+			rtrim($registerReplacement),
+			$extensionContent
+		);
+
+		$this->files->put($this->path.'/extension.php', $extensionContent);
+	}
+
+	/**
+	 * Writes the boot section.
+	 *
+	 * @param  string  $model
+	 * @return void
+	 */
+	public function writeBoot($model)
+	{
+		$extensionContent = $this->files->get($this->path.'/extension.php');
+
+		$bootReplacement = $this->prepare($this->stubsPath.'boot.stub', [
+			'model' => ucfirst($model),
+		]);
+
+		$extensionContent = preg_replace(
+			"/'boot' => function\s*.*?},/s",
+			rtrim($bootReplacement),
+			$extensionContent
+		);
+
+		$this->files->put($this->path.'/extension.php', $extensionContent);
+	}
+
 }

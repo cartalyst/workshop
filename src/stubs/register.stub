@@ -8,7 +8,7 @@
 			{
 				$model = get_class($app['{{vendor}}\{{name}}\Models\{{model}}']);
 
-				return new {{vendor}}\{{name}}\Repositories\Db{{model}}Repository($model, $app['events']);
+				return new {{vendor}}\{{name}}\Repositories\Db{{name}}Repository($model, $app['events']);
 			});
 		}
 	},

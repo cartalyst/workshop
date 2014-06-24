@@ -184,10 +184,7 @@ return [
 
 	'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(['prefix' => admin_uri().'/{{lower_name}}'], function()
-		{
-			Route::get('/', '{{vendor}}\{{name}}\Controllers\Admin\{{name}}Controller@index');
-		});
+
 	},
 
 	/*

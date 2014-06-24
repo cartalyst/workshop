@@ -26,7 +26,7 @@ class RepositoryGenerator extends Generator {
 	 * @param  bool  $interface
 	 * @return void
 	 */
-	public function create($model, $interface = true, $bindRoutes = false)
+	public function create($model, $interface = true)
 	{
 		$repositoryInterface = ucfirst($model).'RepositoryInterface';
 
@@ -55,39 +55,6 @@ class RepositoryGenerator extends Generator {
 		]);
 
 		$this->files->put($this->path.'/src/Repositories/'.$repositoryName.'.php', $content);
-
-		if ($bindRoutes)
-		{
-			$this->writeRegisterAndRoutes($model);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function writeRegisterAndRoutes($model)
-	{
-		$registerReplacement = $this->prepare($this->stubsPath.'repository-registration.stub', [
-			'model' => ucfirst($model),
-		]);
-
-		$extensionContent = $this->files->get($this->path.'/extension.php');
-
-		$extensionContent = preg_replace(
-			"/'register' => function\s*.*?},/s",
-			rtrim($registerReplacement),
-			$extensionContent
-		);
-
-		$routesReplacement = $this->prepare($this->stubsPath.'routes.stub');
-
-		$extensionContent = preg_replace(
-			"/'routes' => function\s*.*?},/s",
-			rtrim($routesReplacement),
-			$extensionContent
-		);
-
-		$this->files->put($this->path.'/extension.php', $extensionContent);
 	}
 
 }
