@@ -94,11 +94,16 @@ class ExtensionGenerator extends Generator {
 	{
 		$name = ucfirst($name ?: $this->extension->name);
 
-		array_set($this->blocks, 'src.Models', [
-			$name => 'model.stub',
+		$content = $this->prepare($this->stubsPath.'model.stub', [
+			'class_name'        => $name,
+			'plural_lower_name' => strtolower(Str::plural($name)),
 		]);
 
-		$this->process();
+		$path = $this->path.'/src/Models/'.$name.'.php';
+
+		$this->ensureDirectory($path);
+
+		$this->files->put($path, $content);
 	}
 
 	/**
@@ -127,7 +132,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createController($name = null, $location = 'Admin', $scaffold = false, $args = [])
 	{
-		$name = ucfirst(($name ?: $this->extension->name).'Controller');
+		$controllerName = ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller');
 
 		$location = ucfirst($location);
 
@@ -147,17 +152,20 @@ class ExtensionGenerator extends Generator {
 			}
 		}
 
-		array_set($this->blocks, 'src.Controllers', [
-			$location => [
-				$name => $stub,
-			],
-		]);
-
 		$args = array_merge($args, [
-			'location' => $location,
+			'location'    => $location,
+			'model'       => ucfirst($name),
+			'lower_model' => strtolower($name),
+			'plural_name' => ucfirst(Str::plural($name)),
 		]);
 
-		$this->process(null, [], $args);
+		$content = $this->prepare($this->stubsPath.$stub, $args);
+
+		$path = $this->path.'/src/Controllers/'.$location.'/'.$controllerName.'.php';
+
+		$this->ensureDirectory($path);
+
+		$this->files->put($path, $content);
 	}
 
 	/**
@@ -199,11 +207,13 @@ class ExtensionGenerator extends Generator {
 	 *
 	 * @return void
 	 */
-	public function writeRoutes()
+	public function writeRoutes($resource)
 	{
 		$extensionContent = $this->files->get($this->path.'/extension.php');
 
-		$routesReplacement = $this->prepare($this->stubsPath.'routes.stub');
+		$routesReplacement = $this->prepare($this->stubsPath.'routes.stub', [
+			'plural_name' => ucfirst(Str::plural($resource)),
+		]);
 
 		$extensionContent = preg_replace(
 			"/'routes' => function\s*.*?},/s",

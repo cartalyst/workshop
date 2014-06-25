@@ -21,7 +21,7 @@ use DataGrid;
 use Input;
 use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
-use {{vendor}}\{{name}}\Repositories\{{name}}RepositoryInterface;
+use {{vendor}}\{{name}}\Repositories\{{model}}RepositoryInterface;
 use Redirect;
 use Response;
 use View;
@@ -38,9 +38,9 @@ class {{name}}Controller extends AdminController {
 	/**
 	 * The {{name}} repository.
 	 *
-	 * @var \Platform\{{name}}\Repositories\{{name}}RepositoryInterface
+	 * @var \Platform\{{name}}\Repositories\{{model}}RepositoryInterface
 	 */
-	protected ${{lower_name}};
+	protected ${{lower_model}};
 
 	/**
 	 * Holds all the mass actions we can execute.
@@ -56,18 +56,18 @@ class {{name}}Controller extends AdminController {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\{{name}}\Repositories\{{name}}RepositoryInterface  ${{lower_name}}
+	 * @param  \Platform\{{name}}\Repositories\{{model}}RepositoryInterface  ${{lower_model}}
 	 * @return void
 	 */
-	public function __construct({{name}}RepositoryInterface ${{lower_name}})
+	public function __construct({{model}}RepositoryInterface ${{lower_model}})
 	{
 		parent::__construct();
 
-		$this->{{lower_name}} = ${{lower_name}};
+		$this->{{lower_model}} = ${{lower_model}};
 	}
 
 	/**
-	 * Display a listing of {{lower_name}}.
+	 * Display a listing of {{lower_model}}.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -77,13 +77,13 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Datasource for the {{lower_name}} Data Grid.
+	 * Datasource for the {{lower_model}} Data Grid.
 	 *
 	 * @return \Cartalyst\DataGrid\DataGrid
 	 */
 	public function grid()
 	{
-		$data = $this->{{lower_name}}->grid();
+		$data = $this->{{lower_model}}->grid();
 
 		$columns = [
 			'*',
@@ -98,7 +98,7 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Show the form for creating new {{lower_name}}.
+	 * Show the form for creating new {{lower_model}}.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -108,7 +108,7 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Handle posting of the form for creating new {{lower_name}}.
+	 * Handle posting of the form for creating new {{lower_model}}.
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
@@ -118,7 +118,7 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Show the form for updating {{lower_name}}.
+	 * Show the form for updating {{lower_model}}.
 	 *
 	 * @param  int  $id
 	 * @return mixed
@@ -129,7 +129,7 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Handle posting of the form for updating {{lower_name}}.
+	 * Handle posting of the form for updating {{lower_model}}.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
@@ -140,7 +140,7 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Show the form for copying {{lower_name}}.
+	 * Show the form for copying {{lower_model}}.
 	 *
 	 * @param  int  $id
 	 * @return mixed
@@ -151,14 +151,14 @@ class {{name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Remove the specified {{lower_name}}.
+	 * Remove the specified {{lower_model}}.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
-		if ($this->{{lower_name}}->delete($id))
+		if ($this->{{lower_model}}->delete($id))
 		{
 			$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.success.delete');
 
@@ -183,7 +183,7 @@ class {{name}}Controller extends AdminController {
 		{
 			foreach (Input::get('entries', []) as $entry)
 			{
-				$this->{{lower_name}}->{$action}($entry);
+				$this->{{lower_model}}->{$action}($entry);
 			}
 
 			return Response::json('Success');
@@ -201,10 +201,10 @@ class {{name}}Controller extends AdminController {
 	 */
 	protected function showForm($mode, $id = null)
 	{
-		// Do we have a {{lower_name}} identifier?
+		// Do we have a {{lower_model}} identifier?
 		if (isset($id))
 		{
-			if ( ! ${{lower_name}} = $this->{{lower_name}}->find($id))
+			if ( ! ${{lower_model}} = $this->{{lower_model}}->find($id))
 			{
 				$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.not_found', compact('id'));
 
@@ -213,11 +213,11 @@ class {{name}}Controller extends AdminController {
 		}
 		else
 		{
-			${{lower_name}} = $this->{{lower_name}}->createModel();
+			${{lower_model}} = $this->{{lower_model}}->createModel();
 		}
 
 		// Show the page
-		return View::make('{{lower_vendor}}/{{lower_name}}::form', compact('mode', '{{lower_name}}'));
+		return View::make('{{lower_vendor}}/{{lower_name}}::form', compact('mode', '{{lower_model}}'));
 	}
 
 	/**
@@ -232,29 +232,29 @@ class {{name}}Controller extends AdminController {
 		// Get the input data
 		$data = Input::all();
 
-		// Do we have a {{lower_name}} identifier?
+		// Do we have a {{lower_model}} identifier?
 		if ($id)
 		{
 			// Check if the data is valid
-			$messages = $this->{{lower_name}}->validForUpdate($id, $data);
+			$messages = $this->{{lower_model}}->validForUpdate($id, $data);
 
 			// Do we have any errors?
 			if ($messages->isEmpty())
 			{
-				// Update the {{lower_name}}
-				${{lower_name}} = $this->{{lower_name}}->update($id, $data);
+				// Update the {{lower_model}}
+				${{lower_model}} = $this->{{lower_model}}->update($id, $data);
 			}
 		}
 		else
 		{
 			// Check if the data is valid
-			$messages = $this->{{lower_name}}->validForCreation($data);
+			$messages = $this->{{lower_model}}->validForCreation($data);
 
 			// Do we have any errors?
 			if ($messages->isEmpty())
 			{
-				// Create the {{lower_name}}
-				${{lower_name}} = $this->{{lower_name}}->create($data);
+				// Create the {{lower_model}}
+				${{lower_model}} = $this->{{lower_model}}->create($data);
 			}
 		}
 
@@ -264,7 +264,7 @@ class {{name}}Controller extends AdminController {
 			// Prepare the success message
 			$message = Lang::get("{{lower_vendor}}/{{lower_name}}::message.success.{$mode}");
 
-			return Redirect::toAdmin("{{lower_name}}/{${{lower_name}}->id}/edit")->withSuccess($message);
+			return Redirect::toAdmin("{{lower_name}}/{${{lower_model}}->id}/edit")->withSuccess($message);
 		}
 
 		return Redirect::back()->withInput()->withErrors($messages);

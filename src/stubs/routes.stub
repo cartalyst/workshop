@@ -4,19 +4,19 @@
 		{
 			Route::group(['prefix' => admin_uri().'/{{lower_name}}', 'namespace' => 'Admin'], function()
 			{
-				Route::get('/', '{{name}}Controller@index');
-				Route::post('/', '{{name}}Controller@executeAction');
-				Route::get('grid', '{{name}}Controller@grid');
-				Route::get('create', '{{name}}Controller@create');
-				Route::post('create', '{{name}}Controller@store');
-				Route::get('{id}/edit', '{{name}}Controller@edit');
-				Route::post('{id}/edit', '{{name}}Controller@update');
-				Route::get('{id}/delete', '{{name}}Controller@delete');
+				Route::get('/', '{{plural_name}}Controller@index');
+				Route::post('/', '{{plural_name}}Controller@executeAction');
+				Route::get('grid', '{{plural_name}}Controller@grid');
+				Route::get('create', '{{plural_name}}Controller@create');
+				Route::post('create', '{{plural_name}}Controller@store');
+				Route::get('{id}/edit', '{{plural_name}}Controller@edit');
+				Route::post('{id}/edit', '{{plural_name}}Controller@update');
+				Route::get('{id}/delete', '{{plural_name}}Controller@delete');
 			});
 
 			Route::group(['prefix' => '{{lower_name}}', 'namespace' => 'Frontend'], function()
 			{
-				Route::get('/', '{{name}}Controller@index');
+				Route::get('/', '{{plural_name}}Controller@index');
 			});
 		});
 	},

@@ -54,12 +54,13 @@ class FormGenerator extends Generator {
 
 			$el[] = $this->prepare($inputStub, [
 				'field_name'  => $col['field'],
-				'lower_model' => $model,
+				'lower_model' => strtolower($model),
 			]);
 		}
 
 		$content = $this->prepare($stub, [
-			'columns' => implode("\n\t\t\t\t", $el),
+			'columns'     => implode("\n\t\t\t\t", $el),
+			'lower_model' => strtolower($model),
 		]);
 
 		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.$view.'.blade.php');

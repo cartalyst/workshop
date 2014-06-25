@@ -1,8 +1,11 @@
 'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		// Get the page model
-		$model = $app['{{vendor}}\{{name}}\Models\{{model}}'];
+		if (class_exists('{{vendor}}\{{name}}\Models\{{model}}'))
+		{
+			// Get the model
+			$model = $app['{{vendor}}\{{name}}\Models\{{model}}'];
 
-		// Register a new attribute namespace
-		$app['Platform\Attributes\Models\Attribute']->registerNamespace($model);
+			// Register a new attribute namespace
+			$app['Platform\Attributes\Models\Attribute']->registerNamespace($model);
+		}
 	},

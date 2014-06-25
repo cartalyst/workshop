@@ -164,9 +164,6 @@ abstract class Generator implements GeneratorInterface {
 
 			$name = $fileName;
 
-			$args['class_name'] = $name;
-			$args['plural_name'] = strtolower(Str::plural($name));
-
 			$fileName = $name.'.php';
 
 			if (strpos($fileName, '.stub'))

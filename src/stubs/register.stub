@@ -1,14 +1,14 @@
 'register' => function(ExtensionInterface $extension, Application $app)
 	{
-		${{lower_name}}Repository = '{{vendor}}\{{name}}\Repositories\{{model}}RepositoryInterface';
+		${{model}}Repository = '{{vendor}}\{{name}}\Repositories\{{model}}RepositoryInterface';
 
-		if ( ! $app->bound(${{lower_name}}Repository))
+		if ( ! $app->bound(${{model}}Repository))
 		{
-			$app->bind(${{lower_name}}Repository, function($app)
+			$app->bind(${{model}}Repository, function($app)
 			{
 				$model = get_class($app['{{vendor}}\{{name}}\Models\{{model}}']);
 
-				return new {{vendor}}\{{name}}\Repositories\Db{{name}}Repository($model, $app['events']);
+				return new {{vendor}}\{{name}}\Repositories\Db{{model}}Repository($model, $app['events']);
 			});
 		}
 	},

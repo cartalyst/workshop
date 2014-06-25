@@ -24,7 +24,7 @@ class {{class_name}} extends Entity {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $table = '{{plural_name}}';
+	protected $table = '{{plural_lower_name}}';
 
 	/**
 	 * {@inheritDoc}
