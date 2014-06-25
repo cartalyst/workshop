@@ -19,6 +19,7 @@
 
 use Cartalyst\Workshop\Extension;
 use URL;
+use Str;
 
 class DataGridGenerator extends Generator {
 
@@ -65,13 +66,24 @@ class DataGridGenerator extends Generator {
 
 		$dir = $basePath.'grids/'.$name.'/';
 
+		$this->writeLangFiles($columns);
+
+		$dgCols = [];
+
+		foreach ($columns as $column)
+		{
+			$dgCols[]['content'] = $column['field'];
+		}
+
+		array_push($dgCols, ['content' => 'created_at']);
+
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
 			'href'    => URL::toAdmin($this->extension->lowerName).'<%= r.id %>/edit',
 			'content' => 'id',
 		];
 
-		$this->dataGridColumns = array_merge($this->dataGridColumns, $columns);
+		$this->dataGridColumns = array_merge($this->dataGridColumns, $dgCols);
 
 		$contents = [];
 
@@ -99,8 +111,6 @@ class DataGridGenerator extends Generator {
 
 		$stub = $this->stubsPath.'view-datagrid-index.blade.stub';
 
-		// $headers = ("<th>".implode("</th>\n\t\t\t<th>", $this->prepareColumns(false)).'</th>');
-
 		$columns = $this->dataGridColumns;
 
 		array_shift($columns);
@@ -125,6 +135,8 @@ class DataGridGenerator extends Generator {
 		]);
 
 		$viewPath = $basePath.$viewName.'.blade.php';
+
+		$this->ensureDirectory($viewPath);
 
 		$this->files->put($viewPath, $view);
 	}
@@ -226,6 +238,42 @@ class DataGridGenerator extends Generator {
 		}
 
 		return $el;
+	}
+
+	/**
+	 * Writes the data grid language files.
+	 *
+	 * @param  array  $columns
+	 * @return void
+	 */
+	protected function writeLangFiles($columns)
+	{
+		$tr = "<?php \n\nreturn [\n";
+
+		foreach ($columns as $column)
+		{
+			$tr .= "\t'".$column['field']."' => '".Str::title($column['field'])."',\n";
+			$tr .= "\t'".$column['field']."_help' => 'Enter the ".Str::title($column['field'])." here',\n";
+		}
+
+		$tr .= "];\n";
+
+		$this->files->put($this->path.'/lang/en/form.php', $tr);
+
+		$tr = "<?php \n\nreturn [\n";
+
+		$tr .= "\t'id' => 'Id',\n";
+
+		foreach ($columns as $column)
+		{
+			$tr .= "\t'".$column['field']."' => '".Str::title($column['field'])."',\n";
+		}
+
+		$tr .= "\t'created_at' => 'Created At',\n";
+
+		$tr .= "];\n";
+
+		$this->files->put($this->path.'/lang/en/table.php', $tr);
 	}
 
 }
