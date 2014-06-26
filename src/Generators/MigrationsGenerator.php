@@ -37,16 +37,27 @@ class MigrationsGenerator extends Generator {
 		$this->timestamps     = $timestamps;
 		$this->columns        = $columns;
 		$this->table          = Str::studly($table);
-		$this->migrationClass = 'Create'.$this->table.'Table';
 		$migrationDate        = date('Y_m_d_His');
-		$migrationName        = $migrationDate.'_'.snake_case($this->migrationClass);
+
+		if ($columns)
+		{
+			$mode = 'Create';
+			$stub = $this->stubsPath.'migration.stub';
+		}
+		else
+		{
+			$mode = 'Alter';
+			$stub = $this->stubsPath.'migration-table.stub';
+		}
+
+		$this->migrationClass = $mode.$this->table.'Table';
+
+		$migrationName = $migrationDate.'_'.snake_case($this->migrationClass);
 
 		if (class_exists($this->migrationClass))
 		{
 			throw new LogicException('This migration already exists.');
 		}
-
-		$stub = $this->stubsPath.'migration.stub';
 
 		$columns = $this->prepareColumns($columns, $increments, $timestamps);
 
