@@ -60,9 +60,12 @@ class DataGridGenerator extends Generator {
 	 * @param  array  $columns
 	 * @return void
 	 */
-	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [])
+	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $lang = false)
 	{
-		$this->writeLangFiles($columns);
+		if ($lang)
+		{
+			$this->writeLangFiles($columns);
+		}
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
 
