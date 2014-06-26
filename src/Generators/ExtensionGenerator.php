@@ -69,26 +69,6 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function prepare($path, $args = [])
-	{
-		$content = $this->files->get($path);
-
-		foreach ((array) $this->extension as $key => $value)
-		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
-		}
-
-		foreach ($args as $key => $value)
-		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
-		}
-
-		return $content;
-	}
-
-	/**
 	 * Creates a new model.
 	 *
 	 * @param  string  $name
@@ -120,11 +100,15 @@ class ExtensionGenerator extends Generator {
 	{
 		$name = ucfirst($name ?: $this->extension->name);
 
-		array_set($this->blocks, 'src.Widgets', [
-			$name => 'widget.stub',
+		$content = $this->prepare($this->stubsPath.'widget.stub', [
+			'class_name' => $name,
 		]);
 
-		$this->process();
+		$path = $this->path.'/src/Widgets/'.$name.'.php';
+
+		$this->ensureDirectory($path);
+
+		$this->files->put($path, $content);
 	}
 
 	/**
@@ -168,6 +152,7 @@ class ExtensionGenerator extends Generator {
 		}
 
 		$args = array_merge($args, [
+			'class_name'  => $controllerName,
 			'location'    => $location,
 			'model'       => ucfirst($name),
 			'lower_model' => strtolower($name),
@@ -345,6 +330,26 @@ class ExtensionGenerator extends Generator {
 		]);
 
 		$this->files->put($this->path.'/lang/en/permissions.php', $content);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function prepare($path, $args = [])
+	{
+		$content = $this->files->get($path);
+
+		foreach ((array) $this->extension as $key => $value)
+		{
+			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
+		}
+
+		foreach ($args as $key => $value)
+		{
+			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
+		}
+
+		return $content;
 	}
 
 }

@@ -88,6 +88,12 @@ abstract class Generator implements GeneratorInterface {
 		$this->html      = $html;
 		$this->form      = $form;
 		$this->path      = base_path().'/workbench/'.$this->extension->getFullName();
+
+		if ( ! $this->files->isDirectory($this->path))
+		{
+			$this->path = str_replace('workbench', 'extensions', $this->path);
+		}
+
 		$this->stubsPath = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
 	}
 
