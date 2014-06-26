@@ -21,10 +21,10 @@ use DataGrid;
 use Input;
 use Lang;
 use Platform\Admin\Controllers\Admin\AdminController;
-use {{vendor}}\{{name}}\Repositories\{{model}}RepositoryInterface;
 use Redirect;
 use Response;
 use View;
+use {{vendor}}\{{name}}\Repositories\{{model}}RepositoryInterface;
 
 class {{plural_name}}Controller extends AdminController {
 
@@ -86,7 +86,7 @@ class {{plural_name}}Controller extends AdminController {
 		$data = $this->{{lower_model}}->grid();
 
 		$columns = [
-			'*',
+			{{columns}}
 		];
 
 		$settings = [

@@ -136,6 +136,24 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createController($name = null, $location = 'Admin', $args = [])
 	{
+		if (isset($args['columns']))
+		{
+			$cols = "'id',\n";
+
+			foreach ($args['columns'] as $column)
+			{
+				$cols .= "\t\t\t'".$column['field']."',\n";
+			}
+
+			$cols .= "\t\t\t'created_at',\n";
+
+			$args['columns'] = trim($cols);
+		}
+		else
+		{
+			$args['columns'] = "'*',";
+		}
+
 		$controllerName = ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller');
 
 		$location = ucfirst($location);
