@@ -19,7 +19,7 @@
 
 use Cartalyst\Workshop\Extension;
 use URL;
-use Str;
+use Illuminate\Support\Str;
 
 class DataGridGenerator extends Generator {
 
@@ -62,11 +62,11 @@ class DataGridGenerator extends Generator {
 	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [])
 	{
+		$this->writeLangFiles($columns);
+
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
 
 		$dir = $basePath.'grids/'.$name.'/';
-
-		$this->writeLangFiles($columns);
 
 		$dgCols = [];
 
@@ -241,28 +241,18 @@ class DataGridGenerator extends Generator {
 	}
 
 	/**
-	 * Writes the data grid language files.
+	 * Writes the data grid language file.
 	 *
 	 * @param  array  $columns
 	 * @return void
 	 */
 	protected function writeLangFiles($columns)
 	{
-		$tr = "<?php \n\nreturn [\n";
+		$stub = $this->stubsPath.'lang/en/table.stub';
 
-		foreach ($columns as $column)
-		{
-			$tr .= "\t'".$column['field']."' => '".Str::title($column['field'])."',\n";
-			$tr .= "\t'".$column['field']."_help' => 'Enter the ".Str::title($column['field'])." here',\n";
-		}
+		$tr = '';
 
-		$tr .= "];\n";
-
-		$this->files->put($this->path.'/lang/en/form.php', $tr);
-
-		$tr = "<?php \n\nreturn [\n";
-
-		$tr .= "\t'id' => 'Id',\n";
+		$tr .= "'id' => 'Id',\n";
 
 		foreach ($columns as $column)
 		{
@@ -271,9 +261,11 @@ class DataGridGenerator extends Generator {
 
 		$tr .= "\t'created_at' => 'Created At',\n";
 
-		$tr .= "];\n";
+		$content = $this->prepare($stub, [
+			'fields' => rtrim($tr),
+		]);
 
-		$this->files->put($this->path.'/lang/en/table.php', $tr);
+		$this->files->put($this->path.'/lang/en/table.php', $content);
 	}
 
 }

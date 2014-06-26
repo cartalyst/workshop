@@ -19,13 +19,9 @@
 
 return [
 
-	'title'  => '{{name}}',
-	'create' => 'Create {{name}}',
-	'update' => 'Update {{name}}',
-
-	'tabs' => [
-		'general'    => 'General',
-		'attributes' => 'Attributes',
-	],
+	'index'  => 'List {{plural_name}}',
+	'create' => 'Create new {{model}}',
+	'edit'   => 'Edit {{model}}',
+	'delete' => 'Delete {{model}}',
 
 ];

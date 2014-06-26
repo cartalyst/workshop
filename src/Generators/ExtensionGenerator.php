@@ -18,7 +18,7 @@
  */
 
 use Illuminate\Filesystem\Filesystem;
-use Str;
+use Illuminate\Support\Str;
 
 class ExtensionGenerator extends Generator {
 
@@ -32,7 +32,11 @@ class ExtensionGenerator extends Generator {
 	/**
 	 * Constructor.
 	 *
+	 * @param  string  $slug
 	 * @param \Illuminate\Filesystem\Filesystem  $files
+	 * @param array  $blocks
+	 * @param \Illuminate\Html\HtmlBuilder  $html
+	 * @param \Illuminate\Html\FormBuilder  $form
 	 * @return void
 	 */
 	public function __construct($slug, Filesystem $files, $blocks = [], $html = null, $form = null)
@@ -47,7 +51,7 @@ class ExtensionGenerator extends Generator {
 	 *
 	 * @return string
 	 */
-	public function create($model = false, $controllers = false)
+	public function create()
 	{
 		if ( ! $this->files->isDirectory($this->path))
 		{
@@ -95,8 +99,8 @@ class ExtensionGenerator extends Generator {
 		$name = ucfirst($name ?: $this->extension->name);
 
 		$content = $this->prepare($this->stubsPath.'model.stub', [
-			'class_name'        => $name,
-			'plural_lower_name' => strtolower(Str::plural($name)),
+			'class_name' => $name,
+			'table'      => strtolower(Str::plural($name)),
 		]);
 
 		$path = $this->path.'/src/Models/'.$name.'.php';
@@ -130,26 +134,19 @@ class ExtensionGenerator extends Generator {
 	 * @param  string  $location
 	 * @return void
 	 */
-	public function createController($name = null, $location = 'Admin', $scaffold = false, $args = [])
+	public function createController($name = null, $location = 'Admin', $args = [])
 	{
 		$controllerName = ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller');
 
 		$location = ucfirst($location);
 
-		if ($scaffold)
+		if (in_array($location, ['Admin', 'Frontend']))
 		{
-			$stub = 'scaffold-admin-controller.stub';
+			$stub = Str::lower($location).'-controller.stub';
 		}
 		else
 		{
-			if (in_array($location, ['Admin', 'Frontend',]))
-			{
-				$stub = Str::lower($location).'-controller.stub';
-			}
-			else
-			{
-				$stub = 'controller.stub';
-			}
+			$stub = 'controller.stub';
 		}
 
 		$args = array_merge($args, [
@@ -227,15 +224,15 @@ class ExtensionGenerator extends Generator {
 	/**
 	 * Writes the register section.
 	 *
-	 * @param  string  $model
+	 * @param  string  $resource
 	 * @return void
 	 */
-	public function writeRegister($model)
+	public function writeRegister($resource)
 	{
 		$extensionContent = $this->files->get($this->path.'/extension.php');
 
 		$registerReplacement = $this->prepare($this->stubsPath.'register.stub', [
-			'model' => ucfirst($model),
+			'model' => ucfirst($resource),
 		]);
 
 		$extensionContent = preg_replace(
@@ -250,15 +247,15 @@ class ExtensionGenerator extends Generator {
 	/**
 	 * Writes the boot section.
 	 *
-	 * @param  string  $model
+	 * @param  string  $resource
 	 * @return void
 	 */
-	public function writeBoot($model)
+	public function writeBoot($resource)
 	{
 		$extensionContent = $this->files->get($this->path.'/extension.php');
 
 		$bootReplacement = $this->prepare($this->stubsPath.'boot.stub', [
-			'model' => ucfirst($model),
+			'model' => ucfirst($resource),
 		]);
 
 		$extensionContent = preg_replace(
@@ -268,6 +265,68 @@ class ExtensionGenerator extends Generator {
 		);
 
 		$this->files->put($this->path.'/extension.php', $extensionContent);
+	}
+
+	/**
+	 * Writes the permissions section.
+	 *
+	 * @param  string  $resource
+	 * @return void
+	 */
+	public function writePermissions($resource)
+	{
+		$extensionContent = $this->files->get($this->path.'/extension.php');
+
+		$permissionsReplacement = $this->prepare($this->stubsPath.'permissions.stub', [
+			'model'       => ucfirst($resource),
+			'plural_name' => ucfirst(Str::plural($resource)),
+		]);
+
+		$extensionContent = preg_replace(
+			"/'permissions' => function\s*.*?},/s",
+			rtrim($permissionsReplacement),
+			$extensionContent
+		);
+
+		$this->files->put($this->path.'/extension.php', $extensionContent);
+	}
+
+	/**
+	 * Writes the data grid language files.
+	 *
+	 * @param  array  $columns
+	 * @return void
+	 */
+	public function writeLang($resource)
+	{
+		$this->ensureDirectory($this->path.'/lang/en/general.php');
+
+		$stub = $this->stubsPath.'lang/en/general.stub';
+
+		$content = $this->prepare($stub, [
+			'model'       => ucfirst($resource),
+			'lower_model' => strtolower($resource),
+		]);
+
+		$this->files->put($this->path.'/lang/en/general.php', $content);
+
+		$stub = $this->stubsPath.'lang/en/message.stub';
+
+		$content = $this->prepare($stub, [
+			'model'       => ucfirst($resource),
+			'lower_model' => strtolower($resource),
+		]);
+
+		$this->files->put($this->path.'/lang/en/message.php', $content);
+
+		$stub = $this->stubsPath.'lang/en/permissions.stub';
+
+		$content = $this->prepare($stub, [
+			'model'       => ucfirst($resource),
+			'plural_name' => ucfirst(Str::plural($resource)),
+		]);
+
+		$this->files->put($this->path.'/lang/en/permissions.php', $content);
 	}
 
 }

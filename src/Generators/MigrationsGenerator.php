@@ -19,7 +19,7 @@
 
 use Cartalyst\Workshop\Extension;
 use LogicException;
-use Str;
+use Illuminate\Support\Str;
 
 class MigrationsGenerator extends Generator {
 

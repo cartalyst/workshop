@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Models;
+<?php
 /**
  * Part of the Workshop package.
  *
@@ -17,32 +17,15 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Attributes\Models\Entity;
+return [
 
-class {{class_name}} extends Entity {
+	'title'  => '{{model}}',
+	'create' => 'Create {{model}}',
+	'update' => 'Update {{model}}',
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected $table = '{{table}}';
+	'tabs' => [
+		'general'    => 'General',
+		'attributes' => 'Attributes',
+	],
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected $guarded = [
-		'id',
-	];
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected $with = [
-		'values.attribute',
-	];
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected $eavNamespace = '{{lower_vendor}}/{{lower_name}}';
-
-}
+];

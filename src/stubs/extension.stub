@@ -241,8 +241,6 @@ return [
 	{
 		return [
 
-			'{{vendor}}\{{name}}\Controllers\Admin\{{name}}Controller@index' => 'List {{name}}',
-
 		];
 	},
 

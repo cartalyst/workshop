@@ -19,7 +19,6 @@
 
 return [
 
-	'id'         => 'Id',
-	'created_at' => 'Created at',
+	{{fields}}
 
 ];

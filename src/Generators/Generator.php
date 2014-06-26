@@ -18,7 +18,7 @@
  */
 
 use Cartalyst\Workshop\Extension;
-use Str;
+use Illuminate\Support\Str;
 
 abstract class Generator implements GeneratorInterface {
 
@@ -173,28 +173,6 @@ abstract class Generator implements GeneratorInterface {
 		}
 
 		$targetPath .= $fileName;
-
-		if ( ! $this->files->exists($stubPath))
-		{
-			$parts = explode('/', $targetPath);
-
-			$filename = array_pop($parts);
-
-			$langDir = str_replace($this->path, __DIR__.'/../stubs', implode('/', $parts));
-
-			if ($this->files->isDirectory($langDir))
-			{
-				$files = $this->files->allFiles($langDir);
-
-				foreach ($files as $f)
-				{
-					if($f->getRelativePathname() === $file)
-					{
-						$stubPath = $langDir.'/'.$file;
-					}
-				}
-			}
-		}
 
 		$this->ensureDirectory($targetPath);
 

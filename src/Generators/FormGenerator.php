@@ -17,6 +17,8 @@
  * @link       http://cartalyst.com
  */
 
+use Illuminate\Support\Str;
+
 class FormGenerator extends Generator {
 
 	/**
@@ -28,6 +30,8 @@ class FormGenerator extends Generator {
 	 */
 	public function create($model, $columns = [], $view = 'form')
 	{
+		$this->writeLangFiles($columns);
+
 		$stub = $this->stubsPath.'form.blade.stub';
 
 		$el = [];
@@ -81,6 +85,33 @@ class FormGenerator extends Generator {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Writes the form language file.
+	 *
+	 * @param  array  $columns
+	 * @return void
+	 */
+	protected function writeLangFiles($columns)
+	{
+		$this->ensureDirectory($this->path.'/lang/en/form.php');
+
+		$stub = $this->stubsPath.'lang/en/form.stub';
+
+		$tr = '';
+
+		foreach ($columns as $column)
+		{
+			$tr .= "\t'".$column['field']."' => '".Str::title($column['field'])."',\n";
+			$tr .= "\t'".$column['field']."_help' => 'Enter the ".Str::title($column['field'])." here',\n";
+		}
+
+		$content = $this->prepare($stub, [
+			'fields' => trim($tr),
+		]);
+
+		$this->files->put($this->path.'/lang/en/form.php', $content);
 	}
 
 }
