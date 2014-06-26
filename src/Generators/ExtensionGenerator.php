@@ -53,6 +53,8 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function create()
 	{
+		$this->path = str_replace('extensions', 'workbench', $this->path);
+
 		if ( ! $this->files->isDirectory($this->path))
 		{
 			$this->files->makeDirectory($this->path, 0777, true);
