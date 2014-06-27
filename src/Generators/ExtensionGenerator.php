@@ -283,6 +283,68 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
+	 * Writes the menu items.
+	 *
+	 * @param  string  $resource
+	 * @return void
+	 */
+	public function writeMenus($resource)
+	{
+		$content = $this->files->get($this->path.'/extension.php');
+
+		$newMenu = [
+			'slug'  => 'admin-'.$this->extension->lowerVendor.'-'.$this->extension->lowerName.'-'.strtolower($resource),
+			'name'  => Str::plural(Str::title($resource)),
+			'class' => 'fa fa-circle-o',
+			'uri'   => 'faq/'.Str::plural(Str::lower($resource)),
+		];
+
+		$menus = array_get($this->files->getRequire($this->path.'/extension.php'), 'menus');
+
+		$children = [];
+
+		if ($admin = array_get($menus, 'admin'))
+		{
+			foreach ($admin as $child)
+			{
+				if ($children = array_get($child, 'children'))
+				{
+					foreach ($children as $_child)
+					{
+						if ($_child === $newMenu)
+						{
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		if ( ! $children)
+		{
+			$children = [
+				$newMenu,
+			];
+		}
+		else
+		{
+			$children[] = $newMenu;
+		}
+
+		$menus['admin'][0]['children'] = $children;
+
+		$newMenu = "'menus' => [\n\n\t\t".$this->wrapArray($menus, "\t")."\n\t],\n\n";
+
+		$content = preg_replace(
+			"/'menus' => \[(.*)\]\s*,/s",
+			rtrim($newMenu),
+			$content
+		);
+
+		$this->files->put($this->path.'/extension.php', $content);
+	}
+
+	/**
 	 * Writes the data grid language files.
 	 *
 	 * @param  array  $columns

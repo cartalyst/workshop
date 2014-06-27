@@ -62,7 +62,7 @@ class DataGridGenerator extends Generator {
 	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
 	{
-		$this->writeLangFiles($columns);
+		$this->writeLangFiles($columns, $model);
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
 
@@ -119,7 +119,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($columns as $column)
 		{
-			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::table.{$column['content']}') }}}";
+			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".strtolower(Str::plural($model))."/table.{$column['content']}') }}}";
 
 			$headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
 		}
@@ -220,8 +220,10 @@ class DataGridGenerator extends Generator {
 	 * @param  array  $columns
 	 * @return void
 	 */
-	protected function writeLangFiles($columns)
+	protected function writeLangFiles($columns, $model)
 	{
+		$model = strtolower(Str::plural($model));
+
 		$stub = $this->stubsPath.'lang/en/table.stub';
 
 		$values['id'] = 'Id';
@@ -233,7 +235,7 @@ class DataGridGenerator extends Generator {
 
 		$values['created_at'] = 'Created At';
 
-		$filePath = $this->path.'/lang/en/table.php';
+		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/table.php';
 
 		if ($this->files->exists($filePath))
 		{
@@ -242,13 +244,13 @@ class DataGridGenerator extends Generator {
 			$values = array_merge($trans, $values);
 		}
 
-		$trans = $this->wrapArray($values);
+		$trans = $this->wrapArray($values, '');
 
 		$content = $this->prepare($stub, [
 			'fields' => rtrim($trans),
 		]);
 
-		$this->files->put($this->path.'/lang/en/table.php', $content);
+		$this->files->put($filePath, $content);
 	}
 
 }

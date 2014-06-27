@@ -107,6 +107,8 @@ class FormGenerator extends Generator {
 
 		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/form.php';
 
+		$this->ensureDirectory($filePath);
+
 		if ($this->files->exists($filePath))
 		{
 			$trans = $this->files->getRequire($filePath);
@@ -114,10 +116,10 @@ class FormGenerator extends Generator {
 			$values = array_merge($trans, $values);
 		}
 
-		$trans = $this->wrapArray($values);
+		$trans = $this->wrapArray($values, '');
 
 		$content = $this->prepare($stub, [
-			'fields' => rtrim($trans),
+			'fields' => trim($trans),
 		]);
 
 		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($model)).'/form.php', $content);

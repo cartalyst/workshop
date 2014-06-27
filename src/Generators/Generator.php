@@ -230,14 +230,35 @@ abstract class Generator implements GeneratorInterface {
 	 * @param  string  $indentation
 	 * @return string
 	 */
-	protected function wrapArray($array, $indentation = "\t")
+	protected function wrapArray($array, $indentation = null)
 	{
-		$text = '';
+		$self = $this;
 
-		foreach ($array as $key => $value)
+		$indentation = $indentation . "\t";
+
+		array_walk($array, function($value, $key) use ($indentation, &$text, $self)
 		{
-			$text .= $indentation."'".$key."' => '".$value."',\n";
-		}
+			if (is_array($value))
+			{
+				if ( ! is_numeric($key))
+				{
+					$text .= $indentation."'".$key."' => [\n\t";
+				}
+				else
+				{
+					$text .= $indentation."[\n\t";
+				}
+
+				$text .= $indentation.$self->wrapArray($value, $indentation) . "\n";
+
+				$text .= $indentation."],\n";
+			}
+
+			if (is_string($value) && is_string($key))
+			{
+				$text .= $indentation."'".$key."' => '".$value."',\n";
+			}
+		});
 
 		return trim($text);
 	}
