@@ -296,7 +296,7 @@ class ExtensionGenerator extends Generator {
 			'slug'  => 'admin-'.$this->extension->lowerVendor.'-'.$this->extension->lowerName.'-'.strtolower($resource),
 			'name'  => Str::plural(Str::title($resource)),
 			'class' => 'fa fa-circle-o',
-			'uri'   => 'faq/'.Str::plural(Str::lower($resource)),
+			'uri'   => $this->extension->lowerName.'/'.Str::plural(Str::lower($resource)),
 		];
 
 		$menus = array_get($this->files->getRequire($this->path.'/extension.php'), 'menus');
