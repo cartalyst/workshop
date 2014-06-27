@@ -3,7 +3,7 @@
 {{-- Page title --}}
 @section('title')
 	@parent
-	: {{{ trans("{{lower_vendor}}/{{lower_name}}::general.{$mode}") }}} {{{ ${{lower_model}}->exists ? '- ' . ${{lower_model}}->name : null }}}
+	: {{{ trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/general.{$mode}") }}} {{{ ${{lower_model}}->exists ? '- ' . ${{lower_model}}->name : null }}}
 @stop
 
 {{-- Queue assets --}}
@@ -26,7 +26,7 @@
 {{-- Page header --}}
 <div class="page-header">
 
-	<h1>{{{ trans("{{lower_vendor}}/{{lower_name}}::general.{$mode}") }}} <small>{{{ ${{lower_model}}->name }}}</small></h1>
+	<h1>{{{ trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/general.{$mode}") }}} <small>{{{ ${{lower_model}}->name }}}</small></h1>
 
 </div>
 
@@ -75,9 +75,9 @@
 
 				<button class="btn btn-success" type="submit">{{{ trans('button.save') }}}</button>
 
-				<a class="btn btn-default" href="{{{ URL::toAdmin('{{lower_name}}') }}}">{{{ trans('button.cancel') }}}</a>
+				<a class="btn btn-default" href="{{{ URL::toAdmin('{{lower_name}}/{{plural_lower_model}}') }}}">{{{ trans('button.cancel') }}}</a>
 
-				<a class="btn btn-danger" data-toggle="modal" data-target="modal-confirm" href="{{ URL::toAdmin("{{lower_name}}/{${{lower_model}}->id}/delete") }}">{{{ trans('button.delete') }}}</a>
+				<a class="btn btn-danger" data-toggle="modal" data-target="modal-confirm" href="{{ URL::toAdmin("{{lower_name}}/{{plural_lower_model}}/{${{lower_model}}->id}/delete") }}">{{{ trans('button.delete') }}}</a>
 
 			</div>
 

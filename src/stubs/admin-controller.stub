@@ -73,7 +73,7 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	public function index()
 	{
-		return View::make('{{lower_vendor}}/{{lower_name}}::index');
+		return View::make('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.index');
 	}
 
 	/**
@@ -140,17 +140,6 @@ class {{plural_name}}Controller extends AdminController {
 	}
 
 	/**
-	 * Show the form for copying {{lower_model}}.
-	 *
-	 * @param  int  $id
-	 * @return mixed
-	 */
-	public function copy($id)
-	{
-		return $this->showForm('copy', $id);
-	}
-
-	/**
 	 * Remove the specified {{lower_model}}.
 	 *
 	 * @param  int  $id
@@ -160,14 +149,14 @@ class {{plural_name}}Controller extends AdminController {
 	{
 		if ($this->{{lower_model}}->delete($id))
 		{
-			$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.success.delete');
+			$message = Lang::get('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.delete');
 
-			return Redirect::toAdmin('{{lower_name}}')->withSuccess($message);
+			return Redirect::toAdmin('{{lower_name}}/{{plural_lower_model}}')->withSuccess($message);
 		}
 
-		$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.error.delete');
+		$message = Lang::get('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.error.delete');
 
-		return Redirect::toAdmin('{{lower_name}}')->withErrors($message);
+		return Redirect::toAdmin('{{lower_name}}/{{plural_lower_model}}')->withErrors($message);
 	}
 
 	/**
@@ -206,9 +195,9 @@ class {{plural_name}}Controller extends AdminController {
 		{
 			if ( ! ${{lower_model}} = $this->{{lower_model}}->find($id))
 			{
-				$message = Lang::get('{{lower_vendor}}/{{lower_name}}::message.not_found', compact('id'));
+				$message = Lang::get('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.not_found', compact('id'));
 
-				return Redirect::toAdmin('{{lower_name}}')->withErrors($message);
+				return Redirect::toAdmin('{{lower_name}}/{{plural_lower_model}}')->withErrors($message);
 			}
 		}
 		else
@@ -217,7 +206,7 @@ class {{plural_name}}Controller extends AdminController {
 		}
 
 		// Show the page
-		return View::make('{{lower_vendor}}/{{lower_name}}::form', compact('mode', '{{lower_model}}'));
+		return View::make('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.form', compact('mode', '{{lower_model}}'));
 	}
 
 	/**
@@ -262,9 +251,9 @@ class {{plural_name}}Controller extends AdminController {
 		if ($messages->isEmpty())
 		{
 			// Prepare the success message
-			$message = Lang::get("{{lower_vendor}}/{{lower_name}}::message.success.{$mode}");
+			$message = Lang::get("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.{$mode}");
 
-			return Redirect::toAdmin("{{lower_name}}/{${{lower_model}}->id}/edit")->withSuccess($message);
+			return Redirect::toAdmin("{{lower_name}}/{{plural_lower_model}}/{${{lower_model}}->id}/edit")->withSuccess($message);
 		}
 
 		return Redirect::back()->withInput()->withErrors($messages);

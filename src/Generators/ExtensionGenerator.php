@@ -81,8 +81,9 @@ class ExtensionGenerator extends Generator {
 		$name = ucfirst($name ?: $this->extension->name);
 
 		$content = $this->prepare($this->stubsPath.'model.stub', [
-			'class_name' => $name,
-			'table'      => strtolower(Str::plural($name)),
+			'class_name'         => $name,
+			'table'              => strtolower(Str::plural($name)),
+			'lower_model'        => strtolower($name),
 		]);
 
 		$path = $this->path.'/src/Models/'.$name.'.php';
@@ -154,11 +155,12 @@ class ExtensionGenerator extends Generator {
 		}
 
 		$args = array_merge($args, [
-			'class_name'  => $controllerName,
-			'location'    => $location,
-			'model'       => ucfirst($name),
-			'lower_model' => strtolower($name),
-			'plural_name' => ucfirst(Str::plural($name)),
+			'class_name'         => $controllerName,
+			'location'           => $location,
+			'model'              => ucfirst($name),
+			'lower_model'        => strtolower($name),
+			'plural_name'        => ucfirst(Str::plural($name)),
+			'plural_lower_model' => strtolower(Str::plural($name)),
 		]);
 
 		$content = $this->prepare($this->stubsPath.$stub, $args);
@@ -211,19 +213,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeRoutes($resource)
 	{
-		$extensionContent = $this->files->get($this->path.'/extension.php');
-
-		$routesReplacement = $this->prepare($this->stubsPath.'routes.stub', [
-			'plural_name' => ucfirst(Str::plural($resource)),
-		]);
-
-		$extensionContent = preg_replace(
-			"/'routes' => function\s*.*?},/s",
-			rtrim($routesReplacement),
-			$extensionContent
-		);
-
-		$this->files->put($this->path.'/extension.php', $extensionContent);
+		$this->updateResource('routes', $resource);
 	}
 
 	/**
@@ -234,19 +224,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeRegister($resource)
 	{
-		$extensionContent = $this->files->get($this->path.'/extension.php');
-
-		$registerReplacement = $this->prepare($this->stubsPath.'register.stub', [
-			'model' => ucfirst($resource),
-		]);
-
-		$extensionContent = preg_replace(
-			"/'register' => function\s*.*?},/s",
-			rtrim($registerReplacement),
-			$extensionContent
-		);
-
-		$this->files->put($this->path.'/extension.php', $extensionContent);
+		$this->updateResource('register', $resource);
 	}
 
 	/**
@@ -257,19 +235,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeBoot($resource)
 	{
-		$extensionContent = $this->files->get($this->path.'/extension.php');
-
-		$bootReplacement = $this->prepare($this->stubsPath.'boot.stub', [
-			'model' => ucfirst($resource),
-		]);
-
-		$extensionContent = preg_replace(
-			"/'boot' => function\s*.*?},/s",
-			rtrim($bootReplacement),
-			$extensionContent
-		);
-
-		$this->files->put($this->path.'/extension.php', $extensionContent);
+		$this->updateResource('boot', $resource);
 	}
 
 	/**
@@ -280,20 +246,40 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writePermissions($resource)
 	{
-		$extensionContent = $this->files->get($this->path.'/extension.php');
+		$content = $this->files->get($this->path.'/extension.php');
 
-		$permissionsReplacement = $this->prepare($this->stubsPath.'permissions.stub', [
-			'model'       => ucfirst($resource),
-			'plural_name' => ucfirst(Str::plural($resource)),
+		$newResources = $this->prepare($this->stubsPath.'permissions'.'.stub', [
+			'plural_name'        => ucfirst(Str::plural($resource)),
+			'model'              => ucfirst($resource),
+			'lower_model'        => strtolower($resource),
+			'plural_lower_model' => strtolower(Str::plural($resource)),
 		]);
 
-		$extensionContent = preg_replace(
+		preg_match('/'.'\''.'permissions'.'\' => function\(.*?\)\s*\n\s*{\s*return \[\n(.*?)\s*?\];/s', $content, $oldResources);
+
+		$oldResources = last($oldResources);
+
+		if (strpos(trim($oldResources), trim($newResources)) !== false)
+		{
+			return;
+		}
+
+		$resources = $oldResources."\n\n".$newResources;
+
+		$stub = 'empty-permissions.stub';
+
+		$resourceReplacement = $this->prepare($this->stubsPath.$stub, [
+			'content' => trim($resources),
+			'type'    => 'permissions',
+		]);
+
+		$content = preg_replace(
 			"/'permissions' => function\s*.*?},/s",
-			rtrim($permissionsReplacement),
-			$extensionContent
+			rtrim($resourceReplacement),
+			$content
 		);
 
-		$this->files->put($this->path.'/extension.php', $extensionContent);
+		$this->files->put($this->path.'/extension.php', $content);
 	}
 
 	/**
@@ -304,16 +290,26 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeLang($resource)
 	{
-		$this->ensureDirectory($this->path.'/lang/en/general.php');
+		$this->ensureDirectory($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/general.php');
+
+		$generalMainPath = $this->path.'/lang/en/general.php';
+
+		if ( ! $this->files->exists($generalMainPath))
+		{
+			$generalMain = $this->prepare($this->stubsPath.'lang/en/general-main.stub');
+
+			$this->files->put($generalMainPath, $generalMain);
+		}
 
 		$stub = $this->stubsPath.'lang/en/general.stub';
 
 		$content = $this->prepare($stub, [
-			'model'       => ucfirst($resource),
-			'lower_model' => strtolower($resource),
+			'model'        => ucfirst($resource),
+			'lower_model'  => strtolower($resource),
+			'plural_model' => Str::title(Str::plural($resource)),
 		]);
 
-		$this->files->put($this->path.'/lang/en/general.php', $content);
+		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/general.php', $content);
 
 		$stub = $this->stubsPath.'lang/en/message.stub';
 
@@ -322,7 +318,7 @@ class ExtensionGenerator extends Generator {
 			'lower_model' => strtolower($resource),
 		]);
 
-		$this->files->put($this->path.'/lang/en/message.php', $content);
+		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/message.php', $content);
 
 		$stub = $this->stubsPath.'lang/en/permissions.stub';
 
@@ -331,7 +327,7 @@ class ExtensionGenerator extends Generator {
 			'plural_name' => ucfirst(Str::plural($resource)),
 		]);
 
-		$this->files->put($this->path.'/lang/en/permissions.php', $content);
+		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/permissions.php', $content);
 	}
 
 	/**
@@ -352,6 +348,54 @@ class ExtensionGenerator extends Generator {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Updates extension resources on extension.php.
+	 *
+	 * @param  string  $type
+	 * @param  string  $resource
+	 * @return void
+	 */
+	protected function updateResource($type, $resource, $stub = null)
+	{
+		$content = $this->files->get($this->path.'/extension.php');
+
+		$newResources = $this->prepare($this->stubsPath.$type.'.stub', [
+			'plural_name'        => ucfirst(Str::plural($resource)),
+			'model'              => ucfirst($resource),
+			'lower_model'        => strtolower($resource),
+			'plural_lower_model' => strtolower(Str::plural($resource)),
+		]);
+
+		preg_match('/'.'\''.$type.'\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $content, $oldResources);
+
+		preg_match('/'.'\''.$type.'\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $newResources, $newResources);
+
+		$oldResources = last($oldResources);
+		$newResources = last($newResources);
+
+		if (strpos($oldResources, $newResources) !== false)
+		{
+			return;
+		}
+
+		$resources = $oldResources."\n".$newResources;
+
+		$stub = $stub ?: 'empty-extension-closure.stub';
+
+		$resourceReplacement = $this->prepare($this->stubsPath.$stub, [
+			'content' => trim($resources),
+			'type'    => $type,
+		]);
+
+		$content = preg_replace(
+			"/'{$type}' => function\s*.*?},/s",
+			rtrim($resourceReplacement),
+			$content
+		);
+
+		$this->files->put($this->path.'/extension.php', $content);
 	}
 
 }

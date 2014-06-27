@@ -30,7 +30,7 @@ class FormGenerator extends Generator {
 	 */
 	public function create($model, $columns = [], $view = 'form')
 	{
-		$this->writeLangFiles($columns);
+		$this->writeLangFiles($columns, $model);
 
 		$stub = $this->stubsPath.'form.blade.stub';
 
@@ -59,17 +59,19 @@ class FormGenerator extends Generator {
 			$el[] = $this->prepare($inputStub, [
 				'field_name'  => $col['field'],
 				'lower_model' => strtolower($model),
+				'plural_lower_model' => strtolower(Str::plural($model)),
 			]);
 		}
 
 		$content = $this->prepare($stub, [
-			'columns'     => implode("\n\t\t\t\t", $el),
-			'lower_model' => strtolower($model),
+			'columns'            => implode("\n\t\t\t\t", $el),
+			'lower_model'        => strtolower($model),
+			'plural_lower_model' => strtolower(Str::plural($model)),
 		]);
 
-		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.$view.'.blade.php');
+		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/'.$view.'.blade.php');
 
-		$this->files->put($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.$view.'.blade.php', $content);
+		$this->files->put($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/'.$view.'.blade.php', $content);
 	}
 
 	/**
@@ -93,25 +95,32 @@ class FormGenerator extends Generator {
 	 * @param  array  $columns
 	 * @return void
 	 */
-	protected function writeLangFiles($columns)
+	protected function writeLangFiles($columns, $model)
 	{
-		$this->ensureDirectory($this->path.'/lang/en/form.php');
-
 		$stub = $this->stubsPath.'lang/en/form.stub';
-
-		$tr = '';
 
 		foreach ($columns as $column)
 		{
-			$tr .= "\t'".$column['field']."' => '".Str::title($column['field'])."',\n";
-			$tr .= "\t'".$column['field']."_help' => 'Enter the ".Str::title($column['field'])." here',\n";
+			$values[$column['field']] = Str::title($column['field']);
+			$values[$column['field'].'_help'] = 'Enter the '.Str::title($column['field']).' here';
 		}
 
+		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/form.php';
+
+		if ($this->files->exists($filePath))
+		{
+			$trans = $this->files->getRequire($filePath);
+
+			$values = array_merge($trans, $values);
+		}
+
+		$trans = $this->wrapArray($values);
+
 		$content = $this->prepare($stub, [
-			'fields' => trim($tr),
+			'fields' => rtrim($trans),
 		]);
 
-		$this->files->put($this->path.'/lang/en/form.php', $content);
+		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($model)).'/form.php', $content);
 	}
 
 }

@@ -60,12 +60,9 @@ class DataGridGenerator extends Generator {
 	 * @param  array  $columns
 	 * @return void
 	 */
-	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $lang = false)
+	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
 	{
-		if ($lang)
-		{
-			$this->writeLangFiles($columns);
-		}
+		$this->writeLangFiles($columns);
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
 
@@ -82,7 +79,7 @@ class DataGridGenerator extends Generator {
 
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
-			'href'    => URL::toAdmin($this->extension->lowerName).'<%= r.id %>/edit',
+			'href'    => URL::toAdmin($this->extension->lowerName.'/'.strtolower(Str::plural($model))).'<%= r.id %>/edit',
 			'content' => 'id',
 		];
 
@@ -92,7 +89,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($this->dataGridTemplates as $template)
 		{
-			$templateContent = $this->processDataGridTemplate($name, $this->stubsPath.$template);
+			$templateContent = $this->processDataGridTemplate($name, $this->stubsPath.$template, $model);
 
 			$contents[$template] = $templateContent;
 		}
@@ -112,7 +109,7 @@ class DataGridGenerator extends Generator {
 			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::grids/{$name}/{$file}')";
 		}
 
-		$stub = $this->stubsPath.'view-datagrid-index.blade.stub';
+		$stub = $this->stubsPath.'view-admin-index.blade.stub';
 
 		$columns = $this->dataGridColumns;
 
@@ -131,13 +128,17 @@ class DataGridGenerator extends Generator {
 
 		$includes = implode("\n", $includes);
 
+		$lowerModel = strtolower($model);
+
 		$view = $this->prepare($stub, [
-			'headers'   => $headers,
-			'includes'  => $includes,
-			'grid_name' => $name,
+			'headers'            => $headers,
+			'includes'           => $includes,
+			'grid_name'          => $name,
+			'lower_model'        => $lowerModel,
+			'plural_lower_model' => strtolower(Str::plural($lowerModel)),
 		]);
 
-		$viewPath = $basePath.$viewName.'.blade.php';
+		$viewPath = $basePath.Str::plural($lowerModel).'/'.$viewName.'.blade.php';
 
 		$this->ensureDirectory($viewPath);
 
@@ -150,9 +151,9 @@ class DataGridGenerator extends Generator {
 	 * @param  string $stub
 	 * @return string
 	 */
-	protected function processDataGridTemplate($name, $stub)
+	protected function processDataGridTemplate($name, $stub, $model)
 	{
-		$el = $this->prepareColumns();
+		$el = $this->prepareColumns($model);
 
 		$columns = ("<td>".implode("</td>\n\t\t\t<td>", $el).'</td>');
 
@@ -171,7 +172,7 @@ class DataGridGenerator extends Generator {
 	 * @param  bool  $results
 	 * @return array
 	 */
-	protected function prepareColumns($results = true)
+	protected function prepareColumns($model)
 	{
 		$el = [];
 
@@ -183,26 +184,15 @@ class DataGridGenerator extends Generator {
 			{
 				if ($type === 'a')
 				{
-					if ($results)
-					{
-						$url = array_pull($attributes, 'href');
+					$url = array_pull($attributes, 'href');
 
-						$elementContent = '<%= r.' . array_pull($attributes, 'content') . ' %>';
+					$elementContent = '<%= r.' . array_pull($attributes, 'content') . ' %>';
 
-						$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
+					$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-						$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/<%= r.id %>/edit\') }}"', $link);
+					$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/'.strtolower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
 
-						$el[] = $link;
-					}
-					else
-					{
-						$value = array_pull($attributes, 'content');
-
-						$content = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::table.{$value}') }}}";
-
-						$el[] = $content;
-					}
+					$el[] = $link;
 				}
 				else if ($type === 'checkbox')
 				{
@@ -210,33 +200,14 @@ class DataGridGenerator extends Generator {
 
 					$value = array_pull($attributes, 'value');
 
-					if ($results)
-					{
-						$value = '<%= r.' . $value . ' %>';
+					$value = '<%= r.' . $value . ' %>';
 
-						$el[] = ($this->html->decode($this->form->checkbox($checkBoxName, $value, null, $attributes)));
-					}
-					else
-					{
-						$attributes['name'] = 'checkAll';
-						$attributes['id']   = 'checkAll';
-
-						$el[] = ($this->html->decode($this->form->checkbox($checkBoxName, null, null, $attributes)));
-					}
+					$el[] = ($this->html->decode($this->form->checkbox($checkBoxName, $value, null, $attributes)));
 				}
 			}
 			else
 			{
-				if ($results)
-				{
-					$el[] = '<%= r.' . array_pull($attributes, 'content') . ' %>';
-				}
-				else
-				{
-					$value = array_pull($attributes, 'content');
-
-					$el[] = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::table.{$value}') }}}";
-				}
+				$el[] = '<%= r.' . array_pull($attributes, 'content') . ' %>';
 			}
 		}
 
@@ -253,19 +224,28 @@ class DataGridGenerator extends Generator {
 	{
 		$stub = $this->stubsPath.'lang/en/table.stub';
 
-		$tr = '';
-
-		$tr .= "'id' => 'Id',\n";
+		$values['id'] = 'Id';
 
 		foreach ($columns as $column)
 		{
-			$tr .= "\t'".$column['field']."' => '".Str::title($column['field'])."',\n";
+			$values[$column['field']] = Str::title($column['field']);
 		}
 
-		$tr .= "\t'created_at' => 'Created At',\n";
+		$values['created_at'] = 'Created At';
+
+		$filePath = $this->path.'/lang/en/table.php';
+
+		if ($this->files->exists($filePath))
+		{
+			$trans = $this->files->getRequire($filePath);
+
+			$values = array_merge($trans, $values);
+		}
+
+		$trans = $this->wrapArray($values);
 
 		$content = $this->prepare($stub, [
-			'fields' => rtrim($tr),
+			'fields' => rtrim($trans),
 		]);
 
 		$this->files->put($this->path.'/lang/en/table.php', $content);

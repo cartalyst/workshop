@@ -223,4 +223,23 @@ abstract class Generator implements GeneratorInterface {
 		}
 	}
 
+	/**
+	 * Wraps an array for text output.
+	 *
+	 * @param  array  $array
+	 * @param  string  $indentation
+	 * @return string
+	 */
+	protected function wrapArray($array, $indentation = "\t")
+	{
+		$text = '';
+
+		foreach ($array as $key => $value)
+		{
+			$text .= $indentation."'".$key."' => '".$value."',\n";
+		}
+
+		return trim($text);
+	}
+
 }
