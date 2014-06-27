@@ -1,4 +1,4 @@
-<?php
+<?php {{namespace}}
 /**
  * Part of the Workshop package.
  *
@@ -17,8 +17,29 @@
  * @link       http://cartalyst.com
  */
 
-return [
+use DB;
+// use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
-	'vendor' => null,
+class {{class_name}} {
 
-];
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run()
+	{
+		// $faker = Faker::create();
+
+		DB::table('{{table}}')->truncate();
+
+		foreach(range(1, {{records}}) as $index)
+		{
+			// DB::table('{{table}}')->insert([
+			// 	{{columns}}
+			// ]);
+		}
+	}
+
+}

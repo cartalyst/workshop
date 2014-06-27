@@ -19,6 +19,9 @@
 
 return [
 
-	'vendor' => null,
+	'index'  => 'List {{plural_name}}',
+	'create' => 'Create new {{model}}',
+	'edit'   => 'Edit {{model}}',
+	'delete' => 'Delete {{model}}',
 
 ];

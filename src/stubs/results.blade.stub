@@ -1,0 +1,11 @@
+<script type="text/template" data-grid="{{grid_name}}" data-template="results">
+
+	<% _.each(results, function(r) { %>
+
+		<tr>
+			{{columns}}
+		</tr>
+
+	<% }); %>
+
+</script>

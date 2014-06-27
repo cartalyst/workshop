@@ -1,4 +1,4 @@
-<?php
+<?php namespace Cartalyst\Workshop\Generators;
 /**
  * Part of the Workshop package.
  *
@@ -17,8 +17,15 @@
  * @link       http://cartalyst.com
  */
 
-return [
+interface GeneratorInterface {
 
-	'vendor' => null,
+	/**
+	 * Prepare stub content.
+	 *
+	 * @param  string  $path
+	 * @param  array  $args
+	 * @return string
+	 */
+	public function prepare($path, $args);
 
-];
+}

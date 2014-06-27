@@ -1,4 +1,4 @@
-<?php
+<?php namespace Cartalyst\Workshop\Facades;
 /**
  * Part of the Workshop package.
  *
@@ -17,8 +17,15 @@
  * @link       http://cartalyst.com
  */
 
-return [
+use Illuminate\Support\Facades\Facade;
 
-	'vendor' => null,
+class Workshop extends Facade {
 
-];
+	/**
+	 * Get the registered name of the component.
+	 *
+	 * @return string
+	 */
+	protected static function getFacadeAccessor() { return 'workshop.creator'; }
+
+}

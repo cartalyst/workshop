@@ -19,6 +19,9 @@
 
 return [
 
-	'vendor' => null,
+	'tabs' => [
+		'general'    => 'General',
+		'attributes' => 'Attributes',
+	],
 
 ];

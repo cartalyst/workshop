@@ -1,7 +1,12 @@
 {
 	"name": "cartalyst/workshop",
 	"description": "Integration with Cartalyst's Extensions for Laravel's Workbench",
-	"keywords": ["platform", "ecommerce", "laravel", "bootstrap"],
+	"keywords": [
+		"platform",
+		"extensions",
+		"laravel",
+		"bootstrap"
+	],
 	"license": "proprietary",
 	"authors": [
 		{
@@ -31,22 +36,24 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.0",
-		"cartalyst/extensions": "~1",
-		"illuminate/workbench": "~4"
+		"php": ">=5.4.0",
+		"illuminate/support": "~4.2",
+		"cartalyst/extensions": "~1"
 	},
 	"require-dev": {
-		"mockery/mockery": "0.7.2"
+		"illuminate/filesystem": "~4.1",
+		"mockery/mockery": "~0.9",
+		"phpunit/phpunit": "~4.0"
 	},
 	"autoload": {
-		"psr-0": {
-			"Cartalyst\\Workshop": "src"
+		"psr-4": {
+			"Cartalyst\\Workshop\\": "src"
 		}
 	},
 	"extra": {
 		"component":"package",
 		"branch-alias": {
-			"dev-master": "1.0-dev"
+			"dev-master": "1.0.x-dev"
 		}
 	},
 	"minimum-stability": "dev"

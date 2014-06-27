@@ -17,8 +17,32 @@
  * @link       http://cartalyst.com
  */
 
-return [
+ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Database\Migrations\Migration;
 
-	'vendor' => null,
+class {{class_name}} extends Migration {
 
-];
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('{{table}}', function(Blueprint $table)
+		{
+			{{columns}}
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('{{table}}');
+	}
+
+}

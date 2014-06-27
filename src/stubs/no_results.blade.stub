@@ -1,0 +1,7 @@
+<script type="text/template" data-grid="{{grid_name}}" data-template="no_results">
+
+	<tr>
+		<td colspan="{{rows}}">{{{ trans('general.no_results') }}}</td>
+	</tr>
+
+</script>
