@@ -62,7 +62,7 @@ class DataGridGenerator extends Generator {
 	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
 	{
-		$this->writeLangFiles($columns, $model);
+		$this->writeLangFiles($columns, $model, $name);
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
 
@@ -137,6 +137,8 @@ class DataGridGenerator extends Generator {
 			'lower_model'        => $lowerModel,
 			'plural_lower_model' => strtolower(Str::plural($lowerModel)),
 		]);
+
+		$lowerModel = $lowerModel ?: $name;
 
 		$viewPath = $basePath.Str::plural($lowerModel).'/'.$viewName.'.blade.php';
 
@@ -220,11 +222,16 @@ class DataGridGenerator extends Generator {
 	 * @param  array  $columns
 	 * @return void
 	 */
-	protected function writeLangFiles($columns, $model)
+	protected function writeLangFiles($columns, $model, $name = null)
 	{
+		$model = $model ?: $name;
 		$model = strtolower(Str::plural($model));
 
 		$stub = $this->stubsPath.'lang/en/table.stub';
+
+		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/table.php';
+
+		$this->ensureDirectory($filePath);
 
 		$values['id'] = 'Id';
 
@@ -234,8 +241,6 @@ class DataGridGenerator extends Generator {
 		}
 
 		$values['created_at'] = 'Created At';
-
-		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/table.php';
 
 		if ($this->files->exists($filePath))
 		{
