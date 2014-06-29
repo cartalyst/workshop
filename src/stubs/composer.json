@@ -24,7 +24,7 @@
 			{{classmap_autoloads}}
 		],
 		"psr-4": {
-			"{{vendor}}\\{{name}}\\": "src/"
+			"{{vendor}}\\{{studly_name}}\\": "src/"
 		}
 	},
 	"minimum-stability": "dev"

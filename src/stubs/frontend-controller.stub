@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Controllers\Frontend;
+<?php namespace {{vendor}}\{{studly_name}}\Controllers\Frontend;
 /**
  * Part of the Workshop package.
  *

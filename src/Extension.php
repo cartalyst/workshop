@@ -48,6 +48,13 @@ class Extension {
 	public $lowerName;
 
 	/**
+	 * The studly-cased version of the package
+	 * 
+	 * @var string
+	 */
+	public $studlyName;
+
+	/**
 	 * The name of the author.
 	 *
 	 * @var string
@@ -103,6 +110,7 @@ class Extension {
 		$this->author      = $author;
 		$this->lowerName   = snake_case($name, '-');
 		$this->lowerVendor = snake_case($vendor, '-');
+		$this->studlyName  = studly_case($name);
 	}
 
 	/**

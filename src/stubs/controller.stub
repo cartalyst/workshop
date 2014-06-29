@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Controllers\{{location}};
+<?php namespace {{vendor}}\{{studly_name}}\Controllers\{{location}};
 /**
  * Part of the Workshop package.
  *

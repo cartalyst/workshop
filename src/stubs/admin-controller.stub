@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Controllers\Admin;
+<?php namespace {{vendor}}\{{studly_name}}\Controllers\Admin;
 /**
  * Part of the Workshop package.
  *
@@ -24,7 +24,7 @@ use Platform\Admin\Controllers\Admin\AdminController;
 use Redirect;
 use Response;
 use View;
-use {{vendor}}\{{name}}\Repositories\{{model}}RepositoryInterface;
+use {{vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface;
 
 class {{plural_name}}Controller extends AdminController {
 
@@ -36,9 +36,9 @@ class {{plural_name}}Controller extends AdminController {
 	];
 
 	/**
-	 * The {{name}} repository.
+	 * The {{studly_name}} repository.
 	 *
-	 * @var \Platform\{{name}}\Repositories\{{model}}RepositoryInterface
+	 * @var \Platform\{{studly_name}}\Repositories\{{model}}RepositoryInterface
 	 */
 	protected ${{lower_model}};
 
@@ -56,7 +56,7 @@ class {{plural_name}}Controller extends AdminController {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Platform\{{name}}\Repositories\{{model}}RepositoryInterface  ${{lower_model}}
+	 * @param  \Platform\{{studly_name}}\Repositories\{{model}}RepositoryInterface  ${{lower_model}}
 	 * @return void
 	 */
 	public function __construct({{model}}RepositoryInterface ${{lower_model}})

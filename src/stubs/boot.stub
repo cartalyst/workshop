@@ -1,9 +1,9 @@
 'boot' => function(ExtensionInterface $extension, Application $app)
 	{
-		if (class_exists('{{vendor}}\{{name}}\Models\{{model}}'))
+		if (class_exists('{{vendor}}\{{studly_name}}\Models\{{model}}'))
 		{
 			// Get the model
-			$model = $app['{{vendor}}\{{name}}\Models\{{model}}'];
+			$model = $app['{{vendor}}\{{studly_name}}\Models\{{model}}'];
 
 			// Register a new attribute namespace
 			$app['Platform\Attributes\Models\Attribute']->registerNamespace($model);
