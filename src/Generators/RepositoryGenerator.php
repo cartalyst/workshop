@@ -28,16 +28,18 @@ class RepositoryGenerator extends Generator {
 	 */
 	public function create($model, $interface = true)
 	{
-		$repositoryInterface = ucfirst($model).'RepositoryInterface';
+		$model = studly_case($model);
 
-		$repositoryName = 'Db'.ucfirst($model).'Repository';
+		$repositoryInterface = studly_case(ucfirst($model).'RepositoryInterface');
+
+		$repositoryName = studly_case('Db'.ucfirst($model).'Repository');
 
 		$stub = $this->stubsPath.'repository-interface.stub';
 
 		$content = $this->prepare($stub, [
-			'model'       => ucfirst($model),
-			'lower_model' => strtolower($model),
-			'class_name'  => $repositoryName,
+			'model'                => ucfirst($model),
+			'lower_model'          => strtolower($model),
+			'class_name'           => $repositoryName,
 			'repository_interface' => $repositoryInterface,
 		]);
 
@@ -48,9 +50,9 @@ class RepositoryGenerator extends Generator {
 		$stub = $this->stubsPath.'db-repository.stub';
 
 		$content = $this->prepare($stub, [
-			'model'       => ucfirst($model),
-			'lower_model' => strtolower($model),
-			'class_name'  => $repositoryName,
+			'model'                => ucfirst($model),
+			'lower_model'          => strtolower($model),
+			'class_name'           => $repositoryName,
 			'repository_interface' => $repositoryInterface,
 		]);
 

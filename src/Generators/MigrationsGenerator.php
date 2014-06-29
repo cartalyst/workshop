@@ -92,11 +92,11 @@ class MigrationsGenerator extends Generator {
 
 	public function seeder($records = 1, $table = null)
 	{
-		$namespace = $this->extension->vendor.'\\'.$this->extension->name.'\\Database\\Seeds';
+		$namespace = $this->extension->vendor.'\\'.studly_case($this->extension->name).'\\Database\\Seeds';
 
-		$table = $table ? Str::studly($table) : $this->table;
+		$table = $table ?: $this->table;
 
-		$seederClass = $table.'TableSeeder';
+		$seederClass = studly_case($table.'TableSeeder');
 
 		$this->seederClass = $namespace.'\\'.$seederClass;
 

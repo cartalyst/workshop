@@ -58,14 +58,14 @@ class FormGenerator extends Generator {
 
 			$el[] = $this->prepare($inputStub, [
 				'field_name'  => $col['field'],
-				'lower_model' => strtolower($model),
+				'lower_model' => studly_case(strtolower($model)),
 				'plural_lower_model' => strtolower(Str::plural($model)),
 			]);
 		}
 
 		$content = $this->prepare($stub, [
 			'columns'            => implode("\n\t\t\t\t", $el),
-			'lower_model'        => strtolower($model),
+			'lower_model'        => studly_case(strtolower($model)),
 			'plural_lower_model' => strtolower(Str::plural($model)),
 		]);
 

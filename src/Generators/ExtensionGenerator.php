@@ -78,12 +78,12 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createModel($name = null)
 	{
-		$name = ucfirst($name ?: $this->extension->name);
+		$className = studly_case(ucfirst($name ?: $this->extension->name));
 
 		$content = $this->prepare($this->stubsPath.'model.stub', [
-			'class_name'         => $name,
-			'table'              => strtolower(Str::plural($name)),
-			'lower_model'        => strtolower($name),
+			'class_name'  => $className,
+			'table'       => strtolower(Str::plural($name)),
+			'lower_model' => strtolower($name),
 		]);
 
 		$path = $this->path.'/src/Models/'.$name.'.php';
@@ -101,7 +101,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createWidget($name = null)
 	{
-		$name = ucfirst($name ?: $this->extension->name);
+		$name = studly_case(ucfirst($name ?: $this->extension->name));
 
 		$content = $this->prepare($this->stubsPath.'widget.stub', [
 			'class_name' => $name,
@@ -141,7 +141,7 @@ class ExtensionGenerator extends Generator {
 			$args['columns'] = "'*',";
 		}
 
-		$controllerName = ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller');
+		$controllerName = studly_case(ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller'));
 
 		$location = ucfirst($location);
 
@@ -157,9 +157,9 @@ class ExtensionGenerator extends Generator {
 		$args = array_merge($args, [
 			'class_name'         => $controllerName,
 			'location'           => $location,
-			'model'              => ucfirst($name),
-			'lower_model'        => strtolower($name),
-			'plural_name'        => ucfirst(Str::plural($name)),
+			'model'              => studly_case(ucfirst($name)),
+			'lower_model'        => studly_case(strtolower($name)),
+			'plural_name'        => studly_case(ucfirst(Str::plural($name))),
 			'plural_lower_model' => strtolower(Str::plural($name)),
 		]);
 
@@ -424,9 +424,9 @@ class ExtensionGenerator extends Generator {
 		$content = $this->files->get($this->path.'/extension.php');
 
 		$newResources = $this->prepare($this->stubsPath.$type.'.stub', [
-			'plural_name'        => ucfirst(Str::plural($resource)),
-			'model'              => ucfirst($resource),
-			'lower_model'        => strtolower($resource),
+			'plural_name'        => studly_case(ucfirst(Str::plural($resource))),
+			'model'              => studly_case(ucfirst($resource)),
+			'lower_model'        => studly_case(strtolower($resource)),
 			'plural_lower_model' => strtolower(Str::plural($resource)),
 		]);
 
