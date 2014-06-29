@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Repositories;
+<?php namespace {{vendor}}\{{studly_name}}\Repositories;
 /**
  * Part of the Workshop package.
  *
@@ -20,7 +20,7 @@
 use Cartalyst\Interpret\Interpreter;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
-use {{vendor}}\{{name}}\Models\{{model}};
+use {{vendor}}\{{studly_name}}\Models\{{model}};
 use Symfony\Component\Finder\Finder;
 use Validator;
 

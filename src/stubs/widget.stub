@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Widgets;
+<?php namespace {{vendor}}\{{studly_name}}\Widgets;
 /**
  * Part of the Workshop package.
  *

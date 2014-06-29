@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{name}}\Models;
+<?php namespace {{vendor}}\{{studly_name}}\Models;
 /**
  * Part of the Workshop package.
  *
