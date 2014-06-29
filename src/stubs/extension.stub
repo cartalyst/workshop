@@ -45,7 +45,6 @@ return [
 	| Ideally, this should match the folder structure within the extensions
 	| folder, but this is completely optional.
 	|
-	|
 	*/
 
 	'slug' => '{{lower_vendor}}/{{lower_name}}',
