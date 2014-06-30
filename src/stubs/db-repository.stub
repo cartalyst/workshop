@@ -50,27 +50,6 @@ class {{class_name}} implements {{repository_interface}} {
 	];
 
 	/**
-	 * The Cartalyst interpeter which renders the {{lower_name}}.
-	 *
-	 * @var \Cartalyst\Interpet\Interpreter
-	 */
-	protected $interpreter;
-
-	/**
-	 * The filesystem instance.
-	 *
-	 * @var \Illuminate\Filesystem\Filesystem
-	 */
-	protected $filesystem;
-
-	/**
-	 * Array of paths where file based {{lower_name}} may live.
-	 *
-	 * @var array
-	 */
-	protected $paths = [];
-
-	/**
 	 * Constructor.
 	 *
 	 * @param  string  $model
@@ -172,22 +151,6 @@ class {{class_name}} implements {{repository_interface}} {
 		}
 
 		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function enable($id)
-	{
-		return $this->update($id, ['enabled' => 1]);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function disable($id)
-	{
-		return $this->update($id, ['enabled' => 0]);
 	}
 
 	/**
