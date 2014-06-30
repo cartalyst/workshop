@@ -86,7 +86,7 @@ class ExtensionGenerator extends Generator {
 			'lower_model' => strtolower($name),
 		]);
 
-		$path = $this->path.'/src/Models/'.$name.'.php';
+		$path = $this->path.'/src/Models/'.$className.'.php';
 
 		$this->ensureDirectory($path);
 
