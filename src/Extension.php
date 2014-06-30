@@ -35,7 +35,7 @@ class Extension {
 
 	/**
 	 * The studly-cased version of the vendor
-	 * 
+	 *
 	 * @var string
 	 */
 	public $studlyVendor;
@@ -56,7 +56,7 @@ class Extension {
 
 	/**
 	 * The studly-cased version of the package
-	 * 
+	 *
 	 * @var string
 	 */
 	public $studlyName;
@@ -118,7 +118,7 @@ class Extension {
 		$this->lowerName    = snake_case($name, '-');
 		$this->lowerVendor  = snake_case($vendor, '-');
 		$this->studlyName   = studly_case($name);
-		$this->studlyVendor = study_case($vendor);
+		$this->studlyVendor = studly_case($vendor);
 	}
 
 	/**
