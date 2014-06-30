@@ -107,7 +107,7 @@ class Extension {
 	 */
 	public function __construct($slug, $author = null, $email = null)
 	{
-		$slug   = explode(DIRECTORY_SEPARATOR, $slug);
+		$slug   = explode('/', $slug);
 		$vendor = head($slug);
 		$name   = last($slug);
 
