@@ -34,6 +34,13 @@ class Extension {
 	public $lowerVendor;
 
 	/**
+	 * The studly-cased version of the vendor
+	 * 
+	 * @var string
+	 */
+	public $studlyVendor;
+
+	/**
 	 * The name of the package.
 	 *
 	 * @var string
@@ -100,17 +107,18 @@ class Extension {
 	 */
 	public function __construct($slug, $author = null, $email = null)
 	{
-		$slug = explode(DIRECTORY_SEPARATOR, $slug);
+		$slug   = explode(DIRECTORY_SEPARATOR, $slug);
 		$vendor = head($slug);
-		$name = last($slug);
+		$name   = last($slug);
 
-		$this->name        = ucfirst($name);
-		$this->email       = $email;
-		$this->vendor      = ucfirst($vendor);
-		$this->author      = $author;
-		$this->lowerName   = snake_case($name, '-');
-		$this->lowerVendor = snake_case($vendor, '-');
-		$this->studlyName  = studly_case($name);
+		$this->name         = ucfirst($name);
+		$this->email        = $email;
+		$this->vendor       = ucfirst($vendor);
+		$this->author       = $author;
+		$this->lowerName    = snake_case($name, '-');
+		$this->lowerVendor  = snake_case($vendor, '-');
+		$this->studlyName   = studly_case($name);
+		$this->studlyVendor = study_case($vendor);
 	}
 
 	/**

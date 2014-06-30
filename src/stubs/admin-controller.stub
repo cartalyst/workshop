@@ -1,4 +1,4 @@
-<?php namespace {{vendor}}\{{studly_name}}\Controllers\Admin;
+<?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\Admin;
 /**
  * Part of the Workshop package.
  *
@@ -24,7 +24,7 @@ use Platform\Admin\Controllers\Admin\AdminController;
 use Redirect;
 use Response;
 use View;
-use {{vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface;
+use {{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface;
 
 class {{plural_name}}Controller extends AdminController {
 
