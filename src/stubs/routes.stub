@@ -1,6 +1,6 @@
 'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(['namespace' => '{{vendor}}\{{studly_name}}\Controllers'], function()
+		Route::group(['namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers'], function()
 		{
 			Route::group(['prefix' => admin_uri().'/{{lower_name}}/{{plural_lower_model}}', 'namespace' => 'Admin'], function()
 			{
