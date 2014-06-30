@@ -158,7 +158,7 @@ class ExtensionGenerator extends Generator {
 			'class_name'         => $controllerName,
 			'location'           => $location,
 			'model'              => studly_case(ucfirst($name)),
-			'camel_model'         => camel_case(strtolower($name)),
+			'camel_model'        => camel_case(strtolower($name)),
 			'plural_name'        => studly_case(ucfirst(Str::plural($name))),
 			'plural_lower_model' => strtolower(Str::plural($name)),
 		]);

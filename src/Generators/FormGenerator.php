@@ -57,15 +57,15 @@ class FormGenerator extends Generator {
 			}
 
 			$el[] = $this->prepare($inputStub, [
-				'field_name'  => $col['field'],
-				'lower_model' => studly_case(strtolower($model)),
+				'field_name'         => $col['field'],
+				'camel_model'        => camel_case(strtolower($model)),
 				'plural_lower_model' => strtolower(Str::plural($model)),
 			]);
 		}
 
 		$content = $this->prepare($stub, [
 			'columns'            => implode("\n\t\t\t\t", $el),
-			'lower_model'        => studly_case(strtolower($model)),
+			'camel_model'        => camel_case(strtolower($model)),
 			'plural_lower_model' => strtolower(Str::plural($model)),
 		]);
 
@@ -98,6 +98,8 @@ class FormGenerator extends Generator {
 	protected function writeLangFiles($columns, $model)
 	{
 		$stub = $this->stubsPath.'lang/en/form.stub';
+
+		$values = [];
 
 		foreach ($columns as $column)
 		{
