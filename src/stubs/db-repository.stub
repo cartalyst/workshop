@@ -117,7 +117,7 @@ class {{class_name}} implements {{repository_interface}} {
 	{
 		with(${{lower_model}} = $this->createModel())->fill($data)->save();
 
-		$this->dispatcher->fire('{{lower_vendor}}.{{lower_model}}.created', ${{lower_model}});
+		$this->dispatcher->fire('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.created', ${{lower_model}});
 
 		return ${{lower_model}};
 	}
@@ -131,7 +131,7 @@ class {{class_name}} implements {{repository_interface}} {
 
 		${{lower_model}}->fill($data)->save();
 
-		$this->dispatcher->fire('{{lower_vendor}}.{{lower_model}}.updated', ${{lower_model}});
+		$this->dispatcher->fire('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updated', ${{lower_model}});
 
 		return ${{lower_model}};
 	}
@@ -143,7 +143,7 @@ class {{class_name}} implements {{repository_interface}} {
 	{
 		if (${{lower_model}} = $this->find($id))
 		{
-			$this->dispatcher->fire('{{lower_vendor}}.{{lower_model}}.deleted', ${{lower_model}});
+			$this->dispatcher->fire('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', ${{lower_model}});
 
 			${{lower_model}}->delete();
 
