@@ -32,7 +32,7 @@ class FormGenerator extends Generator {
 	{
 		$this->writeLangFiles($columns, $model);
 
-		$stub = $this->stubsPath.'form.blade.stub';
+		$stub = $this->getStub('form.blade.stub');
 
 		$el = [];
 
@@ -42,17 +42,17 @@ class FormGenerator extends Generator {
 				case 'text':
 				case 'mediumText':
 				case 'longText':
-					$inputStub = $this->stubsPath.'form-textarea.stub';
+					$inputStub = $this->getStub('form-textarea.stub');
 					break;
 
 				case 'boolean':
 				case 'tinyInteger':
-					$inputStub = $this->stubsPath.'form-checkbox.stub';
+					$inputStub = $this->getStub('form-checkbox.stub');
 					break;
 
 				case 'string':
 				default:
-					$inputStub = $this->stubsPath.'form-input.stub';
+					$inputStub = $this->getStub('form-input.stub');
 					break;
 			}
 
@@ -69,9 +69,11 @@ class FormGenerator extends Generator {
 			'plural_lower_model' => strtolower(Str::plural($model)),
 		]);
 
-		$this->ensureDirectory($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/'.$view.'.blade.php');
+		$filePath = $this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/';
 
-		$this->files->put($this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/'.$view.'.blade.php', $content);
+		$this->ensureDirectory($filePath);
+
+		$this->files->put($filePath.$view.'.blade.php', $content);
 	}
 
 	/**
@@ -97,7 +99,7 @@ class FormGenerator extends Generator {
 	 */
 	protected function writeLangFiles($columns, $model)
 	{
-		$stub = $this->stubsPath.'lang/en/form.stub';
+		$stub = $this->getStub('lang/en/form.stub');
 
 		$values = [];
 
@@ -107,9 +109,11 @@ class FormGenerator extends Generator {
 			$values[$column['field'].'_help'] = 'Enter the '.Str::title($column['field']).' here';
 		}
 
-		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/form.php';
+		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/';
 
 		$this->ensureDirectory($filePath);
+
+		$filePath .= 'form.php';
 
 		if ($this->files->exists($filePath))
 		{
@@ -124,7 +128,7 @@ class FormGenerator extends Generator {
 			'fields' => trim($trans),
 		]);
 
-		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($model)).'/form.php', $content);
+		$this->files->put($filePath, $content);
 	}
 
 }

@@ -24,6 +24,20 @@ use Illuminate\Support\Str;
 class DataGridGenerator extends Generator {
 
 	/**
+	 * Html builder instance.
+	 *
+	 * @var \Illuminate\Html\HtmlBuilder
+	 */
+	protected $html;
+
+	/**
+	 * Form builder instance.
+	 *
+	 * @var \Illuminate\Html\FormBuilder
+	 */
+	protected $form;
+
+	/**
 	 * Data grid templates.
 	 *
 	 * @var array
@@ -49,6 +63,21 @@ class DataGridGenerator extends Generator {
 			'content' => 'id',
 		],
 	];
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  \Cartalyst\Workshop\Extension  $extension
+	 * @param  \Illuminate\Filesystem\Filesystem  $files
+	 * @return void
+	 */
+	public function __construct($extension, $files, $html, $form, $stubsDir = null)
+	{
+		parent::__construct($extension, $files, $stubsDir);
+
+		$this->html = $html;
+		$this->form = $form;
+	}
 
 	/**
 	 * Create a new data grid.
@@ -89,7 +118,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($this->dataGridTemplates as $template)
 		{
-			$templateContent = $this->processDataGridTemplate($name, $this->stubsPath.$template, $model);
+			$templateContent = $this->processDataGridTemplate($name, $this->getStub($template), $model);
 
 			$contents[$template] = $templateContent;
 		}
@@ -99,7 +128,7 @@ class DataGridGenerator extends Generator {
 			// Write data grid templates
 			$file = str_replace('.stub', '.php', $file);
 
-			$this->ensureDirectory($dir.$file);
+			$this->ensureDirectory($dir);
 
 			$this->files->put($dir.$file, $content);
 
@@ -109,7 +138,7 @@ class DataGridGenerator extends Generator {
 			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::grids/{$name}/{$file}')";
 		}
 
-		$stub = $this->stubsPath.'view-admin-index.blade.stub';
+		$stub = $this->getStub('view-admin-index.blade.stub');
 
 		$columns = $this->dataGridColumns;
 
@@ -140,9 +169,11 @@ class DataGridGenerator extends Generator {
 
 		$lowerModel = $lowerModel ?: $name;
 
-		$viewPath = $basePath.Str::plural($lowerModel).'/'.$viewName.'.blade.php';
+		$viewPath = $basePath.Str::plural($lowerModel).'/';
 
 		$this->ensureDirectory($viewPath);
+
+		$viewPath .= $viewName.'.blade.php';
 
 		$this->files->put($viewPath, $view);
 	}
@@ -227,11 +258,13 @@ class DataGridGenerator extends Generator {
 		$model = $model ?: $name;
 		$model = strtolower(Str::plural($model));
 
-		$stub = $this->stubsPath.'lang/en/table.stub';
+		$stub = $this->getStub('lang/en/table.stub');
 
-		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/table.php';
+		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/';
 
 		$this->ensureDirectory($filePath);
+
+		$filePath .= 'table.php';
 
 		$values['id'] = 'Id';
 

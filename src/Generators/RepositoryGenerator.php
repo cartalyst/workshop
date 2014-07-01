@@ -34,7 +34,7 @@ class RepositoryGenerator extends Generator {
 
 		$repositoryName = studly_case('Db'.ucfirst($model).'Repository');
 
-		$stub = $this->stubsPath.'repository-interface.stub';
+		$stub = $this->getStub('repository-interface.stub');
 
 		$content = $this->prepare($stub, [
 			'model'                => ucfirst($model),
@@ -43,11 +43,13 @@ class RepositoryGenerator extends Generator {
 			'repository_interface' => $repositoryInterface,
 		]);
 
-		$this->ensureDirectory($this->path.'/src/Repositories/'.$repositoryInterface.'.php');
+		$filePath = $this->path.'/src/Repositories/';
 
-		$this->files->put($this->path.'/src/Repositories/'.$repositoryInterface.'.php', $content);
+		$this->ensureDirectory($filePath);
 
-		$stub = $this->stubsPath.'db-repository.stub';
+		$this->files->put($filePath.$repositoryInterface.'.php', $content);
+
+		$stub = $this->getStub('db-repository.stub');
 
 		$content = $this->prepare($stub, [
 			'model'                => ucfirst($model),
@@ -56,7 +58,7 @@ class RepositoryGenerator extends Generator {
 			'repository_interface' => $repositoryInterface,
 		]);
 
-		$this->files->put($this->path.'/src/Repositories/'.$repositoryName.'.php', $content);
+		$this->files->put($filePath.$repositoryName.'.php', $content);
 	}
 
 }

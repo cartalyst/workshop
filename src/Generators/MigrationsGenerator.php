@@ -42,12 +42,12 @@ class MigrationsGenerator extends Generator {
 		if ($columns)
 		{
 			$mode = 'Create';
-			$stub = $this->stubsPath.'migration.stub';
+			$stub = $this->getStub('migration.stub');
 		}
 		else
 		{
 			$mode = 'Alter';
-			$stub = $this->stubsPath.'migration-table.stub';
+			$stub = $this->getStub('migration-table.stub');
 		}
 
 		$this->migrationClass = $mode.$this->table.'Table';
@@ -105,7 +105,7 @@ class MigrationsGenerator extends Generator {
 			throw new LogicException('This seeder already exists.');
 		}
 
-		$stub    = $this->stubsPath.'seeder.stub';
+		$stub    = $this->getStub('seeder.stub');
 		$columns = $this->prepareSeederColumns($this->columns);
 
 		$content = $this->prepare($stub, [

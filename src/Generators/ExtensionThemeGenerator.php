@@ -28,29 +28,20 @@ class ExtensionThemeGenerator extends Generator {
 	 */
 	public function create($location, $theme = 'default')
 	{
-		array_set($this->blocks, "themes.{$location}.{$theme}", [
-			'packages' => [
-				$this->extension->lowerVendor => [
-					$this->extension->lowerName => [
-						'assets' => [
-							'js' => [
-								'script.js',
-							],
-							'css' => [
-								'style.css',
-							],
-						],
-						'views' => [
-							'.gitkeep',
-						],
-					],
-				],
-			],
-		]);
+		$base = [
+			'assets/js'  => 'script.js',
+			'assets/css' => 'style.css',
+			'views'      => '.gitkeep',
+		];
 
-		$this->process(null, null, [
-			'location' => $location,
-		]);
+		$themeDirectory = $this->path.'/'."themes/{$location}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
+
+		foreach ($base as $dir => $file)
+		{
+			$this->ensureDirectory($themeDirectory.$dir);
+
+			$this->files->put($themeDirectory.$dir.'/'.$file, null);
+		}
 	}
 
 }

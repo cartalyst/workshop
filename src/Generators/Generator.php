@@ -37,20 +37,6 @@ abstract class Generator implements GeneratorInterface {
 	protected $files;
 
 	/**
-	 * Html builder instance.
-	 *
-	 * @var \Illuminate\Html\HtmlBuilder
-	 */
-	protected $html;
-
-	/**
-	 * Form builder instance.
-	 *
-	 * @var \Illuminate\Html\FormBuilder
-	 */
-	protected $form;
-
-	/**
 	 * Workbench path.
 	 *
 	 * @var string
@@ -62,18 +48,23 @@ abstract class Generator implements GeneratorInterface {
 	 *
 	 * @var string
 	 */
-	protected $stubsPath;
+	protected static $stubsPath;
+
+	/**
+	 * Stubs fallback path.
+	 *
+	 * @var string
+	 */
+	protected $stubsFallback;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param  \Cartalyst\Workshop\Extension  $extension
 	 * @param  \Illuminate\Filesystem\Filesystem  $files
-	 * @param  \Illuminate\Html\HtmlBuilder  $html
-	 * @param  \Illuminate\Html\FormBuilder  $form
 	 * @return void
 	 */
-	public function __construct($extension, $files, $html = null, $form = null)
+	public function __construct($extension, $files)
 	{
 		if ($extension instanceof Extension)
 		{
@@ -84,107 +75,43 @@ abstract class Generator implements GeneratorInterface {
 			$this->extension = new Extension($extension);
 		}
 
-		$this->files     = $files;
-		$this->html      = $html;
-		$this->form      = $form;
-		$this->path      = base_path().'/workbench/'.$this->extension->getFullName();
+		$this->files = $files;
+
+		$this->path = base_path().'/workbench/'.$this->extension->getFullName();
 
 		if ( ! $this->files->isDirectory($this->path))
 		{
 			$this->path = str_replace('workbench', 'extensions', $this->path);
 		}
 
-		$this->stubsPath = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
+		$this->stubsFallback = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
 	}
 
 	/**
-	 * Process files and directories.
+	 * Sets the stubs directory.
+	 *
+	 * @param  string  $dir
+	 * @return void
+	 */
+	public static function setStubsDir($dir)
+	{
+		static::$stubsPath = $dir.'/';
+	}
+
+	/**
+	 * Returns the stub file path.
 	 *
 	 * @param  string  $path
-	 * @param  array  $directories
-	 * @param  array  $args
-	 * @return void
+	 * @return string
 	 */
-	protected function process($path = null, $dir = null, $args = [])
+	protected function getStub($path)
 	{
-		$path = $path ?: $this->path;
-
-		$dir = $dir ?: $this->blocks;
-
-		if (is_array($dir))
+		if ($this->files->exists(static::$stubsPath.'/'.$path))
 		{
-			foreach ($dir as $fileName => $filePath)
-			{
-				$subdir = $path;
-
-				if ( ! is_numeric($fileName) && is_array($filePath) && strpos($fileName, '.stub') === false)
-				{
-					$subdir = $path.'/'.$fileName;
-				}
-
-				if ( ! is_array($filePath) && strpos($filePath, '.stub') !== false)
-				{
-					$this->processFile($path, $filePath, $args, $fileName);
-
-					continue;
-				}
-
-				$this->process($subdir, $filePath, $args);
-			}
-
-			return;
+			return static::$stubsPath.$path;
 		}
 
-		$this->processFile($path, $dir, $args);
-	}
-
-	/**
-	 * Process a file.
-	 *
-	 * @param  string  $directory
-	 * @param  string  $file
-	 * @param  array  $args
-	 * @param  string  $overriddenFile
-	 * @return void
-	 */
-	protected function processFile($directory, $file, $args = [], $overriddenFile = null)
-	{
-		$fileName = ! is_numeric($overriddenFile) && isset($overriddenFile) ? $overriddenFile : $file;
-
-		$fullPath = __DIR__.'/..'.str_replace($this->path, '/stubs', $directory).'/'.$file;
-
-		$stubPath = __DIR__.'/../stubs/'.$file;
-
-		$baseDirectory = str_replace($this->path, '', $directory);
-
-		$targetPath = str_replace($this->path.'/workbench/', '', $directory).'/';
-
-		if (strpos($file, '.stub') !== false)
-		{
-			if (strpos($file, '-') !== false)
-			{
-				$prefix = ucfirst(last(explode('-', str_replace('.stub', '', $file))));
-
-				$fileName = $overriddenFile ?: $this->extension->name.$prefix;
-			}
-
-			$name = $fileName;
-
-			$fileName = $name.'.php';
-
-			if (strpos($fileName, '.stub'))
-			{
-				$fileName = str_replace('.stub', '.php', $file);
-			}
-		}
-
-		$targetPath .= $fileName;
-
-		$this->ensureDirectory($targetPath);
-
-		$content = $this->prepare($stubPath, $args);
-
-		$this->files->put($targetPath, $content);
+		return $this->stubsFallback.$path;
 	}
 
 	/**
@@ -215,11 +142,11 @@ abstract class Generator implements GeneratorInterface {
 	 */
 	protected function ensureDirectory($path)
 	{
-		$dir = array_get(pathinfo($path), 'dirname');
+		$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 
-		if ( ! $this->files->isDirectory($dir))
+		if ( ! $this->files->isDirectory($path))
 		{
-			$this->files->makeDirectory($dir, 0777, true);
+			$this->files->makeDirectory($path, 0777, true);
 		}
 	}
 
