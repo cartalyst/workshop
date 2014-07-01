@@ -69,11 +69,13 @@ class DataGridGenerator extends Generator {
 	 *
 	 * @param  \Cartalyst\Workshop\Extension  $extension
 	 * @param  \Illuminate\Filesystem\Filesystem  $files
+	 * @param  \Illuminate\Html\HtmlBuilder  $html
+	 * @param  \Illuminate\Html\FormBuilder  $form
 	 * @return void
 	 */
-	public function __construct($extension, $files, $html, $form, $stubsDir = null)
+	public function __construct($extension, $files, $html, $form)
 	{
-		parent::__construct($extension, $files, $stubsDir);
+		parent::__construct($extension, $files);
 
 		$this->html = $html;
 		$this->form = $form;
