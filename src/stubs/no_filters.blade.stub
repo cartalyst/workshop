@@ -1,9 +1,5 @@
 <script type="text/template" data-grid="{{grid_name}}" data-template="no_filters">
 
-	<% _.each(filters, function(f) { %>
-
-		<button class="btn btn-default disabled">No filter applied</button>
-
-	<% } %>
+	<button class="btn btn-default disabled">No filter applied</button>
 
 </script>
