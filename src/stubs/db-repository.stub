@@ -139,13 +139,14 @@ class {{class_name}} implements {{repository_interface}} {
 	/**
 	 * Create a new instance of the model.
 	 *
+	 * @param  array  $data
 	 * @return \Illuminate\Database\Eloquent\Model
 	 */
-	public function createModel()
+	public function createModel(array $data = [])
 	{
 		$class = '\\'.ltrim($this->model, '\\');
 
-		return new $class;
+		return new $class($data);
 	}
 
 	/**
