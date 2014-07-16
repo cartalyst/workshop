@@ -59,8 +59,7 @@ class ExtensionGenerator extends Generator {
 		$this->ensureDirectory($this->path);
 
 		// Create database dirs
-		$this->ensureDirectory($this->path.'/database/migrations');
-		$this->ensureDirectory($this->path.'/database/seeds');
+		$this->databaseDirs();
 
 		// Write composer.json
 		$this->writeComposerFile();
@@ -415,6 +414,20 @@ class ExtensionGenerator extends Generator {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Writes database directories.
+	 *
+	 * @return void
+	 */
+	protected function databaseDirs()
+	{
+		$this->ensureDirectory($this->path.'/database/migrations');
+		$this->ensureDirectory($this->path.'/database/seeds');
+
+		$this->files->put($this->path.'/database/migrations/.gitkeep', '');
+		$this->files->put($this->path.'/database/seeds/.gitkeep', '');
 	}
 
 	/**
