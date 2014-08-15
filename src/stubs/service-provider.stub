@@ -1,0 +1,23 @@
+<?php namespace {{vendor}}\{{name}};
+
+use Illuminate\Support\ServiceProvider;
+
+class {{name}}ServiceProvider extends ServiceProvider {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function boot()
+	{
+		{{boot}}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function register()
+	{
+		{{register}}
+	}
+
+}

@@ -1,11 +1,10 @@
-'boot' => function(ExtensionInterface $extension, Application $app)
-	{
+$this->package('{{lower_vendor}}/{{lower_name}}', '{{lower_vendor}}/{{lower_name}}', __DIR__.'/..');
+
 		if (class_exists('{{studly_vendor}}\{{studly_name}}\Models\{{model}}'))
 		{
 			// Get the model
-			$model = $app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}'];
+			$model = $this->app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}'];
 
 			// Register a new attribute namespace
-			$app['Platform\Attributes\Models\Attribute']->registerNamespace($model);
+			$this->app['Platform\Attributes\Models\Attribute']->registerNamespace($model);
 		}
-	},

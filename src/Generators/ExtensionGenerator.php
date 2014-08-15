@@ -221,25 +221,39 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * Writes the register section.
+	 * Writes the service provider.
 	 *
 	 * @param  string  $resource
 	 * @return void
 	 */
-	public function writeRegister($resource)
+	public function writeServiceProvider($resource)
 	{
-		$this->updateResource('register', $resource);
+		$content = $this->prepare($this->getStub('service-provider.stub'), [
+			'plural_name' => studly_case(ucfirst(Str::plural($resource))),
+			'boot'        => trim($this->writeMethod('boot', $resource)),
+			'register'    => trim($this->writeMethod('register', $resource)),
+		]);
+
+		$serviceProvider = studly_case(ucfirst($resource));
+
+		$dir = $this->path.'/src/';
+
+		$this->files->put($dir.$serviceProvider.'ServiceProvider.php', $content);
 	}
 
 	/**
-	 * Writes the boot section.
+	 * Writes a method from its stub.
 	 *
+	 * @param  string  $name
 	 * @param  string  $resource
-	 * @return void
+	 * @return string
 	 */
-	public function writeBoot($resource)
+	protected function writeMethod($name, $resource)
 	{
-		$this->updateResource('boot', $resource);
+		return $this->prepare($this->getStub($name.'.stub'), [
+			'model'       => studly_case(ucfirst($resource)),
+			'lower_model' => strtolower(studly_case($resource)),
+		]);
 	}
 
 	/**
