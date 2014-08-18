@@ -228,17 +228,49 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeServiceProvider($resource)
 	{
+		$serviceProvider = studly_case(ucfirst($resource));
+
 		$content = $this->prepare($this->getStub('service-provider.stub'), [
+			'provider'    => $serviceProvider,
 			'plural_name' => studly_case(ucfirst(Str::plural($resource))),
 			'boot'        => trim($this->writeMethod('boot', $resource)),
 			'register'    => trim($this->writeMethod('register', $resource)),
 		]);
 
-		$serviceProvider = studly_case(ucfirst($resource));
-
 		$dir = $this->path.'/src/';
 
 		$this->files->put($dir.$serviceProvider.'ServiceProvider.php', $content);
+
+		$content = $this->files->get($this->path.'/extension.php');
+
+		$newResources = $this->prepare($this->getStub('providers.stub'), [
+			'provider' => $serviceProvider,
+		]);
+
+		preg_match('/\'providers\' => \[\s*\n\s*(.*?)\s*],/s', $content, $oldResources);
+
+		$oldResources = last($oldResources);
+
+		if (strpos(trim($oldResources), trim($newResources)) !== false)
+		{
+			return;
+		}
+
+		$resources = $oldResources."\n\t".$newResources;
+
+		$stub = 'empty-providers.stub';
+
+		$resourceReplacement = $this->prepare($this->getStub($stub), [
+			'content' => trim($resources),
+		]);
+
+		$content = preg_replace(
+			'/\'providers\' => \[\s*\n\s*(.*?)\s*],/s',
+			rtrim($resourceReplacement),
+			$content
+		);
+
+		$this->files->put($this->path.'/extension.php', $content);
 	}
 
 	/**

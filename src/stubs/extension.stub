@@ -111,43 +111,17 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Register Callback
+	| Service Providers
 	|--------------------------------------------------------------------------
 	|
-	| Closure that is called when the extension is registered. This can do
-	| all the needed custom logic upon registering.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
+	| Define your extension service providers here. They will be dynamically
+	| registered without having to include them in app/config/app.php.
 	|
 	*/
 
-	'register' => function(ExtensionInterface $extension, Application $app)
-	{
+	'providers' => [
 
-	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Boot Callback
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called when the extension is booted. This can do
-	| all the needed custom logic upon booting.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
-	|
-	*/
-
-	'boot' => function(ExtensionInterface $extension, Application $app)
-	{
-
-	},
+	],
 
 	/*
 	|--------------------------------------------------------------------------

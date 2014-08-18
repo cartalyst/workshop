@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class {{name}}ServiceProvider extends ServiceProvider {
+class {{provider}}ServiceProvider extends ServiceProvider {
 
 	/**
 	 * {@inheritDoc}
