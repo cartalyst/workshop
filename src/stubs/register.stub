@@ -1,11 +1,8 @@
 ${{lower_model}}Repository = '{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface';
 
-		if ( ! $this->app->bound(${{lower_model}}Repository))
+		$this->app->bindIf(${{lower_model}}Repository, function($app)
 		{
-			$this->app->bind(${{lower_model}}Repository, function($app)
-			{
-				$model = get_class($app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']);
+			$model = get_class($app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']);
 
-				return new {{studly_vendor}}\{{studly_name}}\Repositories\Db{{model}}Repository($model, $app['events']);
-			});
-		}
+			return new {{studly_vendor}}\{{studly_name}}\Repositories\Db{{model}}Repository($model, $app['events']);
+		});
