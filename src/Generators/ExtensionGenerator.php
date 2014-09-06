@@ -443,26 +443,6 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function prepare($path, $args = [])
-	{
-		$content = $this->files->get($path);
-
-		foreach ((array) $this->extension as $key => $value)
-		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
-		}
-
-		foreach ($args as $key => $value)
-		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
-		}
-
-		return $content;
-	}
-
-	/**
 	 * Writes database directories.
 	 *
 	 * @return void

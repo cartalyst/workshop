@@ -18,7 +18,6 @@
  */
 
 use Cartalyst\Workshop\Extension;
-use URL;
 use Illuminate\Support\Str;
 
 class DataGridGenerator extends Generator {
@@ -110,7 +109,7 @@ class DataGridGenerator extends Generator {
 
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
-			'href'    => URL::toAdmin($this->extension->lowerName.'/'.strtolower(Str::plural($model))).'<%= r.id %>/edit',
+			'href'    => $this->html->toAdmin($this->extension->lowerName.'/'.strtolower(Str::plural($model))).'<%= r.id %>/edit',
 			'content' => 'id',
 		];
 
@@ -225,7 +224,7 @@ class DataGridGenerator extends Generator {
 
 					$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-					$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/'.strtolower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
+					$link = str_replace('href="#"', 'href="{{ $this->html->toAdmin(\''.$this->extension->lowerName.'/'.strtolower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
 
 					$el[] = $link;
 				}

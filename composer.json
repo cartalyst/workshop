@@ -42,6 +42,7 @@
 	},
 	"require-dev": {
 		"illuminate/filesystem": "~4.1",
+		"illuminate/html": "~4.1",
 		"mockery/mockery": "~0.9",
 		"phpunit/phpunit": "~4.0"
 	},

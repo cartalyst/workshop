@@ -4,5 +4,5 @@ ${{lower_model}}Repository = '{{studly_vendor}}\{{studly_name}}\Repositories\{{m
 		{
 			$model = get_class($app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']);
 
-			return new {{studly_vendor}}\{{studly_name}}\Repositories\Db{{model}}Repository($model, $app['events']);
+			return new {{studly_vendor}}\{{studly_name}}\Repositories\Illuminate{{model}}Repository($model, $app['events']);
 		});

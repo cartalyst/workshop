@@ -23,15 +23,65 @@ use Illuminate\Support\Str;
 
 class MigrationsGenerator extends Generator {
 
+	/**
+	 * Migrations table.
+	 *
+	 * @var string
+	 */
 	protected $table;
+
+	/**
+	 * Migrations path.
+	 *
+	 * @var string
+	 */
 	protected $migrationPath;
+
+	/**
+	 * Migrations class.
+	 *
+	 * @var string
+	 */
 	protected $migrationClass;
+
+	/**
+	 * Seeder class.
+	 *
+	 * @var string
+	 */
 	protected $seederClass;
+
+	/**
+	 * Migrations columns.
+	 *
+	 * @var array
+	 */
 	protected $columns = [];
+
+	/**
+	 * Increments column.
+	 *
+	 * @var bool
+	 */
 	protected $increments;
+
+	/**
+	 * Timestamps columns.
+	 *
+	 * @var bool
+	 */
 	protected $timestamps;
 
-	public function create($table, $columns = null, $increments = true, $timestamps = true)
+	/**
+	 * Creates a new migration.
+	 *
+	 * @param  string  $table
+	 * @param  array  $columns
+	 * @param  bool  $increments
+	 * @param  bool  $timestamps
+	 * @return this
+	 */
+	public function create($table, $columns = [], $increments = true, $timestamps = true)
 	{
 		$this->increments     = $increments;
 		$this->timestamps     = $timestamps;
@@ -90,6 +140,14 @@ class MigrationsGenerator extends Generator {
 		return $this;
 	}
 
+	/**
+	 * Creates the seeder and updates the
+	 * array on extension.php
+	 *
+	 * @param  int  $records
+	 * @param  string  $table
+	 * @return this
+	 */
 	public function seeder($records = 1, $table = null)
 	{
 		$namespace = $this->extension->vendor.'\\'.studly_case($this->extension->name).'\\Database\\Seeds';
@@ -174,21 +232,42 @@ class MigrationsGenerator extends Generator {
 		return $this;
 	}
 
+	/**
+	 * Returns the migration path.
+	 *
+	 * @return string
+	 */
 	public function getMigrationPath()
 	{
 		return $this->migrationPath;
 	}
 
+	/**
+	 * Returns the migration class.
+	 *
+	 * @return string
+	 */
 	public function getMigrationClass()
 	{
 		return $this->migrationClass;
 	}
 
+	/**
+	 * Returns the seeder class.
+	 *
+	 * @return string
+	 */
 	public function getSeederClass()
 	{
 		return $this->seederClass;
 	}
 
+	/**
+	 * Prepares the seeder columns.
+	 *
+	 * @param  array  $columns
+	 * @return string
+	 */
 	protected function prepareSeederColumns($columns)
 	{
 		if ( ! $columns)
@@ -255,6 +334,14 @@ class MigrationsGenerator extends Generator {
 		return implode("\n\t\t\t//\t", $cols);
 	}
 
+	/**
+	 * Prepares the migration columns.
+	 *
+	 * @param  array  $columns
+	 * @param  bool  $increments
+	 * @param  bool  $timestamps
+	 * @return string
+	 */
 	protected function prepareColumns($columns, $increments, $timestamps)
 	{
 		if ( ! $columns)

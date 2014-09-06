@@ -77,21 +77,6 @@ class FormGenerator extends Generator {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function prepare($path, $args = [])
-	{
-		$content = parent::prepare($path, $args);
-
-		foreach ((array) $this->extension as $key => $value)
-		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
-		}
-
-		return $content;
-	}
-
-	/**
 	 * Writes the form language file.
 	 *
 	 * @param  array  $columns

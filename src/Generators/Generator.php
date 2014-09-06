@@ -77,7 +77,7 @@ abstract class Generator implements GeneratorInterface {
 
 		$this->files = $files;
 
-		$this->path = base_path().'/workbench/'.$this->extension->getFullName();
+		$this->path = __DIR__.'/../../../../../workbench/'.$this->extension->getFullName();
 
 		if ( ! $this->files->isDirectory($this->path))
 		{
@@ -95,7 +95,17 @@ abstract class Generator implements GeneratorInterface {
 	 */
 	public static function setStubsDir($dir)
 	{
-		static::$stubsPath = $dir.'/';
+		static::$stubsPath = $dir;
+	}
+
+	/**
+	 * Returns the stubs directory.
+	 *
+	 * @return string
+	 */
+	public static function getStubsDir()
+	{
+		return static::$stubsPath;
 	}
 
 	/**

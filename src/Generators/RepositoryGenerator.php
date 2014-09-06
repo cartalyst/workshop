@@ -32,7 +32,7 @@ class RepositoryGenerator extends Generator {
 
 		$repositoryInterface = studly_case(ucfirst($model).'RepositoryInterface');
 
-		$repositoryName = studly_case('Db'.ucfirst($model).'Repository');
+		$repositoryName = studly_case('Illuminate'.ucfirst($model).'Repository');
 
 		$stub = $this->getStub('repository-interface.stub');
 
