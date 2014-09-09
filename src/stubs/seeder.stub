@@ -4,7 +4,7 @@ use DB;
 // use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
-class {{class_name}} {
+class {{class_name}} extends Seeder {
 
 	/**
 	 * Run the database seeds.
