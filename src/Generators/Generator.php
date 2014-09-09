@@ -114,7 +114,7 @@ abstract class Generator implements GeneratorInterface {
 	 * @param  string  $path
 	 * @return string
 	 */
-	protected function getStub($path)
+	public function getStub($path)
 	{
 		if ($this->files->exists(static::$stubsPath.'/'.$path))
 		{

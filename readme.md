@@ -1,5 +1,7 @@
 # Workshop
 
+[![Build Status](http://ci.cartalyst.com/build-status/svg/21)](http://ci.cartalyst.com/build-status/view/21)
+
 A workshop package for platform extensions and resources.
 
 Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](license.txt). Code well, rock on.

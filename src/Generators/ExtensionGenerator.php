@@ -395,7 +395,7 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * Writes the data grid language files.
+	 * Writes the language files.
 	 *
 	 * @param  array  $columns
 	 * @return void
