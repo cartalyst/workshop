@@ -19,11 +19,12 @@
 
 use Cartalyst\Workshop\Extension;
 use Illuminate\Support\Str;
+use LogicException;
 
-abstract class Generator implements GeneratorInterface {
+abstract class Generator {
 
 	/**
-	 * Platform extension.
+	 * Platform extension instance.
 	 *
 	 * @var \Cartalyst\Workshop\Extension
 	 */
@@ -37,54 +38,47 @@ abstract class Generator implements GeneratorInterface {
 	protected $files;
 
 	/**
-	 * Workbench path.
+	 * Extension path.
 	 *
 	 * @var string
 	 */
 	protected $path;
 
 	/**
-	 * Stubs path.
+	 * Stubs directory.
 	 *
 	 * @var string
 	 */
-	protected static $stubsPath;
+	protected static $stubsDir;
 
 	/**
-	 * Stubs fallback path.
+	 * Default stubs directory.
 	 *
 	 * @var string
 	 */
-	protected $stubsFallback;
+	protected $defaultStubsDir;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Cartalyst\Workshop\Extension  $extension
+	 * @param  string  $slug
 	 * @param  \Illuminate\Filesystem\Filesystem  $files
 	 * @return void
 	 */
-	public function __construct($extension, $files)
+	public function __construct($slug, $files)
 	{
-		if ($extension instanceof Extension)
-		{
-			$this->extension = $extension;
-		}
-		else
-		{
-			$this->extension = new Extension($extension);
-		}
+		$this->extension = new Extension($slug);
 
 		$this->files = $files;
 
-		$this->path = __DIR__.'/../../../../../workbench/'.$this->extension->getFullName();
+		$this->path = __DIR__.str_repeat('/..', 5).'/workbench/'.$this->extension->getFullName();
 
 		if ( ! $this->files->isDirectory($this->path))
 		{
 			$this->path = str_replace('workbench', 'extensions', $this->path);
 		}
 
-		$this->stubsFallback = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
+		$this->defaultStubsDir = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
 	}
 
 	/**
@@ -95,7 +89,7 @@ abstract class Generator implements GeneratorInterface {
 	 */
 	public static function setStubsDir($dir)
 	{
-		static::$stubsPath = $dir;
+		static::$stubsDir = $dir;
 	}
 
 	/**
@@ -105,7 +99,7 @@ abstract class Generator implements GeneratorInterface {
 	 */
 	public static function getStubsDir()
 	{
-		return static::$stubsPath;
+		return static::$stubsDir;
 	}
 
 	/**
@@ -116,12 +110,12 @@ abstract class Generator implements GeneratorInterface {
 	 */
 	public function getStub($path)
 	{
-		if ($this->files->exists(static::$stubsPath.'/'.$path))
+		if ($this->files->exists(static::$stubsDir.'/'.$path))
 		{
-			return static::$stubsPath.$path;
+			return static::$stubsDir.$path;
 		}
 
-		return $this->stubsFallback.$path;
+		return $this->defaultStubsDir.$path;
 	}
 
 	/**
@@ -133,12 +127,12 @@ abstract class Generator implements GeneratorInterface {
 
 		foreach ((array) $this->extension as $key => $value)
 		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
+			$content = str_replace('{{'.Str::snake($key).'}}', $value, $content);
 		}
 
 		foreach ($args as $key => $value)
 		{
-			$content = str_replace('{{'.snake_case($key).'}}', $value, $content);
+			$content = str_replace('{{'.Str::snake($key).'}}', $value, $content);
 		}
 
 		return $content;
@@ -198,6 +192,29 @@ abstract class Generator implements GeneratorInterface {
 		});
 
 		return trim($text);
+	}
+
+	/**
+	 * Returns the extension.php file path.
+	 *
+	 * @return string
+	 * @throws \LogicException
+	 */
+	protected function getExtensionPhpPath()
+	{
+		$path = $this->path.'/extension.php';
+
+		if ( ! $this->files->exists($path))
+		{
+			$path = str_replace('workbench', 'extensions', $path);
+
+			if ( ! $this->files->exists($path))
+			{
+				throw new LogicException('extension.php could not be found.');
+			}
+		}
+
+		return $path;
 	}
 
 }

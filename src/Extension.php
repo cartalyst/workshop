@@ -17,6 +17,8 @@
  * @link       http://cartalyst.com
  */
 
+use Illuminate\Support\Str;
+
 class Extension {
 
 	/**
@@ -115,10 +117,10 @@ class Extension {
 		$this->email        = $email;
 		$this->vendor       = ucfirst($vendor);
 		$this->author       = $author;
-		$this->lowerName    = snake_case($name, '-');
-		$this->lowerVendor  = snake_case($vendor, '-');
-		$this->studlyName   = studly_case($name);
-		$this->studlyVendor = studly_case($vendor);
+		$this->lowerName    = Str::snake($name, '-');
+		$this->lowerVendor  = Str::snake($vendor, '-');
+		$this->studlyName   = Str::studly($name);
+		$this->studlyVendor = Str::studly($vendor);
 	}
 
 	/**

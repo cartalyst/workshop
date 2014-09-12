@@ -17,6 +17,8 @@
  * @link       http://cartalyst.com
  */
 
+use Illuminate\Support\Str;
+
 class RepositoryGenerator extends Generator {
 
 	/**
@@ -28,17 +30,17 @@ class RepositoryGenerator extends Generator {
 	 */
 	public function create($model, $interface = true)
 	{
-		$model = studly_case($model);
+		$model = Str::studly($model);
 
-		$repositoryInterface = studly_case(ucfirst($model).'RepositoryInterface');
+		$repositoryInterface = Str::studly(ucfirst($model).'RepositoryInterface');
 
-		$repositoryName = studly_case('Illuminate'.ucfirst($model).'Repository');
+		$repositoryName = Str::studly('Illuminate'.ucfirst($model).'Repository');
 
 		$stub = $this->getStub('repository-interface.stub');
 
 		$content = $this->prepare($stub, [
 			'model'                => ucfirst($model),
-			'lower_model'          => strtolower($model),
+			'lower_model'          => Str::lower($model),
 			'class_name'           => $repositoryName,
 			'repository_interface' => $repositoryInterface,
 		]);
@@ -53,7 +55,7 @@ class RepositoryGenerator extends Generator {
 
 		$content = $this->prepare($stub, [
 			'model'                => ucfirst($model),
-			'lower_model'          => strtolower($model),
+			'lower_model'          => Str::lower($model),
 			'class_name'           => $repositoryName,
 			'repository_interface' => $repositoryInterface,
 		]);

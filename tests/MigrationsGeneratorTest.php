@@ -52,9 +52,10 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp()
+	public function prepare()
 	{
 		$files = m::mock('Illuminate\Filesystem\Filesystem');
+
 		$files->shouldReceive('isDirectory')->atLeast()->once()->andReturn(true);
 		$files->shouldReceive('get')->atLeast()->once()->andReturn('{{studly_vendor}}{{new_arg}}');
 		$files->shouldReceive('put')->atLeast()->once();
@@ -68,6 +69,8 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_generate_migrations()
 	{
+		$this->prepare();
+
 		$this->generator->shouldReceive('getStub')->once()->with('migration-table.stub');
 
 		$this->generator->create('foo');
@@ -78,6 +81,8 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_generate_seeders()
 	{
+		$this->prepare();
+
 		$this->files->shouldReceive('exists')->once()->andReturn(true);
 		$this->files->shouldReceive('getRequire')->once()->andReturn([]);
 
@@ -89,6 +94,8 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_get_migrations_path_and_classes()
 	{
+		$this->prepare();
+
 		$this->files->shouldReceive('exists')->once()->andReturn(true);
 		$this->files->shouldReceive('getRequire')->once()->andReturn([]);
 
@@ -98,6 +105,7 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->create('foo', [
 			'name' => 'string',
 		]);
+
 		$this->generator->seeder();
 
 		$this->assertContains('foo/bar/database/migrations', $this->generator->getMigrationPath());
@@ -108,8 +116,10 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_create_seeder_fields()
 	{
+		$this->prepare();
+
 		$this->files->shouldReceive('exists')->atLeast()->once()->andReturn(true);
-		$this->files->shouldReceive('getRequire')->atLeast()->once()->andReturn([]);
+		$this->files->shouldReceive('getRequire')->atLeast()->once()->andReturn(['seeds' => ['Seeder']]);
 
 		$this->generator->shouldReceive('getStub')->atLeast()->once()->with('migration.stub');
 		$this->generator->shouldReceive('getStub')->atLeast()->once()->with('seeder.stub');
@@ -117,7 +127,72 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->create('foo', [
 			'name' => 'boolean',
 		]);
+
 		$this->generator->seeder();
+	}
+
+	/** @test */
+	public function it_can_make_seeder_columns_nullable_default_or_unsigned()
+	{
+		$this->prepare();
+
+		$this->files->shouldReceive('exists')->once()->andReturn(true);
+		$this->files->shouldReceive('getRequire')->once()->andReturn([]);
+
+		$this->generator->shouldReceive('getStub')->once()->with('migration.stub');
+		$this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
+
+		$this->generator->create('foo', [
+			'name' => 'string|nullable|default:test',
+			'age' => 'integer|nullable|unsigned',
+		]);
+
+		$this->generator->seeder();
+	}
+
+	/**
+	 * @test
+	 * @expectedException \LogicException
+	 */
+	public function it_throws_a_logic_exception_if_seeder_class_already_exists()
+	{
+		require_once __DIR__.'/stubs/seeder.php';
+
+		$files = m::mock('Illuminate\Filesystem\Filesystem');
+
+		$files->shouldReceive('isDirectory')->atLeast()->once()->andReturn(true);
+		$files->shouldReceive('exists')->once()->andReturn(true);
+		$files->shouldReceive('get')->atLeast()->once()->andReturn('{{studly_vendor}}{{new_arg}}');
+		$files->shouldReceive('put')->atLeast()->once();
+
+		$generator = new MigrationsGenerator('foo/bar', $files);
+
+		$generator->create('foo', [
+			'name' => 'boolean',
+		]);
+
+		$generator->seeder();
+	}
+
+	/**
+	 * @test
+	 * @expectedException \LogicException
+	 */
+	public function it_throws_a_logic_exception_if_the_extension_does_not_exist()
+	{
+		$files = m::mock('Illuminate\Filesystem\Filesystem');
+
+		$files->shouldReceive('isDirectory')->once()->andReturn(true);
+		$files->shouldReceive('isDirectory')->twice()->andReturn(false);
+		$files->shouldReceive('exists')->once()->andReturn(true);
+		$files->shouldReceive('get')->atLeast()->once();
+
+		$generator = new MigrationsGenerator('foo/bar', $files);
+
+		$generator->create('foo', [
+			'name' => 'boolean',
+		]);
+		$generator->seeder();
 	}
 
 }

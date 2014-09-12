@@ -74,8 +74,47 @@ class GeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('Foobar', $generator->prepare('foo.stub', ['new_arg' => 'bar']));
 	}
 
+	/**
+	 * @test
+	 * @expectedException \LogicException
+	 */
+	public function it_throws_an_exception_if_the_extension_does_not_exist()
+	{
+		$files = m::mock('Illuminate\Filesystem\Filesystem');
+
+		$files->shouldReceive('isDirectory')->once()->andReturn(true);
+		$files->shouldReceive('exists')->twice()->andReturn(false);
+
+		$generator = new GeneratorStub('foo/bar', $files);
+		$generator->check();
+	}
+
+	/**
+	 * @test
+	 */
+	public function it_can_ensure_a_directory_exists()
+	{
+		$files = m::mock('Illuminate\Filesystem\Filesystem');
+
+		$files->shouldReceive('isDirectory')->twice()->andReturn(false);
+		$files->shouldReceive('makeDirectory')->with('directory', 0777, true);
+
+		$generator = new GeneratorStub('foo/bar', $files);
+		$generator->ensure();
+	}
+
 }
 
 class GeneratorStub extends Generator {
+
+	public function check()
+	{
+		return $this->getExtensionPhpPath();
+	}
+
+	public function ensure()
+	{
+		$this->ensureDirectory('directory');
+	}
 
 }

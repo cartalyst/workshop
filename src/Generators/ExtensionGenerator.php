@@ -23,30 +23,6 @@ use Illuminate\Support\Str;
 class ExtensionGenerator extends Generator {
 
 	/**
-	 * Foundation blocks.
-	 *
-	 * @var array
-	 */
-	protected $blocks;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param  string  $slug
-	 * @param \Illuminate\Filesystem\Filesystem  $files
-	 * @param array  $blocks
-	 * @param \Illuminate\Html\HtmlBuilder  $html
-	 * @param \Illuminate\Html\FormBuilder  $form
-	 * @return void
-	 */
-	public function __construct($slug, $files, $blocks = [], $form = null, $stubsDir = null)
-	{
-		parent::__construct($slug, $files, null, null, $stubsDir);
-
-		$this->blocks = $blocks;
-	}
-
-	/**
 	 * Create a new extension.
 	 *
 	 * @return string
@@ -76,12 +52,12 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createModel($name = null)
 	{
-		$className = studly_case(ucfirst($name ?: $this->extension->name));
+		$className = Str::studly(ucfirst($name ?: $this->extension->name));
 
 		$content = $this->prepare($this->getStub('model.stub'), [
 			'class_name'  => $className,
-			'table'       => strtolower(Str::plural($name)),
-			'lower_model' => strtolower($name),
+			'table'       => Str::lower(Str::plural($name)),
+			'lower_model' => Str::lower($name),
 		]);
 
 		$path = $this->path.'/src/Models/';
@@ -101,7 +77,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createWidget($name = null)
 	{
-		$name = studly_case(ucfirst($name ?: $this->extension->name));
+		$name = Str::studly(ucfirst($name ?: $this->extension->name));
 
 		$content = $this->prepare($this->getStub('widget.stub'), [
 			'class_name' => $name,
@@ -143,7 +119,7 @@ class ExtensionGenerator extends Generator {
 			$args['columns'] = "'*',";
 		}
 
-		$controllerName = studly_case(ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller'));
+		$controllerName = Str::studly(ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller'));
 
 		$location = ucfirst($location);
 
@@ -159,10 +135,10 @@ class ExtensionGenerator extends Generator {
 		$args = array_merge($args, [
 			'class_name'         => $controllerName,
 			'location'           => $location,
-			'model'              => studly_case(ucfirst($name)),
-			'camel_model'        => camel_case(strtolower($name)),
-			'plural_name'        => studly_case(ucfirst(Str::plural($name))),
-			'plural_lower_model' => strtolower(Str::plural($name)),
+			'model'              => Str::studly(ucfirst($name)),
+			'camel_model'        => Str::camel(Str::lower($name)),
+			'plural_name'        => Str::studly(ucfirst(Str::plural($name))),
+			'plural_lower_model' => Str::lower(Str::plural($name)),
 		]);
 
 		$content = $this->prepare($this->getStub($stub), $args);
@@ -228,11 +204,11 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeServiceProvider($resource)
 	{
-		$serviceProvider = studly_case(ucfirst($resource));
+		$serviceProvider = Str::studly(ucfirst($resource));
 
 		$content = $this->prepare($this->getStub('service-provider.stub'), [
 			'provider'    => $serviceProvider,
-			'plural_name' => studly_case(ucfirst(Str::plural($resource))),
+			'plural_name' => Str::studly(ucfirst(Str::plural($resource))),
 			'boot'        => trim($this->writeMethod('boot', $resource)),
 			'register'    => trim($this->writeMethod('register', $resource)),
 		]);
@@ -241,13 +217,13 @@ class ExtensionGenerator extends Generator {
 
 		$this->files->put($dir.$serviceProvider.'ServiceProvider.php', $content);
 
-		$content = $this->files->get($this->path.'/extension.php');
+		$extensionPhp = $this->files->get($this->getExtensionPhpPath());
 
 		$newResources = $this->prepare($this->getStub('providers.stub'), [
 			'provider' => $serviceProvider,
 		]);
 
-		preg_match('/\'providers\' => \[\s*\n\s*(.*?)\s*],/s', $content, $oldResources);
+		preg_match('/\'providers\' => \[\s*\n\s*(.*?)\s*],/s', $extensionPhp, $oldResources);
 
 		$oldResources = last($oldResources);
 
@@ -283,8 +259,8 @@ class ExtensionGenerator extends Generator {
 	protected function writeMethod($name, $resource)
 	{
 		return $this->prepare($this->getStub($name.'.stub'), [
-			'model'       => studly_case(ucfirst($resource)),
-			'lower_model' => strtolower(studly_case($resource)),
+			'model'       => Str::studly(ucfirst($resource)),
+			'lower_model' => Str::lower(Str::studly($resource)),
 		]);
 	}
 
@@ -301,8 +277,8 @@ class ExtensionGenerator extends Generator {
 		$newResources = $this->prepare($this->getStub('permissions.stub'), [
 			'plural_name'        => ucfirst(Str::plural($resource)),
 			'model'              => ucfirst($resource),
-			'lower_model'        => strtolower($resource),
-			'plural_lower_model' => strtolower(Str::plural($resource)),
+			'lower_model'        => Str::lower($resource),
+			'plural_lower_model' => Str::lower(Str::plural($resource)),
 		]);
 
 		preg_match('/'.'\''.'permissions'.'\' => function\(.*?\)\s*\n\s*{\s*return \[\n(.*?)\s*?\];/s', $content, $oldResources);
@@ -343,7 +319,7 @@ class ExtensionGenerator extends Generator {
 		$content = $this->files->get($this->path.'/extension.php');
 
 		$newMenu = [
-			'slug'  => 'admin-'.$this->extension->lowerVendor.'-'.$this->extension->lowerName.'-'.strtolower($resource),
+			'slug'  => 'admin-'.$this->extension->lowerVendor.'-'.$this->extension->lowerName.'-'.Str::lower($resource),
 			'name'  => Str::plural(Str::title($resource)),
 			'class' => 'fa fa-circle-o',
 			'uri'   => $this->extension->lowerName.'/'.Str::plural(Str::lower($resource)),
@@ -402,7 +378,7 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeLang($resource)
 	{
-		$this->ensureDirectory($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/');
+		$this->ensureDirectory($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/');
 
 		$generalMainPath = $this->path.'/lang/en/general.php';
 
@@ -417,20 +393,20 @@ class ExtensionGenerator extends Generator {
 
 		$content = $this->prepare($stub, [
 			'model'        => ucfirst($resource),
-			'lower_model'  => strtolower($resource),
+			'lower_model'  => Str::lower($resource),
 			'plural_model' => Str::title(Str::plural($resource)),
 		]);
 
-		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/general.php', $content);
+		$this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/general.php', $content);
 
 		$stub = $this->getStub('lang/en/message.stub');
 
 		$content = $this->prepare($stub, [
 			'model'       => ucfirst($resource),
-			'lower_model' => strtolower($resource),
+			'lower_model' => Str::lower($resource),
 		]);
 
-		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/message.php', $content);
+		$this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/message.php', $content);
 
 		$stub = $this->getStub('lang/en/permissions.stub');
 
@@ -439,7 +415,7 @@ class ExtensionGenerator extends Generator {
 			'plural_name' => ucfirst(Str::plural($resource)),
 		]);
 
-		$this->files->put($this->path.'/lang/en/'.strtolower(Str::plural($resource)).'/permissions.php', $content);
+		$this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php', $content);
 	}
 
 	/**
@@ -468,10 +444,10 @@ class ExtensionGenerator extends Generator {
 		$content = $this->files->get($this->path.'/extension.php');
 
 		$newResources = $this->prepare($this->getStub($type.'.stub'), [
-			'plural_name'        => studly_case(ucfirst(Str::plural($resource))),
-			'model'              => studly_case(ucfirst($resource)),
-			'lower_model'        => studly_case(strtolower($resource)),
-			'plural_lower_model' => strtolower(Str::plural($resource)),
+			'plural_name'        => Str::studly(ucfirst(Str::plural($resource))),
+			'model'              => Str::studly(ucfirst($resource)),
+			'lower_model'        => Str::studly(Str::lower($resource)),
+			'plural_lower_model' => Str::lower(Str::plural($resource)),
 		]);
 
 		preg_match('/'.'\''.$type.'\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $content, $oldResources);

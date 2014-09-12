@@ -17,9 +17,8 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Workshop\Extension;
-use LogicException;
 use Illuminate\Support\Str;
+use LogicException;
 
 class MigrationsGenerator extends Generator {
 
@@ -31,28 +30,28 @@ class MigrationsGenerator extends Generator {
 	protected $table;
 
 	/**
-	 * Migrations path.
+	 * Migration's path.
 	 *
 	 * @var string
 	 */
 	protected $migrationPath;
 
 	/**
-	 * Migrations class.
+	 * Migration's class.
 	 *
 	 * @var string
 	 */
 	protected $migrationClass;
 
 	/**
-	 * Seeder class.
+	 * Seeder's class.
 	 *
 	 * @var string
 	 */
 	protected $seederClass;
 
 	/**
-	 * Migrations columns.
+	 * Migration's columns.
 	 *
 	 * @var array
 	 */
@@ -66,7 +65,7 @@ class MigrationsGenerator extends Generator {
 	protected $increments;
 
 	/**
-	 * Timestamps columns.
+	 * Timestamp columns.
 	 *
 	 * @var bool
 	 */
@@ -83,11 +82,11 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function create($table, $columns = [], $increments = true, $timestamps = true)
 	{
-		$this->increments     = $increments;
-		$this->timestamps     = $timestamps;
-		$this->columns        = $columns;
-		$this->table          = Str::studly($table);
-		$migrationDate        = date('Y_m_d_His');
+		$this->increments = $increments;
+		$this->timestamps = $timestamps;
+		$this->columns    = $columns;
+		$this->table      = Str::studly($table);
+		$migrationDate    = date('Y_m_d_His');
 
 		if ($columns)
 		{
@@ -102,12 +101,9 @@ class MigrationsGenerator extends Generator {
 
 		$this->migrationClass = $mode.$this->table.'Table';
 
-		$migrationName = $migrationDate.'_'.snake_case($this->migrationClass);
+		$migrationName = $migrationDate.'_'.Str::snake($this->migrationClass);
 
-		if (class_exists($this->migrationClass))
-		{
-			throw new LogicException('This migration already exists.');
-		}
+		$this->ensureClassDoesNotExist($this->migrationClass);
 
 		$columns = $this->prepareColumns($columns, $increments, $timestamps);
 
@@ -121,17 +117,9 @@ class MigrationsGenerator extends Generator {
 
 		$dir = $this->path.'/database/migrations/';
 
-		if ( ! $this->files->isDirectory($dir))
-		{
-			$dir = str_replace('workbench', 'extensions', $dir);
+		$this->ensureExtension($dir);
 
-			if ( ! $this->files->isDirectory($dir))
-			{
-				throw new LogicException('Extension does not exist.');
-			}
-		}
-
-		$filePath = $dir . $fileName;
+		$filePath = $dir.$fileName;
 
 		$this->migrationPath = $dir;
 
@@ -142,7 +130,7 @@ class MigrationsGenerator extends Generator {
 
 	/**
 	 * Creates the seeder and updates the
-	 * array on extension.php
+	 * seeders array on extension.php.
 	 *
 	 * @param  int  $records
 	 * @param  string  $table
@@ -150,18 +138,15 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function seeder($records = 1, $table = null)
 	{
-		$namespace = $this->extension->vendor.'\\'.studly_case($this->extension->name).'\\Database\\Seeds';
+		$namespace = $this->extension->vendor.'\\'.Str::studly($this->extension->name).'\\Database\\Seeds';
 
 		$table = $table ?: $this->table;
 
-		$seederClass = studly_case($table.'TableSeeder');
+		$seederClass = Str::studly($table.'TableSeeder');
 
 		$this->seederClass = $namespace.'\\'.$seederClass;
 
-		if (class_exists($this->seederClass))
-		{
-			throw new LogicException('This seeder already exists.');
-		}
+		$this->ensureClassDoesNotExist($this->seederClass);
 
 		$stub    = $this->getStub('seeder.stub');
 		$columns = $this->prepareSeederColumns($this->columns);
@@ -176,36 +161,16 @@ class MigrationsGenerator extends Generator {
 
 		$dir = $this->path.'/database/seeds/';
 
-		if ( ! $this->files->isDirectory($dir))
-		{
-			$dir = str_replace('workbench', 'extensions', $dir);
-
-			if ( ! $this->files->isDirectory($dir))
-			{
-				throw new LogicException('Extension does not exist.');
-			}
-		}
+		$this->ensureExtension($dir);
 
 		$filePath = $dir.$seederClass.'.php';
 
 		$this->files->put($filePath, $content);
 
 		// Add the new seeder to the extension
-		$ext = $this->path.'/extension.php';
+		$ext = $this->getExtensionPhpPath();
 
-		if ( ! $this->files->exists($ext))
-		{
-			$ext = str_replace('workbench', 'extensions', $ext);
-
-			if ( ! $this->files->exists($ext))
-			{
-				throw new LogicException('extension.php could not be found.');
-			}
-		}
-
-		$currentSeeds = $this->files->getRequire($ext);
-
-		$currentSeeds = isset($currentSeeds['seeds']) ? $currentSeeds['seeds'] : [];
+		$currentSeeds = array_get($this->files->getRequire($ext), 'seeds', []);
 
 		$seeds = null;
 
@@ -408,6 +373,41 @@ class MigrationsGenerator extends Generator {
 		}
 
 		return implode("\n\t\t\t", $cols);
+	}
+
+	/**
+	 * Ensures the extension exists.
+	 *
+	 * @param  string  $dir
+	 * @return void
+	 * @throws \LogicException
+	 */
+	protected function ensureExtension($dir)
+	{
+		if ( ! $this->files->isDirectory($dir))
+		{
+			$dir = str_replace('workbench', 'extensions', $dir);
+
+			if ( ! $this->files->isDirectory($dir))
+			{
+				throw new LogicException('Extension does not exist.');
+			}
+		}
+	}
+
+	/**
+	 * Ensures a class does not exist.
+	 *
+	 * @param  string  $class
+	 * @return void
+	 * @throws \LogicException
+	 */
+	protected function ensureClassDoesNotExist($class)
+	{
+		if (class_exists($class))
+		{
+			throw new LogicException('This class already exists.');
+		}
 	}
 
 }

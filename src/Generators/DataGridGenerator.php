@@ -17,7 +17,6 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Workshop\Extension;
 use Illuminate\Support\Str;
 
 class DataGridGenerator extends Generator {
@@ -66,15 +65,15 @@ class DataGridGenerator extends Generator {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \Cartalyst\Workshop\Extension  $extension
+	 * @param  string  $slug
 	 * @param  \Illuminate\Filesystem\Filesystem  $files
 	 * @param  \Illuminate\Html\HtmlBuilder  $html
 	 * @param  \Illuminate\Html\FormBuilder  $form
 	 * @return void
 	 */
-	public function __construct($extension, $files, $html, $form)
+	public function __construct($slug, $files, $html, $form)
 	{
-		parent::__construct($extension, $files);
+		parent::__construct($slug, $files);
 
 		$this->html = $html;
 		$this->form = $form;
@@ -109,7 +108,7 @@ class DataGridGenerator extends Generator {
 
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
-			'href'    => $this->html->toAdmin($this->extension->lowerName.'/'.strtolower(Str::plural($model))).'<%= r.id %>/edit',
+			'href'    => $this->html->toAdmin($this->extension->lowerName.'/'.Str::lower(Str::plural($model))).'<%= r.id %>/edit',
 			'content' => 'id',
 		];
 
@@ -149,7 +148,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($columns as $column)
 		{
-			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".strtolower(Str::plural($model))."/table.{$column['content']}') }}}";
+			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/table.{$column['content']}') }}}";
 
 			$headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
 		}
@@ -158,14 +157,14 @@ class DataGridGenerator extends Generator {
 
 		$includes = implode("\n", $includes);
 
-		$lowerModel = strtolower($model);
+		$lowerModel = Str::lower($model);
 
 		$view = $this->prepare($stub, [
 			'headers'            => $headers,
 			'includes'           => $includes,
 			'grid_name'          => $name,
 			'lower_model'        => $lowerModel,
-			'plural_lower_model' => strtolower(Str::plural($lowerModel)),
+			'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
 		]);
 
 		$lowerModel = $lowerModel ?: $name;
@@ -224,7 +223,7 @@ class DataGridGenerator extends Generator {
 
 					$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-					$link = str_replace('href="#"', 'href="{{ $this->html->toAdmin(\''.$this->extension->lowerName.'/'.strtolower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
+					$link = str_replace('href="#"', 'href="{{ $this->html->toAdmin(\''.$this->extension->lowerName.'/'.Str::lower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
 
 					$el[] = $link;
 				}
@@ -257,11 +256,11 @@ class DataGridGenerator extends Generator {
 	protected function writeLangFiles($columns, $model, $name = null)
 	{
 		$model = $model ?: $name;
-		$model = strtolower(Str::plural($model));
+		$model = Str::lower(Str::plural($model));
 
 		$stub = $this->getStub('lang/en/table.stub');
 
-		$filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/';
+		$filePath = $this->path.'/lang/en/'.Str::lower(Str::plural($model)).'/';
 
 		$this->ensureDirectory($filePath);
 

@@ -127,6 +127,8 @@ class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->shouldReceive('getStub')->once()->with('register.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('providers.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('empty-providers.stub');
+		$this->files->shouldReceive('exists')->once()->andReturn(false);
+		$this->files->shouldReceive('exists')->once()->andReturn(true);
 
 		$this->generator->writeServiceProvider('foo');
 	}
