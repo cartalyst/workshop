@@ -59,7 +59,6 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase {
 		$files->shouldReceive('put')->times(7);
 
 		$html = m::mock('Illuminate\Html\HtmlBuilder');
-		$html->shouldReceive('toAdmin')->once();
 		$html->shouldReceive('decode');
 		$html->shouldReceive('link');
 

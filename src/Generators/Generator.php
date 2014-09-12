@@ -61,13 +61,20 @@ abstract class Generator {
 	/**
 	 * Constructor.
 	 *
-	 * @param  string  $slug
+	 * @param  \Cartalyst\Workshop\Extension|string  $extension
 	 * @param  \Illuminate\Filesystem\Filesystem  $files
 	 * @return void
 	 */
-	public function __construct($slug, $files)
+	public function __construct($extension, $files)
 	{
-		$this->extension = new Extension($slug);
+		if (is_string($extension))
+		{
+			$this->extension = new Extension($extension);
+		}
+		else
+		{
+			$this->extension = $extension;
+		}
 
 		$this->files = $files;
 

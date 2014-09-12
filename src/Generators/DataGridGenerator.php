@@ -108,7 +108,7 @@ class DataGridGenerator extends Generator {
 
 		$this->dataGridColumns[] = [
 			'type'    => 'a',
-			'href'    => $this->html->toAdmin($this->extension->lowerName.'/'.Str::lower(Str::plural($model))).'<%= r.id %>/edit',
+			'href'    => '#',
 			'content' => 'id',
 		];
 
@@ -217,13 +217,11 @@ class DataGridGenerator extends Generator {
 			{
 				if ($type === 'a')
 				{
-					$url = array_pull($attributes, 'href');
-
 					$elementContent = '<%= r.' . array_pull($attributes, 'content') . ' %>';
 
 					$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-					$link = str_replace('href="#"', 'href="{{ $this->html->toAdmin(\''.$this->extension->lowerName.'/'.Str::lower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
+					$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/'.Str::lower(Str::plural($model)).'/<%= r.id %>/edit\') }}"', $link);
 
 					$el[] = $link;
 				}

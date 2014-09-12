@@ -243,7 +243,7 @@ class ExtensionGenerator extends Generator {
 		$content = preg_replace(
 			'/\'providers\' => \[\s*\n\s*(.*?)\s*],/s',
 			rtrim($resourceReplacement),
-			$content
+			$extensionPhp
 		);
 
 		$this->files->put($this->path.'/extension.php', $content);
