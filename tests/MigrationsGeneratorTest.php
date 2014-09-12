@@ -143,8 +143,9 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
 
 		$this->generator->create('foo', [
-			'name' => 'string|nullable|default:test',
-			'age' => 'integer|nullable|unsigned',
+			'name'  => 'string|nullable|default:test',
+			'age'   => 'integer|nullable|unsigned',
+			'email' => 'test|unique',
 		]);
 
 		$this->generator->seeder();

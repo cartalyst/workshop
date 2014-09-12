@@ -362,9 +362,18 @@ class MigrationsGenerator extends Generator {
 				$unsigned = '';
 			}
 
+			if (strpos($type, 'unique') !== false)
+			{
+				$unique = '->unique()';
+			}
+			else
+			{
+				$unique = '';
+			}
+
 			$type = head(explode('|', $type));
 
-			$cols[] = '$table->'.$type."('$name'){$nullable}{$default}{$unsigned};";
+			$cols[] = '$table->'.$type."('$name'){$nullable}{$default}{$unsigned}{$unique};";
 		}
 
 		if ($timestamps)
