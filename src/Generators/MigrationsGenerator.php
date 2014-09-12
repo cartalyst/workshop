@@ -82,36 +82,35 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function create($table, $columns = [], $increments = true, $timestamps = true)
 	{
+		$this->table      = Str::studly($table);
+		$this->columns    = $columns;
 		$this->increments = $increments;
 		$this->timestamps = $timestamps;
-		$this->columns    = $columns;
-		$this->table      = Str::studly($table);
-		$migrationDate    = date('Y_m_d_His');
 
-		if ($columns)
+		$mode     = 'Create';
+		$stubPath = 'migration.stub';
+
+		if ( ! $columns)
 		{
-			$mode = 'Create';
-			$stub = $this->getStub('migration.stub');
-		}
-		else
-		{
-			$mode = 'Alter';
-			$stub = $this->getStub('migration-table.stub');
+			$mode     = 'Alter';
+			$stubPath = 'migration-table.stub';
 		}
 
 		$this->migrationClass = $mode.$this->table.'Table';
 
-		$migrationName = $migrationDate.'_'.Str::snake($this->migrationClass);
-
 		$this->ensureClassDoesNotExist($this->migrationClass);
 
 		$columns = $this->prepareColumns($columns, $increments, $timestamps);
+
+		$stub = $this->getStub($stubPath);
 
 		$content = $this->prepare($stub, [
 			'class_name' => $this->migrationClass,
 			'table'      => Str::lower($table),
 			'columns'    => $columns,
 		]);
+
+		$migrationName = date('Y_m_d_His').'_'.Str::snake($this->migrationClass);
 
 		$fileName = $migrationName.'.php';
 
@@ -138,7 +137,7 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function seeder($records = 1, $table = null)
 	{
-		$namespace = $this->extension->vendor.'\\'.Str::studly($this->extension->name).'\\Database\\Seeds';
+		$namespace = $this->extension->studlyVendor.'\\'.$this->extension->studlyName.'\\Database\\Seeds';
 
 		$table = $table ?: $this->table;
 
@@ -168,9 +167,9 @@ class MigrationsGenerator extends Generator {
 		$this->files->put($filePath, $content);
 
 		// Add the new seeder to the extension
-		$ext = $this->getExtensionPhpPath();
+		$extensionPhp = $this->getExtensionPhpPath();
 
-		$currentSeeds = array_get($this->files->getRequire($ext), 'seeds', []);
+		$currentSeeds = array_get($this->files->getRequire($extensionPhp), 'seeds', []);
 
 		$seeds = null;
 
@@ -179,7 +178,7 @@ class MigrationsGenerator extends Generator {
 			$seeds .= "'$s',\n\t\t";
 		}
 
-		$extensionContent = $this->files->get($ext);
+		$extensionContent = $this->files->get($extensionPhp);
 
 		if ( ! in_array("{$namespace}\\{$seederClass}", $currentSeeds))
 		{
@@ -191,7 +190,7 @@ class MigrationsGenerator extends Generator {
 				$extensionContent
 			);
 
-			$this->files->put($ext, $extensionContent);
+			$this->files->put($extensionPhp, $extensionContent);
 		}
 
 		return $this;

@@ -1,0 +1,4 @@
+			Route::group(['prefix' => '{{lower_name}}/{{plural_lower_model}}', 'namespace' => 'Frontend'], function()
+			{
+				Route::get('/', '{{plural_name}}Controller@index');
+			});

@@ -191,9 +191,62 @@ class ExtensionGenerator extends Generator {
 	 *
 	 * @return void
 	 */
-	public function writeRoutes($resource)
+	public function writeRoutes($resource, $adminRoutes = null, $frontendRoutes = null)
 	{
-		$this->updateResource('routes', $resource);
+		$content = $this->files->get($this->getExtensionPhpPath());
+
+		$routes = null;
+
+		if ($adminRoutes)
+		{
+			$routes .= $this->prepare($this->getStub('admin-routes.stub'), [
+				'plural_name'        => Str::studly(ucfirst(Str::plural($resource))),
+				'plural_lower_model' => Str::lower(Str::plural($resource)),
+			]);
+		}
+
+		if ($frontendRoutes)
+		{
+			$routes = $routes ? $routes."\n" : '';
+
+			$routes .= $this->prepare($this->getStub('frontend-routes.stub'), [
+				'plural_name'        => Str::studly(ucfirst(Str::plural($resource))),
+				'plural_lower_model' => Str::lower(Str::plural($resource)),
+			]);
+		}
+
+		$newRoutes = $this->prepare($this->getStub('routes.stub'), [
+			'routes' => rtrim($routes),
+		]);
+
+		preg_match('/'.'\'routes\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $content, $oldRoutes);
+
+		preg_match('/'.'\'routes\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $newRoutes, $newRoutes);
+
+		$oldRoutes = last($oldRoutes);
+		$newRoutes = last($newRoutes);
+
+		if ($this->alreadyExists($oldRoutes, $newRoutes))
+		{
+			return;
+		}
+
+		$routesContent = $oldRoutes."\n".$newRoutes;
+
+		$stub = 'empty-extension-closure.stub';
+
+		$resourceReplacement = $this->prepare($this->getStub($stub), [
+			'content' => trim($routesContent),
+			'type'    => 'routes',
+		]);
+
+		$content = preg_replace(
+			"/'routes' => function\s*.*?},/s",
+			trim($resourceReplacement),
+			$content
+		);
+
+		$this->files->put($this->getExtensionPhpPath(), $content);
 	}
 
 	/**
@@ -219,20 +272,20 @@ class ExtensionGenerator extends Generator {
 
 		$extensionPhp = $this->files->get($this->getExtensionPhpPath());
 
-		$newResources = $this->prepare($this->getStub('providers.stub'), [
+		$newProviders = $this->prepare($this->getStub('providers.stub'), [
 			'provider' => $serviceProvider,
 		]);
 
-		preg_match('/\'providers\' => \[\s*\n\s*(.*?)\s*],/s', $extensionPhp, $oldResources);
+		preg_match('/\'providers\' => \[\s*\n\s*(.*?)\s*],/s', $extensionPhp, $oldProviders);
 
-		$oldResources = last($oldResources);
+		$oldProviders = last($oldProviders);
 
-		if (strpos(trim($oldResources), trim($newResources)) !== false)
+		if ($this->alreadyExists(trim($oldProviders), trim($newProviders)))
 		{
 			return;
 		}
 
-		$resources = $oldResources."\n\t".$newResources;
+		$resources = $oldProviders."\n\t".$newProviders;
 
 		$stub = 'empty-providers.stub';
 
@@ -246,7 +299,7 @@ class ExtensionGenerator extends Generator {
 			$extensionPhp
 		);
 
-		$this->files->put($this->path.'/extension.php', $content);
+		$this->files->put($this->getExtensionPhpPath(), $content);
 	}
 
 	/**
@@ -272,25 +325,25 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writePermissions($resource)
 	{
-		$content = $this->files->get($this->path.'/extension.php');
+		$content = $this->files->get($this->getExtensionPhpPath());
 
-		$newResources = $this->prepare($this->getStub('permissions.stub'), [
+		$newPermissions = $this->prepare($this->getStub('permissions.stub'), [
 			'plural_name'        => ucfirst(Str::plural($resource)),
 			'model'              => ucfirst($resource),
 			'lower_model'        => Str::lower($resource),
 			'plural_lower_model' => Str::lower(Str::plural($resource)),
 		]);
 
-		preg_match('/'.'\''.'permissions'.'\' => function\(.*?\)\s*\n\s*{\s*return \[\n(.*?)\s*?\];/s', $content, $oldResources);
+		preg_match('/'.'\''.'permissions'.'\' => function\(.*?\)\s*\n\s*{\s*return \[\n(.*?)\s*?\];/s', $content, $oldPermissions);
 
-		$oldResources = last($oldResources);
+		$oldPermissions = last($oldPermissions);
 
-		if (strpos(trim($oldResources), trim($newResources)) !== false)
+		if ($this->alreadyExists(trim($oldPermissions), trim($newPermissions)))
 		{
 			return;
 		}
 
-		$resources = $oldResources."\n\n".$newResources;
+		$resources = $oldPermissions."\n\n".$newPermissions;
 
 		$stub = 'empty-permissions.stub';
 
@@ -305,7 +358,7 @@ class ExtensionGenerator extends Generator {
 			$content
 		);
 
-		$this->files->put($this->path.'/extension.php', $content);
+		$this->files->put($this->getExtensionPhpPath(), $content);
 	}
 
 	/**
@@ -316,7 +369,9 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeMenus($resource)
 	{
-		$content = $this->files->get($this->path.'/extension.php');
+		$extensionPhpPath = $this->getExtensionPhpPath();
+
+		$content = $this->files->get($extensionPhpPath);
 
 		$newMenu = [
 			'slug'  => 'admin-'.$this->extension->lowerVendor.'-'.$this->extension->lowerName.'-'.Str::lower($resource),
@@ -325,7 +380,7 @@ class ExtensionGenerator extends Generator {
 			'uri'   => $this->extension->lowerName.'/'.Str::plural(Str::lower($resource)),
 		];
 
-		$menus = array_get($this->files->getRequire($this->path.'/extension.php'), 'menus');
+		$menus = array_get($this->files->getRequire($extensionPhpPath), 'menus');
 
 		$children = [];
 
@@ -367,7 +422,7 @@ class ExtensionGenerator extends Generator {
 			$content
 		);
 
-		$this->files->put($this->path.'/extension.php', $content);
+		$this->files->put($extensionPhpPath, $content);
 	}
 
 	/**
@@ -433,51 +488,20 @@ class ExtensionGenerator extends Generator {
 	}
 
 	/**
-	 * Updates extension resources on extension.php.
+	 * Check if the new content already exists.
 	 *
-	 * @param  string  $type
-	 * @param  string  $resource
-	 * @return void
+	 * @param  string  $oldContent
+	 * @param  string  $newContent
+	 * @return bool
 	 */
-	protected function updateResource($type, $resource, $stub = null)
+	protected function alreadyExists($oldContent, $newContent)
 	{
-		$content = $this->files->get($this->path.'/extension.php');
-
-		$newResources = $this->prepare($this->getStub($type.'.stub'), [
-			'plural_name'        => Str::studly(ucfirst(Str::plural($resource))),
-			'model'              => Str::studly(ucfirst($resource)),
-			'lower_model'        => Str::studly(Str::lower($resource)),
-			'plural_lower_model' => Str::lower(Str::plural($resource)),
-		]);
-
-		preg_match('/'.'\''.$type.'\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $content, $oldResources);
-
-		preg_match('/'.'\''.$type.'\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $newResources, $newResources);
-
-		$oldResources = last($oldResources);
-		$newResources = last($newResources);
-
-		if (strpos($oldResources, $newResources) !== false)
+		if (strpos($oldContent, $newContent) !== false)
 		{
-			return;
+			return true;
 		}
 
-		$resources = $oldResources."\n".$newResources;
-
-		$stub = $stub ?: 'empty-extension-closure.stub';
-
-		$resourceReplacement = $this->prepare($this->getStub($stub), [
-			'content' => trim($resources),
-			'type'    => $type,
-		]);
-
-		$content = preg_replace(
-			"/'{$type}' => function\s*.*?},/s",
-			rtrim($resourceReplacement),
-			$content
-		);
-
-		$this->files->put($this->path.'/extension.php', $content);
+		return false;
 	}
 
 }

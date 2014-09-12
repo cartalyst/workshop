@@ -127,8 +127,7 @@ class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->shouldReceive('getStub')->once()->with('register.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('providers.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('empty-providers.stub');
-		$this->files->shouldReceive('exists')->once()->andReturn(false);
-		$this->files->shouldReceive('exists')->once()->andReturn(true);
+		$this->files->shouldReceive('exists')->twice()->andReturn(true);
 
 		$this->generator->writeServiceProvider('foo');
 	}
@@ -138,6 +137,7 @@ class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase {
 	{
 		$this->generator->shouldReceive('getStub')->once()->with('permissions.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('empty-permissions.stub');
+		$this->files->shouldReceive('exists')->twice()->andReturn(true);
 
 		$this->generator->writePermissions('foo');
 	}
@@ -147,14 +147,38 @@ class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase {
 	{
 		$this->generator->shouldReceive('getStub')->once()->with('routes.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('empty-extension-closure.stub');
+		$this->files->shouldReceive('exists')->twice()->andReturn(true);
 
 		$this->generator->writeRoutes('foo');
+	}
+
+	/** @test */
+	public function it_can_write_admin_routes()
+	{
+		$this->generator->shouldReceive('getStub')->once()->with('routes.stub');
+		$this->generator->shouldReceive('getStub')->once()->with('empty-extension-closure.stub');
+		$this->generator->shouldReceive('getStub')->once()->with('admin-routes.stub');
+		$this->files->shouldReceive('exists')->twice()->andReturn(true);
+
+		$this->generator->writeRoutes('foo', true);
+	}
+
+	/** @test */
+	public function it_can_write_frontend_routes()
+	{
+		$this->generator->shouldReceive('getStub')->once()->with('routes.stub');
+		$this->generator->shouldReceive('getStub')->once()->with('empty-extension-closure.stub');
+		$this->generator->shouldReceive('getStub')->once()->with('frontend-routes.stub');
+		$this->files->shouldReceive('exists')->twice()->andReturn(true);
+
+		$this->generator->writeRoutes('foo', false, true);
 	}
 
 	/** @test */
 	public function it_can_write_menus()
 	{
 		$this->files->shouldReceive('getRequire')->once()->andReturn([]);
+		$this->files->shouldReceive('exists')->once()->andReturn(true);
 
 		$this->generator->writeMenus('foo');
 	}
