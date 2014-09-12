@@ -17,7 +17,7 @@
 	"require": {
 		"php": ">=5.4.0",
 		"cartalyst/composer-installers": "1.1.*",
-		"illuminate/support": "~4.2"
+		"illuminate/support": "4.2.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -27,5 +27,6 @@
 			"{{studly_vendor}}\\{{studly_name}}\\": "src/"
 		}
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
