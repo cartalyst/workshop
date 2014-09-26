@@ -82,6 +82,9 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function create($table, $columns = [], $increments = true, $timestamps = true)
 	{
+		$table = $this->sanitize($table);
+		$columns = $this->sanitize($columns);
+
 		$this->table      = Str::studly($table);
 		$this->columns    = $columns;
 		$this->increments = $increments;
@@ -137,6 +140,8 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function seeder($records = 1, $table = null)
 	{
+		$table = $this->sanitize($table);
+
 		$namespace = $this->extension->studlyVendor.'\\'.$this->extension->studlyName.'\\Database\\Seeds';
 
 		$table = $table ?: $this->table;

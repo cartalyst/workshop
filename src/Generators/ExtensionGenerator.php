@@ -52,6 +52,8 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createModel($name = null)
 	{
+		$name = $this->sanitize($name);
+
 		$className = Str::studly(ucfirst($name ?: $this->extension->name));
 
 		$content = $this->prepare($this->getStub('model.stub'), [
@@ -77,6 +79,8 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function createWidget($name = null)
 	{
+		$name = $this->sanitize($name);
+
 		$name = Str::studly(ucfirst($name ?: $this->extension->name));
 
 		$content = $this->prepare($this->getStub('widget.stub'), [
@@ -97,10 +101,13 @@ class ExtensionGenerator extends Generator {
 	 *
 	 * @param  string  $name
 	 * @param  string  $location
+	 * @param  array  $args
 	 * @return void
 	 */
 	public function createController($name = null, $location = 'Admin', $args = [])
 	{
+		$name = $this->sanitize($name);
+
 		if (isset($args['columns']))
 		{
 			$cols = "'id',\n";
@@ -189,10 +196,15 @@ class ExtensionGenerator extends Generator {
 	/**
 	 * Writes the routes section.
 	 *
+	 * @param  string  $resource
+	 * @param  bool  $adminRoutes
+	 * @param  bool  $frontendRoutes
 	 * @return void
 	 */
 	public function writeRoutes($resource, $adminRoutes = null, $frontendRoutes = null)
 	{
+		$resource = $this->sanitize($resource);
+
 		$content = $this->files->get($this->getExtensionPhpPath());
 
 		$routes = null;
@@ -257,6 +269,8 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeServiceProvider($resource)
 	{
+		$resource = $this->sanitize($resource);
+
 		$serviceProvider = Str::studly(ucfirst($resource));
 
 		$content = $this->prepare($this->getStub('service-provider.stub'), [
@@ -325,6 +339,8 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writePermissions($resource)
 	{
+		$resource = $this->sanitize($resource);
+
 		$content = $this->files->get($this->getExtensionPhpPath());
 
 		$newPermissions = $this->prepare($this->getStub('permissions.stub'), [
@@ -369,6 +385,8 @@ class ExtensionGenerator extends Generator {
 	 */
 	public function writeMenus($resource)
 	{
+		$resource = $this->sanitize($resource);
+
 		$extensionPhpPath = $this->getExtensionPhpPath();
 
 		$content = $this->files->get($extensionPhpPath);
@@ -428,11 +446,13 @@ class ExtensionGenerator extends Generator {
 	/**
 	 * Writes the language files.
 	 *
-	 * @param  array  $columns
+	 * @param  string  $resource
 	 * @return void
 	 */
 	public function writeLang($resource)
 	{
+		$resource = $this->sanitize($resource);
+
 		$this->ensureDirectory($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/');
 
 		$generalMainPath = $this->path.'/lang/en/general.php';

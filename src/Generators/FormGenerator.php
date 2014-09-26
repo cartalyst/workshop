@@ -24,12 +24,16 @@ class FormGenerator extends Generator {
 	/**
 	 * Create a new form.
 	 *
+	 * @param  string  $model
 	 * @param  array  $columns
-	 * @param  bool  $interface
+	 * @param  string  $view
 	 * @return void
 	 */
 	public function create($model, $columns = [], $view = 'form')
 	{
+		$model = $this->sanitize($model);
+		$columns = $this->sanitize($columns);
+
 		$this->writeLangFiles($columns, $model);
 
 		$stub = $this->getStub('form.blade.stub');
@@ -80,6 +84,7 @@ class FormGenerator extends Generator {
 	 * Writes the form language file.
 	 *
 	 * @param  array  $columns
+	 * @param  string  $model
 	 * @return void
 	 */
 	protected function writeLangFiles($columns, $model)

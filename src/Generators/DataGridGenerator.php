@@ -87,10 +87,15 @@ class DataGridGenerator extends Generator {
 	 * @param  string  $theme
 	 * @param  string  $viewName
 	 * @param  array  $columns
+	 * @param  string  $model
 	 * @return void
 	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
 	{
+		$name = $this->sanitize($name);
+		$columns = $this->sanitize($columns);
+		$model = $this->sanitize($model);
+
 		$this->writeLangFiles($columns, $model, $name);
 
 		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
@@ -181,7 +186,9 @@ class DataGridGenerator extends Generator {
 	/**
 	 * Process data grid templates.
 	 *
+	 * @param  string $name
 	 * @param  string $stub
+	 * @param  string $model
 	 * @return string
 	 */
 	protected function processDataGridTemplate($name, $stub, $model)

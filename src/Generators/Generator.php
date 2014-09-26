@@ -17,9 +17,9 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\Workshop\Extension;
-use Illuminate\Support\Str;
 use LogicException;
+use Illuminate\Support\Str;
+use Cartalyst\Workshop\Extension;
 
 abstract class Generator {
 
@@ -222,6 +222,34 @@ abstract class Generator {
 		}
 
 		return $path;
+	}
+
+	/**
+	 * Sanitizes a string.
+	 *
+	 * @param  string|array  $element
+	 * @return string
+	 */
+	public static function sanitize($element)
+	{
+		if (is_array($element))
+		{
+			$newArray = [];
+
+			foreach ($element as $key => $string)
+			{
+				$key = static::sanitize($key);
+				$string = static::sanitize($string);
+
+				$newArray[$key] = $string;
+			}
+
+			return $newArray;
+		}
+
+		$pattern = '/[^a-zA-Z0-9]/';
+
+		return preg_replace($pattern, '', (string) $element);
 	}
 
 }

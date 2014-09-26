@@ -30,6 +30,7 @@ class RepositoryGenerator extends Generator {
 	 */
 	public function create($model, $interface = true)
 	{
+		$model = $this->sanitize($model);
 		$model = Str::studly($model);
 
 		$repositoryInterface = Str::studly(ucfirst($model).'RepositoryInterface');

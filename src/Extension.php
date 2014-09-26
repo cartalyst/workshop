@@ -101,8 +101,7 @@ class Extension {
 	/**
 	 * Create a new package instance.
 	 *
-	 * @param  string  $vendor
-	 * @param  string  $name
+	 * @param  string  $slug
 	 * @param  string  $author
 	 * @param  string  $email
 	 * @return void
