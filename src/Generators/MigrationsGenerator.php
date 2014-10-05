@@ -82,10 +82,9 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function create($table, $columns = [], $increments = true, $timestamps = true)
 	{
-		$table = $this->sanitize($table);
-		$columns = $this->sanitize($columns);
+		$table = $this->sanitize($table, '/[^a-zA-Z0-9_-]/');
 
-		$this->table      = Str::studly($table);
+		$this->table      = Str::lower($table);
 		$this->columns    = $columns;
 		$this->increments = $increments;
 		$this->timestamps = $timestamps;
@@ -140,7 +139,7 @@ class MigrationsGenerator extends Generator {
 	 */
 	public function seeder($records = 1, $table = null)
 	{
-		$table = $this->sanitize($table);
+		$table = $this->sanitize($table, '/[^a-zA-Z0-9_-]/');
 
 		$namespace = $this->extension->studlyVendor.'\\'.$this->extension->studlyName.'\\Database\\Seeds';
 
@@ -248,6 +247,8 @@ class MigrationsGenerator extends Generator {
 
 		foreach ($columns as $name => $type)
 		{
+			$name = $this->sanitize($name, '/[^a-zA-Z0-9_-]/');
+
 			switch ($type)
 			{
 				case 'tinyInteger':
@@ -329,6 +330,8 @@ class MigrationsGenerator extends Generator {
 
 		foreach ($columns as $name => $type)
 		{
+			$name = $this->sanitize($name, '/[^a-zA-Z0-9_-]/');
+
 			if (strpos($type, 'default') !== false)
 			{
 				$parts = explode('|', $type);
