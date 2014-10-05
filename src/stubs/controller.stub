@@ -1,9 +1,6 @@
 <?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\{{location}};
 
-use Platform\Foundation\Controllers\BaseController;
-use View;
-
-class {{class_name}} extends BaseController {
+class {{class_name}} extends \Platform\Foundation\Controllers\Controller {
 
 	/**
 	 * Return the main view.
@@ -12,7 +9,7 @@ class {{class_name}} extends BaseController {
 	 */
 	public function index()
 	{
-		return View::make('{{lower_vendor}}/{{lower_name}}::index');
+		return view('{{lower_vendor}}/{{lower_name}}::index');
 	}
 
 }
