@@ -230,7 +230,7 @@ abstract class Generator {
 	 * @param  string|array  $element
 	 * @return string
 	 */
-	public static function sanitize($element)
+	public static function sanitize($element, $pattern = '/[^a-zA-Z0-9]/')
 	{
 		if (is_array($element))
 		{
@@ -238,16 +238,14 @@ abstract class Generator {
 
 			foreach ($element as $key => $string)
 			{
-				$key = static::sanitize($key);
-				$string = static::sanitize($string);
+				$key = static::sanitize($key, $pattern);
+				$string = static::sanitize($string, $pattern);
 
 				$newArray[$key] = $string;
 			}
 
 			return $newArray;
 		}
-
-		$pattern = '/[^a-zA-Z0-9]/';
 
 		return preg_replace($pattern, '', (string) $element);
 	}
