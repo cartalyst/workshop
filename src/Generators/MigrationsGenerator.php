@@ -84,7 +84,7 @@ class MigrationsGenerator extends Generator {
 	{
 		$table = $this->sanitize($table, '/[^a-zA-Z0-9_-]/');
 
-		$this->table      = Str::lower($table);
+		$this->table      = Str::studly($table);
 		$this->columns    = $columns;
 		$this->increments = $increments;
 		$this->timestamps = $timestamps;
