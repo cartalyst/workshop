@@ -3,10 +3,11 @@
 use Cartalyst\Attributes\EntityInterface;
 use Illuminate\Database\Eloquent\Model;
 use Platform\Attributes\Traits\EntityTrait;
+use Cartalyst\Support\Traits\NamespacedEntityTrait;
 
 class {{class_name}} extends Model implements EntityInterface {
 
-	use EntityTrait;
+	use EntityTrait, NamespacedEntityTrait;
 
 	/**
 	 * {@inheritDoc}
@@ -30,6 +31,6 @@ class {{class_name}} extends Model implements EntityInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $eavNamespace = '{{lower_vendor}}/{{lower_name}}.{{lower_model}}';
+	protected $entityNamespace = '{{lower_vendor}}/{{lower_name}}.{{lower_model}}';
 
 }
