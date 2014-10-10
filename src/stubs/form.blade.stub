@@ -77,7 +77,7 @@
 
 				<a class="btn btn-default" href="{{{ URL::toAdmin('{{lower_name}}/{{plural_lower_model}}') }}}">{{{ trans('button.cancel') }}}</a>
 
-				<a class="btn btn-danger" data-toggle="modal" data-target="modal-confirm" href="{{ URL::toAdmin("{{lower_name}}/{{plural_lower_model}}/{${{camel_model}}->id}/delete") }}">{{{ trans('button.delete') }}}</a>
+				<a class="btn btn-danger" data-toggle="modal" data-target="modal-confirm" href="{{ URL::toAdmin('{{lower_name}}/{{plural_lower_model}}/{${{camel_model}}->id}/delete') }}">{{{ trans('button.delete') }}}</a>
 
 			</div>
 
