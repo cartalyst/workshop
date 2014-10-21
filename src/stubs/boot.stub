@@ -1,10 +1,11 @@
 $this->package('{{lower_vendor}}/{{lower_name}}', '{{lower_vendor}}/{{lower_name}}', __DIR__.'/..');
 
-		if (class_exists('{{studly_vendor}}\{{studly_name}}\Models\{{model}}'))
-		{
-			// Get the model
-			$model = $this->app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}'];
+		$model = '{{studly_vendor}}\{{studly_name}}\Models\{{model}}';
 
-			// Register a new attribute namespace
-			$this->app['Platform\Attributes\Models\Attribute']->registerNamespace($model);
+		if (class_exists($model))
+		{
+			// Register the attributes namespace
+			$this->app['platform.attributes.manager']->registerNamespace(
+				$this->app[$model]
+			);
 		}
