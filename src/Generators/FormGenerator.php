@@ -32,7 +32,6 @@ class FormGenerator extends Generator {
 	public function create($model, $columns = [], $view = 'form')
 	{
 		$model = $this->sanitize($model);
-		$columns = $this->sanitize($columns);
 
 		$this->writeLangFiles($columns, $model);
 
@@ -42,6 +41,8 @@ class FormGenerator extends Generator {
 
 		foreach ($columns as $col)
 		{
+			$col['field'] = $this->sanitize($col['field'], '/[^a-zA-Z0-9_-]/');
+
 			switch ($col['type']) {
 				case 'text':
 				case 'mediumText':
