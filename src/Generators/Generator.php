@@ -117,9 +117,9 @@ abstract class Generator {
 	 */
 	public function getStub($path)
 	{
-		if ($this->files->exists(static::$stubsDir.'/'.$path))
+		if ($this->files->exists(static::$stubsDir.DIRECTORY_SEPARATOR.$path))
 		{
-			return static::$stubsDir.$path;
+			return static::$stubsDir.DIRECTORY_SEPARATOR.$path;
 		}
 
 		return $this->defaultStubsDir.$path;
