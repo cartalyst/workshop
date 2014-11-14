@@ -117,9 +117,11 @@ abstract class Generator {
 	 */
 	public function getStub($path)
 	{
-		if ($this->files->exists(static::$stubsDir.DIRECTORY_SEPARATOR.$path))
+		$overriddenPath = static::$stubsDir.DIRECTORY_SEPARATOR.$path;
+
+		if ($this->files->exists($overriddenPath))
 		{
-			return static::$stubsDir.DIRECTORY_SEPARATOR.$path;
+			return $overriddenPath;
 		}
 
 		return $this->defaultStubsDir.$path;

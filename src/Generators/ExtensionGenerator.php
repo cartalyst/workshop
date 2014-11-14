@@ -350,7 +350,7 @@ class ExtensionGenerator extends Generator {
 			'plural_lower_model' => Str::lower(Str::plural($resource)),
 		]);
 
-		preg_match('/'.'\''.'permissions'.'\' => function\(.*?\)\s*\n\s*{\s*return \[\n(.*?)\s*?\];/s', $content, $oldPermissions);
+		preg_match('/'.'\'permissions\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $content, $oldPermissions);
 
 		$oldPermissions = last($oldPermissions);
 

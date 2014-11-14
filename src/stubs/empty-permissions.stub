@@ -1,6 +1,4 @@
-'{{type}}' => function()
+'permissions' => function(Permissions $permissions)
 	{
-		return [
-			{{content}}
-		];
+		{{content}}
 	},

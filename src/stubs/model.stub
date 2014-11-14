@@ -31,6 +31,6 @@ class {{class_name}} extends Model implements EntityInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $entityNamespace = '{{lower_vendor}}/{{lower_name}}.{{lower_model}}';
+	protected static $entityNamespace = '{{lower_vendor}}/{{lower_name}}.{{lower_model}}';
 
 }

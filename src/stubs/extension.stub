@@ -1,7 +1,9 @@
 <?php
 
-use Cartalyst\Extensions\ExtensionInterface;
 use Illuminate\Foundation\Application;
+use Cartalyst\Extensions\ExtensionInterface;
+use Cartalyst\Settings\Repository as Settings;
+use Cartalyst\Permissions\Container as Permissions;
 
 return [
 
@@ -171,33 +173,18 @@ return [
 	| Permissions
 	|--------------------------------------------------------------------------
 	|
-	| List of permissions this extension has. These are shown in the user
-	| management area to build a graphical interface where permissions
-	| may be selected.
+	| Register here all the permissions that this extension has. These will
+	| be shown in the user management area to build a graphical interface
+	| where permissions can be selected to allow or deny user access.
 	|
-	| The admin controllers state that permissions should follow the following
-	| structure:
-	|
-	|    Vendor\Namespace\Controller@method
-	|
-	| For example:
-	|
-	|    Platform\Users\Controllers\Admin\UsersController@index
-	|
-	| These are automatically generated for controller routes however you are
-	| free to add your own permissions and check against them at any time.
-	|
-	| When writing permissions, if you put a 'key' => 'value' pair, the 'value'
-	| will be the label for the permission which is displayed when editing
-	| permissions.
+	| For detailed instructions on how to register the permissions, please
+	| refer to the following url https://cartalyst.com/manual/permissions
 	|
 	*/
 
-	'permissions' => function()
+	'permissions' => function(Permissions $permissions)
 	{
-		return [
 
-		];
 	},
 
 	/*
