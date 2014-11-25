@@ -93,7 +93,6 @@ class DataGridGenerator extends Generator {
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
 	{
 		$name = $this->sanitize($name);
-		$columns = $this->sanitize($columns);
 		$model = $this->sanitize($model);
 
 		$this->writeLangFiles($columns, $model, $name);
@@ -106,7 +105,7 @@ class DataGridGenerator extends Generator {
 
 		foreach ($columns as $column)
 		{
-			$dgCols[]['content'] = $column['field'];
+			$dgCols[]['content'] = $this->sanitize($column['field'], '/[^a-zA-Z0-9_-]/');
 		}
 
 		array_push($dgCols, ['content' => 'created_at']);
