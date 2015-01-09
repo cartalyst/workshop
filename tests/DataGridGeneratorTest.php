@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -44,7 +44,7 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase {
 
 		$generator = new DataGridGenerator('foo/bar', $files, $html, $form);
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\Generator', $generator);
+		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
 	}
 
 	/** @test */
@@ -52,11 +52,11 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase {
 	{
 		$files = m::mock('Illuminate\Filesystem\Filesystem');
 
-		$files->shouldReceive('isDirectory')->times(8)->andReturn(true);
-		$files->shouldReceive('exists')->times(8)->andReturn(true);
+		$files->shouldReceive('isDirectory')->times(9)->andReturn(true);
+		$files->shouldReceive('exists')->times(9)->andReturn(true);
 		$files->shouldReceive('getRequire')->once()->andReturn([]);
-		$files->shouldReceive('get')->times(7);
-		$files->shouldReceive('put')->times(7);
+		$files->shouldReceive('get')->times(8);
+		$files->shouldReceive('put')->times(8);
 
 		$html = m::mock('Illuminate\Html\HtmlBuilder');
 		$html->shouldReceive('decode');

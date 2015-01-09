@@ -2,7 +2,7 @@
 
 	<% _.each(results, function(r) { %>
 
-		<tr>
+		<tr data-grid-row>
 			{{columns}}
 		</tr>
 

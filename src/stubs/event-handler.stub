@@ -1,0 +1,76 @@
+<?php namespace {{studly_vendor}}\{{studly_name}}\Handlers;
+
+use Illuminate\Events\Dispatcher;
+use {{studly_vendor}}\{{studly_name}}\Models\{{model}};
+use Cartalyst\Support\Handlers\EventHandler as BaseEventHandler;
+
+class EventHandler extends BaseEventHandler implements EventHandlerInterface {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function subscribe(Dispatcher $dispatcher)
+	{
+		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.creating', __CLASS__.'@creating');
+		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.created', __CLASS__.'@created');
+
+		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updating', __CLASS__.'@updating');
+		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updated', __CLASS__.'@updated');
+
+		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', __CLASS__.'@deleted');
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function creating(array $data)
+	{
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function created({{model}} ${{lower_model}})
+	{
+		$this->flushCache(${{lower_model}});
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function updating({{model}} ${{lower_model}}, array $data)
+	{
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function updated({{model}} ${{lower_model}})
+	{
+		$this->flushCache(${{lower_model}});
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function deleted({{model}} ${{lower_model}})
+	{
+		$this->flushCache(${{lower_model}});
+	}
+
+	/**
+	 * Flush the cache.
+	 *
+	 * @param  \{{studly_vendor}}\{{studly_name}}\Models\{{model}}  ${{lower_model}}
+	 * @return void
+	 */
+	protected function flushCache({{model}} ${{lower_model}})
+	{
+		$this->app['cache']->forget('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.all');
+
+		$this->app['cache']->forget('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.'.${{lower_model}}->id);
+	}
+
+}

@@ -23,7 +23,7 @@ class {{plural_name}}Controller extends AdminController {
 	 *
 	 * @var \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface
 	 */
-	protected ${{camel_model}};
+	protected ${{plural_lower_model}};
 
 	/**
 	 * Holds all the mass actions we can execute.
@@ -39,14 +39,14 @@ class {{plural_name}}Controller extends AdminController {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface  ${{camel_model}}
+	 * @param  \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface  ${{plural_lower_model}}
 	 * @return void
 	 */
-	public function __construct({{model}}RepositoryInterface ${{camel_model}})
+	public function __construct({{model}}RepositoryInterface ${{plural_lower_model}})
 	{
 		parent::__construct();
 
-		$this->{{camel_model}} = ${{camel_model}};
+		$this->{{plural_lower_model}} = ${{plural_lower_model}};
 	}
 
 	/**
@@ -66,7 +66,7 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	public function grid()
 	{
-		$data = $this->{{camel_model}}->grid();
+		$data = $this->{{plural_lower_model}}->grid();
 
 		$columns = [
 			{{columns}}
@@ -130,16 +130,13 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	public function delete($id)
 	{
-		if ($this->{{camel_model}}->delete($id))
-		{
-			$message = Lang::get('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.delete');
+		$type = $this->{{plural_lower_model}}->delete($id) ? 'success' : 'error';
 
-			return Redirect::toAdmin('{{lower_name}}/{{plural_lower_model}}')->withSuccess($message);
-		}
+		$this->alerts->{$type}(
+			trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.{$type}.delete")
+		);
 
-		$message = Lang::get('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.error.delete');
-
-		return Redirect::toAdmin('{{lower_name}}/{{plural_lower_model}}')->withErrors($message);
+		return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
 	}
 
 	/**
@@ -153,9 +150,9 @@ class {{plural_name}}Controller extends AdminController {
 
 		if (in_array($action, $this->actions))
 		{
-			foreach (Input::get('entries', []) as $entry)
+			foreach (Input::get('rows', []) as $entry)
 			{
-				$this->{{camel_model}}->{$action}($entry);
+				$this->{{plural_lower_model}}->{$action}($entry);
 			}
 
 			return Response::json('Success');
@@ -176,20 +173,20 @@ class {{plural_name}}Controller extends AdminController {
 		// Do we have a {{camel_model}} identifier?
 		if (isset($id))
 		{
-			if ( ! ${{camel_model}} = $this->{{camel_model}}->find($id))
+			if ( ! ${{camel_model}} = $this->{{plural_lower_model}}->find($id))
 			{
-				$message = Lang::get('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.not_found', compact('id'));
+				$this->alerts->error(trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.not_found', compact('id')));
 
-				return Redirect::toAdmin('{{lower_name}}/{{plural_lower_model}}')->withErrors($message);
+				return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
 			}
 		}
 		else
 		{
-			${{camel_model}} = $this->{{camel_model}}->createModel();
+			${{camel_model}} = $this->{{plural_lower_model}}->createModel();
 		}
 
 		// Show the page
-		return View::make('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.form', compact('mode', '{{camel_model}}'));
+		return view('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.form', compact('mode', '{{camel_model}}'));
 	}
 
 	/**
@@ -201,45 +198,20 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	protected function processForm($mode, $id = null)
 	{
-		// Get the input data
-		$data = Input::all();
-
-		// Do we have a {{camel_model}} identifier?
-		if ($id)
-		{
-			// Check if the data is valid
-			$messages = $this->{{camel_model}}->validForUpdate($id, $data);
-
-			// Do we have any errors?
-			if ($messages->isEmpty())
-			{
-				// Update the {{camel_model}}
-				${{camel_model}} = $this->{{camel_model}}->update($id, $data);
-			}
-		}
-		else
-		{
-			// Check if the data is valid
-			$messages = $this->{{camel_model}}->validForCreation($data);
-
-			// Do we have any errors?
-			if ($messages->isEmpty())
-			{
-				// Create the {{camel_model}}
-				${{camel_model}} = $this->{{camel_model}}->create($data);
-			}
-		}
+		// Store the {{camel_model}}
+		list($messages) = $this->{{plural_lower_model}}->store($id, request()->all());
 
 		// Do we have any errors?
 		if ($messages->isEmpty())
 		{
-			// Prepare the success message
-			$message = Lang::get("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.{$mode}");
+			$this->alerts->success(trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.{$mode}"));
 
-			return Redirect::toAdmin("{{lower_name}}/{{plural_lower_model}}/{${{camel_model}}->id}/edit")->withSuccess($message);
+			return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
 		}
 
-		return Redirect::back()->withInput()->withErrors($messages);
+		$this->alerts->error($messages, 'form');
+
+		return redirect()->back()->withInput();
 	}
 
 }

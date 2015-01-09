@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -41,7 +41,7 @@ class RepositoryGeneratorTest extends PHPUnit_Framework_TestCase {
 
 		$generator = new RepositoryGenerator('foo/bar', $files);
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\Generator', $generator);
+		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
 	}
 
 	/** @test */
@@ -49,10 +49,10 @@ class RepositoryGeneratorTest extends PHPUnit_Framework_TestCase {
 	{
 		$files = m::mock('Illuminate\Filesystem\Filesystem');
 
-		$files->shouldReceive('isDirectory')->twice()->andReturn(true);
-		$files->shouldReceive('exists')->twice()->andReturn(false);
-		$files->shouldReceive('get')->twice()->andReturn('{{studly_vendor}}{{new_arg}}');
-		$files->shouldReceive('put')->twice();
+		$files->shouldReceive('isDirectory')->times(5)->andReturn(true);
+		$files->shouldReceive('exists')->times(8)->andReturn(false);
+		$files->shouldReceive('get')->times(8)->andReturn('{{studly_vendor}}{{new_arg}}');
+		$files->shouldReceive('put')->times(8);
 
 		$generator = new RepositoryGenerator('foo/bar', $files);
 

@@ -13,13 +13,13 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
 use Illuminate\Support\Str;
 
-class DataGridGenerator extends Generator {
+class DataGridGenerator extends AbstractGenerator {
 
 	/**
 	 * Html builder instance.
@@ -55,10 +55,11 @@ class DataGridGenerator extends Generator {
 	 */
 	protected $dataGridColumns = [
 		[
-			'type'    => 'checkbox',
-			'name'    => 'entries[]',
-			'value'   => 'id',
-			'content' => 'id',
+			'type'                     => 'checkbox',
+			'name'                     => 'entries[]',
+			'value'                    => 'id',
+			'content'                  => 'id',
+			'input data-grid-checkbox' => '',
 		],
 	];
 
@@ -97,9 +98,9 @@ class DataGridGenerator extends Generator {
 
 		$this->writeLangFiles($columns, $model, $name);
 
-		$basePath = $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/';
+		$basePath = $this->getPath($themeType, $theme, $model);
 
-		$dir = $basePath.'grids/'.$name.'/';
+		$dir = $basePath.'grid/'.$viewName.'/';
 
 		$dgCols = [];
 
@@ -139,7 +140,7 @@ class DataGridGenerator extends Generator {
 			// Prepare view includes
 			$file = str_replace('.blade.php', '', $file);
 
-			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::grids/{$name}/{$file}')";
+			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::".Str::lower(Str::plural($model))."/grid/{$name}/{$file}')";
 		}
 
 		$stub = $this->getStub('view-admin-index.blade.stub');
@@ -148,7 +149,7 @@ class DataGridGenerator extends Generator {
 
 		array_shift($columns);
 
-		$headers = '<th><input type="checkbox" name="checkAll" id="checkAll"></th>';
+		$headers = '<th><input data-grid-checkbox="all" type="checkbox"></th>';
 
 		foreach ($columns as $column)
 		{
@@ -173,13 +174,26 @@ class DataGridGenerator extends Generator {
 
 		$lowerModel = $lowerModel ?: $name;
 
-		$viewPath = $basePath.Str::plural($lowerModel).'/';
+		$viewPath = $basePath.'/';
 
 		$this->ensureDirectory($viewPath);
 
 		$viewPath .= $viewName.'.blade.php';
 
 		$this->files->put($viewPath, $view);
+
+		// Write index.js
+		$jsStub = $this->getStub('index.js.stub');
+
+		$js = $this->prepare($jsStub, [
+			'grid_name' => $name,
+		]);
+
+		$jsPath = $this->getPath($themeType, $theme, $model, 'assets').'js';
+
+		$this->ensureDirectory($jsPath);
+
+		$this->files->put($jsPath.'/index.js', $js);
 	}
 
 	/**
@@ -293,6 +307,17 @@ class DataGridGenerator extends Generator {
 		]);
 
 		$this->files->put($filePath, $content);
+	}
+
+	/**
+	 * Returns the workbench dir path.
+	 *
+	 * @param  string  $dir
+	 * @return string
+	 */
+	protected function getPath($themeType, $theme, $model, $dir = 'views')
+	{
+		return $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
 	}
 
 }

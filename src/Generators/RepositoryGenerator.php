@@ -13,13 +13,13 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
 use Illuminate\Support\Str;
 
-class RepositoryGenerator extends Generator {
+class RepositoryGenerator extends AbstractGenerator {
 
 	/**
 	 * Create a new repository.
@@ -35,7 +35,7 @@ class RepositoryGenerator extends Generator {
 
 		$repositoryInterface = Str::studly(ucfirst($model).'RepositoryInterface');
 
-		$repositoryName = Str::studly('Illuminate'.ucfirst($model).'Repository');
+		$repositoryName = Str::studly(ucfirst($model).'Repository');
 
 		$stub = $this->getStub('repository-interface.stub');
 
@@ -52,7 +52,7 @@ class RepositoryGenerator extends Generator {
 
 		$this->files->put($filePath.$repositoryInterface.'.php', $content);
 
-		$stub = $this->getStub('db-repository.stub');
+		$stub = $this->getStub('repository.stub');
 
 		$content = $this->prepare($stub, [
 			'model'                => ucfirst($model),
@@ -62,6 +62,70 @@ class RepositoryGenerator extends Generator {
 		]);
 
 		$this->files->put($filePath.$repositoryName.'.php', $content);
+
+		// Write event handler interface
+		$stub = $this->getStub('event-handler-interface.stub');
+
+		$content = $this->prepare($stub, [
+			'model'       => ucfirst($model),
+			'lower_model' => Str::lower($model),
+		]);
+
+		$handlerPath = $this->path.'/src/Handlers/';
+
+		$this->ensureDirectory($handlerPath);
+
+		$this->files->put($handlerPath.'EventHandlerInterface.php', $content);
+
+		// Write event handler
+		$stub = $this->getStub('event-handler.stub');
+
+		$content = $this->prepare($stub, [
+			'model'       => ucfirst($model),
+			'lower_model' => Str::lower($model),
+		]);
+
+		$this->files->put($handlerPath.'EventHandler.php', $content);
+
+		// Write data handler interface
+		$stub = $this->getStub('data-handler-interface.stub');
+
+		$content = $this->prepare($stub);
+
+		$handlerPath = $this->path.'/src/Handlers/';
+
+		$this->ensureDirectory($handlerPath);
+
+		$this->files->put($handlerPath.'DataHandlerInterface.php', $content);
+
+		// Write data handler
+		$stub = $this->getStub('data-handler.stub');
+
+		$content = $this->prepare($stub);
+
+		$this->files->put($handlerPath.'DataHandler.php', $content);
+
+		// Write validator interface
+		$stub = $this->getStub('validator-interface.stub');
+
+		$content = $this->prepare($stub, [
+			'model' => ucfirst($model),
+		]);
+
+		$validatorPath = $this->path.'/src/Handlers/';
+
+		$this->ensureDirectory($validatorPath);
+
+		$this->files->put($validatorPath.$model.'ValidatorInterface.php', $content);
+
+		// Write validator
+		$stub = $this->getStub('validator.stub');
+
+		$content = $this->prepare($stub, [
+			'model' => ucfirst($model),
+		]);
+
+		$this->files->put($validatorPath.$model.'Validator.php', $content);
 	}
 
 }

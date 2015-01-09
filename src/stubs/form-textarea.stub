@@ -1,9 +1,9 @@
 <div class="form-group{{ $errors->first('{{field_name}}', ' has-error') }}">
 
-					<label for="{{field_name}}" class="control-label">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}') }}} <i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}_help') }}}"></i></label>
+									<label for="{{field_name}}" class="control-label">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}') }}} <i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}_help') }}}"></i></label>
 
-					<textarea class="form-control" name="{{field_name}}" id="{{field_name}}" placeholder="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}') }}}">{{{ Input::old('{{field_name}}', ${{camel_model}}->{{field_name}}) }}}</textarea>
+									<textarea class="form-control" name="{{field_name}}" id="{{field_name}}" placeholder="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}') }}}">{{{ Input::old('{{field_name}}', ${{camel_model}}->{{field_name}}) }}}</textarea>
 
-					<span class="help-block">{{{ $errors->first('{{field_name}}', ':message') }}}</span>
+									<span class="help-block">{{{ $errors->first('{{field_name}}', ':message') }}}</span>
 
-				</div>
+								</div>

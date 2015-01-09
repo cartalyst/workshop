@@ -42,6 +42,15 @@ interface {{repository_interface}} {
 	public function validForUpdate($id, array $data);
 
 	/**
+	 * Creates or updates the given {{lower_name}}.
+	 *
+	 * @param  int  $id
+	 * @param  array  $input
+	 * @return bool|array
+	 */
+	public function store($id, array $input);
+
+	/**
 	 * Creates a {{lower_name}} entry with the given data.
 	 *
 	 * @param  array  $data

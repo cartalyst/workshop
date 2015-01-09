@@ -1,8 +1,11 @@
-${{lower_model}}Repository = '{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface';
+// Register the repository
+		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}', '{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}Repository');
 
-		$this->app->bindIf(${{lower_model}}Repository, function($app)
-		{
-			$model = get_class($app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']);
+		// Register the data handler
+		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.data', '{{studly_vendor}}\{{studly_name}}\Handlers\DataHandler');
 
-			return new \{{studly_vendor}}\{{studly_name}}\Repositories\Illuminate{{model}}Repository($model, $app['events']);
-		});
+		// Register the event handler
+		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event', '{{studly_vendor}}\{{studly_name}}\Handlers\EventHandler');
+
+		// Register the validator
+		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.validator', '{{studly_vendor}}\{{studly_name}}\Validator\{{model}}Validator');

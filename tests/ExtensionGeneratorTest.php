@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -186,12 +186,9 @@ class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_write_language_files()
 	{
-		$this->generator->shouldReceive('getStub')->once()->with('lang/en/general-main.stub');
-		$this->generator->shouldReceive('getStub')->once()->with('lang/en/general.stub');
+		$this->generator->shouldReceive('getStub')->once()->with('lang/en/common.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('lang/en/message.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('lang/en/permissions.stub');
-
-		$this->files->shouldReceive('exists')->atLeast()->once()->andReturn(false);
 
 		$this->generator->writeLang('foo');
 	}

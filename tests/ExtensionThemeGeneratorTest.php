@@ -13,7 +13,7 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -41,7 +41,7 @@ class ExtensionThemeGeneratorTest extends PHPUnit_Framework_TestCase {
 
 		$generator = new ExtensionThemeGenerator('foo/bar', $files);
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\Generator', $generator);
+		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
 	}
 
 	/** @test */

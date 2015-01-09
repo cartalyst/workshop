@@ -2,162 +2,218 @@
 
 {{-- Page title --}}
 @section('title')
-{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/general.title') }} ::
 @parent
+: {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/general.title') }}
 @stop
 
-{{-- Queue Assets --}}
+{{-- Queue assets --}}{{-- Queue assets --}}
+{{ Asset::queue('bootstrap-daterange', 'bootstrap/css/daterangepicker-bs3.css', 'style') }}
+
+{{ Asset::queue('moment', 'moment/js/moment.js', 'jquery') }}
+{{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'jquery') }}
 {{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery') }}
-{{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'underscore') }}
-{{ Asset::queue('moment', 'moment/js/moment.js') }}
+{{ Asset::queue('index', '{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/js/index.js', 'platform') }}
+{{ Asset::queue('bootstrap-daterange', 'bootstrap/js/daterangepicker.js', 'jquery') }}
 
-{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}/{{lower_name}}::css/style.css', 'bootstrap') }}
-{{ Asset::queue('{{lower_vendor}}-{{lower_name}}', '{{lower_vendor}}/{{lower_name}}::js/script.js', 'jquery') }}
-
-{{-- Partial Assets --}}
-@section('assets')
+{{-- Inline scripts --}}
+@section('scripts')
 @parent
 @stop
 
-{{-- Inline Styles --}}
+{{-- Inline styles --}}
 @section('styles')
 @parent
 @stop
 
-{{-- Inline Scripts --}}
-@section('scripts')
-@parent
-<script>
-$(function()
-{
-	var dg = $.datagrid('{{grid_name}}', '.data-grid', '.data-grid_pagination', '.data-grid_applied', {
-		loader: '.loading',
-		scroll: '.data-grid',
-		callback: function()
-		{
-			$('#checkAll').prop('checked', false);
+{{-- Page --}}
+@section('page')
 
-			$('#actions').prop('disabled', true);
-		}
-	});
+{{-- Grid --}}
+<section class="panel panel-default panel-grid">
 
-	$(document).on('click', '#checkAll', function()
-	{
-		$('input:checkbox').not(this).prop('checked', this.checked);
+	{{-- Grid: Header --}}
+	<header class="panel-heading">
 
-		var status = $('input[name="entries[]"]:checked').length > 0;
+		<nav class="navbar navbar-default navbar-actions">
 
-		$('#actions').prop('disabled', ! status);
-	});
+			<div class="container-fluid">
 
-	$(document).on('click', 'input[name="entries[]"]', function()
-	{
-		var status = $('input[name="entries[]"]:checked').length > 0;
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#actions">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
 
-		$('#actions').prop('disabled', ! status);
-	});
+					<span class="navbar-brand">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}}</span>
 
-	$(document).on('click', '[data-action]', function(e)
-	{
-		e.preventDefault();
+				</div>
 
-		var action = $(this).data('action');
+				{{-- Grid: Actions --}}
+				<div class="collapse navbar-collapse" id="actions">
 
-		var entries = $.map($('input[name="entries[]"]:checked'), function(e, i)
-		{
-			return +e.value;
-		});
+					<ul class="nav navbar-nav navbar-left">
 
-		$.ajax({
-			type: 'POST',
-			url: '{{ URL::toAdmin('{{lower_name}}/{{plural_lower_model}}') }}',
-			data: {
-				action : action,
-				entries: entries
-			},
-			success: function(response)
-			{
-				dg.refresh();
-			}
-		});
-	});
-});
-</script>
-@stop
+						<li class="disabled">
+							<a class="disabled" data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
+								<i class="fa fa-eye-slash"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.disable') }}}</span>
+							</a>
+						</li>
 
-{{-- Page content --}}
-@section('content')
+						<li class="disabled">
+							<a data-grid-bulk-action="enable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.enable') }}}">
+								<i class="fa fa-eye"></i>  <span class="visible-xs-inline">{{{ trans('action.bulk.enable') }}}</span>
+							</a>
+						</li>
 
-{{-- Page header --}}
-<div class="page-header">
+						<li class="danger disabled">
+							<a data-grid-bulk-action="delete" data-toggle="tooltip" data-target="modal-confirm" data-original-title="{{{ trans('action.bulk.delete') }}}">
+								<i class="fa fa-trash-o"></i>  <span class="visible-xs-inline">{{{ trans('action.bulk.delete') }}}</span>
+							</a>
+						</li>
 
-	<h1>{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/general.title') }}}</h1>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle tip" data-toggle="dropdown" role="button" aria-expanded="false" data-original-title="{{{ trans('action.export') }}}">
+								<i class="fa fa-download"></i> <span class="visible-xs-inline">{{{ trans('action.export') }}}</span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a data-download="json"><i class="fa fa-file-code-o"></i> JSON</a></li>
+								<li><a data-download="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
+								<li><a data-download="pdf"><i class="fa fa-file-pdf-o"></i> PDF</a></li>
+							</ul>
+						</li>
 
-</div>
+						<li class="primary">
+							<a href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.create') }}}">
+								<i class="fa fa-plus"></i>  <span class="visible-xs-inline">{{{ trans('action.create') }}}</span>
+							</a>
+						</li>
 
-<div class="row">
+					</ul>
 
-	<div class="col-lg-7">
+					{{-- Grid: Filters --}}
+					<form class="navbar-form navbar-right" method="post" accept-charset="utf-8" data-search data-grid="{{grid_name}}" role="form">
 
-		{{-- Data Grid : Applied Filters --}}
-		<div class="data-grid_applied" data-grid="{{grid_name}}"></div>
+						<div class="input-group">
+
+							<span class="input-group-btn">
+
+								<button class="btn btn-default" type="button" disabled>
+									{{{ trans('common.filters') }}}
+								</button>
+
+								<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+
+								<ul class="dropdown-menu" role="menu">
+
+									<li>
+										<a data-grid="{{grid_name}}" data-filter="enabled:1" data-label="enabled::{{{ trans('common.all_enabled') }}}" data-reset>
+											<i class="fa fa-eye"></i> {{{ trans('common.show_enabled') }}}
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tooltip" data-placement="top" data-original-title="" data-grid="{{grid_name}}" data-filter="enabled:0" data-label="enabled::{{{ trans('common.all_disabled') }}}" data-reset>
+											<i class="fa fa-eye-slash"></i> {{{ trans('common.show_disabled') }}}
+										</a>
+									</li>
+
+									<li class="divider"></li>
+
+									<li>
+										<a data-grid-calendar-preset="day">
+											<i class="fa fa-calendar"></i> {{{ trans('date.day') }}}
+										</a>
+									</li>
+
+									<li>
+										<a data-grid-calendar-preset="week">
+											<i class="fa fa-calendar"></i> {{{ trans('date.week') }}}
+										</a>
+									</li>
+
+									<li>
+										<a data-grid-calendar-preset="month">
+											<i class="fa fa-calendar"></i> {{{ trans('date.month') }}}
+										</a>
+									</li>
+
+								</ul>
+
+								<button class="btn btn-default hidden-xs" type="button" data-grid-calendar data-range-filter="created_at">
+									<i class="fa fa-calendar"></i>
+								</button>
+
+							</span>
+
+							<input class="form-control " name="filter" type="text" placeholder="{{{ trans('common.search') }}}">
+
+							<span class="input-group-btn">
+
+								<button class="btn btn-default" type="submit">
+									<span class="fa fa-search"></span>
+								</button>
+
+								<button class="btn btn-default" data-grid="{{grid_name}}" data-reset>
+									<i class="fa fa-refresh fa-sm"></i>
+								</button>
+
+							</span>
+
+						</div>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</nav>
+
+	</header>
+
+	<div class="panel-body">
+
+		{{-- Grid: Applied Filters --}}
+		<div class="btn-toolbar" role="toolbar" aria-label="data-grid-applied-filters">
+
+			<div id="data-grid_applied" class="btn-group" data-grid="{{grid_name}}"></div>
+
+		</div>
 
 	</div>
 
-	<div class="col-lg-5 text-right">
+	{{-- Grid: Table --}}
+	<div class="table-responsive">
 
-		<form method="post" action="" accept-charset="utf-8" data-search data-grid="{{grid_name}}" class="form-inline" role="form">
-
-			<div class="form-group">
-
-				<div class="loading"></div>
-
-			</div>
-
-			<div class="btn-group text-left">
-
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					{{{ trans('general.filters') }}} <span class="caret"></span>
-				</button>
-
-				<ul class="dropdown-menu" role="menu" data-grid="{{grid_name}}">
-					<li><a href="#" data-reset>{{{ trans('general.show_all') }}}</a></li>
-					<li><a href="#" data-filter="enabled:1" data-label="enabled::{{{ trans('general.all_enabled') }}}" data-reset>{{{ trans('general.show_enabled') }}}</a></li>
-					<li><a href="#" data-filter="enabled:0" data-label="enabled::{{{ trans('general.all_disabled') }}}" data-reset>{{{ trans('general.show_disabled') }}}</a></li>
-				</ul>
-
-			</div>
-
-			<div class="form-group has-feedback">
-
-				<input name="filter" type="text" placeholder="{{{ trans('general.search') }}}" class="form-control">
-
-				<span class="glyphicon fa fa-search form-control-feedback"></span>
-
-			</div>
-
-			<a class="btn btn-primary" href="{{ URL::toAdmin('{{lower_name}}/{{plural_lower_model}}/create') }}"><i class="fa fa-plus"></i> {{{ trans('button.create') }}}</a>
-
-		</form>
+		<table id="data-grid" class="table table-hover" data-source="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid') }}" data-grid="{{grid_name}}">
+			<thead>
+				<tr>
+					{{headers}}
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 
 	</div>
 
-</div>
+	<footer class="panel-footer clearfix">
 
-<br />
+		{{-- Grid: Pagination --}}
+		<div id="data-grid_pagination" data-grid="{{grid_name}}"></div>
 
-<table data-source="{{ URL::toAdmin('{{lower_name}}/{{plural_lower_model}}/grid') }}" data-grid="{{grid_name}}" class="data-grid table table-striped table-bordered table-hover">
-	<thead>
-		<tr>
-			{{headers}}
-		</tr>
-	</thead>
-	<tbody></tbody>
-</table>
+	</footer>
 
-{{-- Data Grid : Pagination --}}
-<div class="data-grid_pagination" data-grid="{{grid_name}}"></div>
+	{{-- Grid: templates --}}
+	@include('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/grid/index/results')
+	@include('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/grid/index/pagination')
+	@include('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/grid/index/filters')
+	@include('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/grid/index/no_results')
 
-{{includes}}
+</section>
 
 @stop

@@ -13,13 +13,13 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Cartalyst\Workshop\Generators\Generator;
+use Cartalyst\Workshop\Generators\AbstractGenerator;
 
 class GeneratorTest extends PHPUnit_Framework_TestCase {
 
@@ -41,7 +41,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase {
 
 		$generator = new GeneratorStub('foo/bar', $files);
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\Generator', $generator);
+		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
 	}
 
 	/**
@@ -105,7 +105,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase {
 
 }
 
-class GeneratorStub extends Generator {
+class GeneratorStub extends AbstractGenerator {
 
 	public function check()
 	{

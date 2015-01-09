@@ -252,13 +252,6 @@ return [
 
 		'main' => [
 
-			[
-				'slug'  => 'main-{{lower_vendor}}-{{lower_name}}',
-				'name'  => '{{name}}',
-				'class' => 'fa fa-circle-o',
-				'uri'   => '{{lower_name}}',
-			],
-
 		],
 
 	],

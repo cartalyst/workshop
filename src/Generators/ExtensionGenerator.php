@@ -13,14 +13,14 @@
  * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @copyright  (c) 2011-2015, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Illuminate\Filesystem\Filesystem;
 
-class ExtensionGenerator extends Generator {
+class ExtensionGenerator extends AbstractGenerator {
 
 	/**
 	 * Create a new extension.
@@ -455,16 +455,7 @@ class ExtensionGenerator extends Generator {
 
 		$this->ensureDirectory($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/');
 
-		$generalMainPath = $this->path.'/lang/en/general.php';
-
-		if ( ! $this->files->exists($generalMainPath))
-		{
-			$generalMain = $this->prepare($this->getStub('lang/en/general-main.stub'));
-
-			$this->files->put($generalMainPath, $generalMain);
-		}
-
-		$stub = $this->getStub('lang/en/general.stub');
+		$stub = $this->getStub('lang/en/common.stub');
 
 		$content = $this->prepare($stub, [
 			'model'        => ucfirst($resource),
@@ -472,7 +463,7 @@ class ExtensionGenerator extends Generator {
 			'plural_model' => Str::title(Str::plural($resource)),
 		]);
 
-		$this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/general.php', $content);
+		$this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/common.php', $content);
 
 		$stub = $this->getStub('lang/en/message.stub');
 

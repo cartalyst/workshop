@@ -1,0 +1,12 @@
+<?php namespace {{studly_vendor}}\{{studly_name}}\Validator;
+
+interface {{model}}ValidatorInterface {
+
+	/**
+	 * Updating a {{lower_model}} scenario.
+	 *
+	 * @return void
+	 */
+	public function onUpdate();
+
+}

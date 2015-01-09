@@ -1,0 +1,207 @@
+<?php namespace {{studly_vendor}}\{{studly_name}}\Repositories;
+
+use Validator;
+use Cartalyst\Support\Traits;
+use Illuminate\Container\Container;
+use Symfony\Component\Finder\Finder;
+use {{studly_vendor}}\{{studly_name}}\Models\{{model}};
+
+class {{class_name}} implements {{repository_interface}} {
+
+	use Traits\ContainerTrait, Traits\EventTrait, Traits\RepositoryTrait, Traits\ValidatorTrait;
+
+	/**
+	 * The Data handler.
+	 *
+	 * @var \{{studly_vendor}}\{{studly_name}}\Handlers\DataHandlerInterface
+	 */
+	protected $data;
+
+	/**
+	 * The Eloquent {{lower_name}} model.
+	 *
+	 * @var string
+	 */
+	protected $model;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param  \Illuminate\Container\Container  $app
+	 * @return void
+	 */
+	public function __construct(Container $app)
+	{
+		$this->setContainer($app);
+
+		$this->setDispatcher($app['events']);
+
+		$this->data = $app['{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.data'];
+
+		$this->setValidator($app['{{lower_vendor}}.{{lower_name}}.{{lower_model}}.validator']);
+
+		$this->setModel(get_class($app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function grid()
+	{
+		return $this
+			->createModel();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function findAll()
+	{
+		return $this->container['cache']->rememberForever('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.all', function()
+		{
+			return $this->createModel()->get();
+		});
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function find($id)
+	{
+		return $this->container['cache']->rememberForever('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.'.$id, function() use ($id)
+		{
+			return $this->createModel()->find($id);
+		});
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function validForCreation(array $input)
+	{
+		return $this->validator->on('create')->validate($input);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function validForUpdate($id, array $input)
+	{
+		return $this->validator->on('update')->validate($input);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function store($id, array $input)
+	{
+		return ! $id ? $this->create($input) : $this->update($id, $input);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function create(array $input)
+	{
+		// Create a new {{lower_model}}
+		${{lower_model}} = $this->createModel();
+
+		// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.creating' event
+		if ($this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.creating', [ $input ]) === false)
+		{
+			return false;
+		}
+
+		// Prepare the submitted data
+		$data = $this->data->prepare($input);
+
+		// Validate the submitted data
+		$messages = $this->validForCreation($data);
+
+		// Check if the validation returned any errors
+		if ($messages->isEmpty())
+		{
+			// Save the {{lower_model}}
+			${{lower_model}}->fill($data)->save();
+
+			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.created' event
+			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.created', [ ${{lower_model}} ]);
+		}
+
+		return [ $messages, ${{lower_model}} ];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function update($id, array $input)
+	{
+		// Get the {{lower_model}} object
+		${{lower_model}} = $this->find($id);
+
+		// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}updating' event
+		if ($this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}updating', [ ${{lower_model}}, $input ]) === false)
+		{
+			return false;
+		}
+
+		// Prepare the submitted data
+		$data = $this->data->prepare($input);
+
+		// Validate the submitted data
+		$messages = $this->validForUpdate(${{lower_model}}, $data);
+
+		// Check if the validation returned any errors
+		if ($messages->isEmpty())
+		{
+			// Update the {{lower_model}}
+			${{lower_model}}->fill($data)->save();
+
+			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}updated' event
+			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}updated', [ ${{lower_model}} ]);
+		}
+
+		return [ $messages, ${{lower_model}} ];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function delete($id)
+	{
+		// Check if the {{lower_model}} exists
+		if (${{lower_model}} = $this->find($id))
+		{
+			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted' event
+			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', [ ${{lower_model}} ]);
+
+			// Delete the {{lower_model}} entry
+			${{lower_model}}->delete();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function enable($id)
+	{
+		$this->validator->bypass();
+
+		return $this->update($id, [ 'enabled' => true ]);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function disable($id)
+	{
+		$this->validator->bypass();
+
+		return $this->update($id, [ 'enabled' => false ]);
+	}
+
+}

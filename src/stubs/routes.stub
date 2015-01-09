@@ -1,7 +1,4 @@
 'routes' => function(ExtensionInterface $extension, Application $app)
 	{
-		Route::group(['namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers'], function()
-		{
-{{routes}}
-		});
+		{{routes}}
 	},

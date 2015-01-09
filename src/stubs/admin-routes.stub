@@ -1,11 +1,18 @@
-			Route::group(['prefix' => admin_uri().'/{{lower_name}}/{{plural_lower_model}}', 'namespace' => 'Admin'], function()
+			Route::group([
+				'prefix'    => admin_uri().'/{{lower_name}}/{{plural_lower_model}}',
+				'namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers\Admin',
+			], function()
 			{
-				Route::get('/', '{{plural_name}}Controller@index');
-				Route::post('/', '{{plural_name}}Controller@executeAction');
-				Route::get('grid', '{{plural_name}}Controller@grid');
-				Route::get('create', '{{plural_name}}Controller@create');
-				Route::post('create', '{{plural_name}}Controller@store');
-				Route::get('{id}/edit', '{{plural_name}}Controller@edit');
-				Route::post('{id}/edit', '{{plural_name}}Controller@update');
-				Route::get('{id}/delete', '{{plural_name}}Controller@delete');
+				Route::get('/' , ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all', 'uses' => '{{plural_name}}Controller@index']);
+				Route::post('/', ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all', 'uses' => '{{plural_name}}Controller@executeAction']);
+
+				Route::get('grid', ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid', 'uses' => '{{plural_name}}Controller@grid']);
+
+				Route::get('create' , ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create', 'uses' => '{{plural_name}}Controller@create']);
+				Route::post('create', ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create', 'uses' => '{{plural_name}}Controller@store']);
+
+				Route::get('{id}'   , ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit'  , 'uses' => '{{plural_name}}Controller@edit']);
+				Route::post('{id}'  , ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit'  , 'uses' => '{{plural_name}}Controller@update']);
+
+				Route::delete('{id}', ['as' => 'admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.delete', 'uses' => '{{plural_name}}Controller@delete']);
 			});
