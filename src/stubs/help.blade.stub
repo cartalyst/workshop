@@ -7,11 +7,6 @@
 
 			<a class="panel-close small pull-right collapsed tip" data-original-title="{{{ trans('action.collapse') }}}" data-toggle="collapse" href="#help-body" aria-expanded="false" aria-controls="help-body"></a>
 
-			<a class="manual small pull-right" href="{{URL::to('https://cartalyst.com/manual/platform-content')}}" target="_blank">
-				<i class="fa fa-file-text-o fa-sm"></i>
-				<span>{{{ trans('common.help.documentation') }}}</span>
-			</a>
-
 		</h4>
 
 	</header>
@@ -22,7 +17,7 @@
 
 			<div class="col-md-10 col-md-offset-1 help">
 
-				@content('platform-content-help', 'platform/content::content/help.md')
+				@content('{{lower_vendor}}-{{lower_name}}-{{plural_lower_model}}-help', '{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/content/help.md')
 
 			</div>
 

@@ -87,8 +87,8 @@
 
 				{{-- Form: Tabs --}}
 				<ul class="nav nav-tabs" role="tablist">
-					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('common.tabs.general') }}}</a></li>
-					<li role="presentation"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">{{{ trans('common.tabs.attributes') }}}</a></li>
+					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.general') }}}</a></li>
+					<li role="presentation"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.attributes') }}}</a></li>
 				</ul>
 
 				<div class="tab-content">
@@ -110,7 +110,7 @@
 
 					{{-- Form: Attributes --}}
 					<div role="tabpanel" class="tab-pane fade" id="attributes">
-						@widget('platform/attributes::entity.form', [ ${{camel_model}} ])
+						@attributes(${{camel_model}})
 					</div>
 
 				</div>

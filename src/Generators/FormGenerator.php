@@ -90,7 +90,7 @@ class FormGenerator extends AbstractGenerator {
 	 */
 	protected function writeLangFiles($columns, $model)
 	{
-		$stub = $this->getStub('lang/en/form.stub');
+		$stub = $this->getStub('lang/en/model.stub');
 
 		$values = [];
 
@@ -104,16 +104,16 @@ class FormGenerator extends AbstractGenerator {
 
 		$this->ensureDirectory($filePath);
 
-		$filePath .= 'form.php';
+		$filePath .= 'model.php';
 
 		if ($this->files->exists($filePath))
 		{
 			$trans = $this->files->getRequire($filePath);
 
-			$values = array_merge($trans, $values);
+			$values = array_merge($values, array_get($trans, 'general'));
 		}
 
-		$trans = $this->wrapArray($values, '');
+		$trans = $this->wrapArray($values, "\t");
 
 		$content = $this->prepare($stub, [
 			'fields' => trim($trans),

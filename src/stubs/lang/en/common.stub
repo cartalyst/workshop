@@ -3,7 +3,12 @@
 return [
 
 	'title'  => '{{plural_model}}',
-	'create' => 'Create {{model}}',
-	'update' => 'Update {{model}}',
+
+	'tabs' => [
+
+		'general'    => '{{model}}',
+		'attributes' => 'Attributes',
+
+	],
 
 ];

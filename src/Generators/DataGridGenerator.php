@@ -153,7 +153,7 @@ class DataGridGenerator extends AbstractGenerator {
 
 		foreach ($columns as $column)
 		{
-			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/table.{$column['content']}') }}}";
+			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
 
 			$headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
 		}
@@ -194,6 +194,24 @@ class DataGridGenerator extends AbstractGenerator {
 		$this->ensureDirectory($jsPath);
 
 		$this->files->put($jsPath.'/index.js', $js);
+
+		// Write help files
+		$helpStub = $this->getStub('help.blade.stub');
+
+		$help = $this->prepare($helpStub, [
+			'lower_model'        => $lowerModel,
+			'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
+		]);
+
+		$helpPath = $this->getPath($themeType, $theme, $model);
+
+		$this->files->put($helpPath.'help.blade.php', $help);
+
+		$helpFilePath = $helpPath.'content/';
+
+		$this->ensureDirectory($helpFilePath);
+
+		$this->files->put($helpFilePath.'help.md', null);
 	}
 
 	/**
@@ -276,13 +294,13 @@ class DataGridGenerator extends AbstractGenerator {
 		$model = $model ?: $name;
 		$model = Str::lower(Str::plural($model));
 
-		$stub = $this->getStub('lang/en/table.stub');
+		$stub = $this->getStub('lang/en/model.stub');
 
 		$filePath = $this->path.'/lang/en/'.Str::lower(Str::plural($model)).'/';
 
 		$this->ensureDirectory($filePath);
 
-		$filePath .= 'table.php';
+		$filePath .= 'model.php';
 
 		$values['id'] = 'Id';
 
@@ -297,10 +315,10 @@ class DataGridGenerator extends AbstractGenerator {
 		{
 			$trans = $this->files->getRequire($filePath);
 
-			$values = array_merge($trans, $values);
+			$values = array_merge($values, array_get($trans, 'general'));
 		}
 
-		$trans = $this->wrapArray($values, '');
+		$trans = $this->wrapArray($values, "\t");
 
 		$content = $this->prepare($stub, [
 			'fields' => rtrim($trans),

@@ -1,6 +1,9 @@
 <div class="form-group{{ $errors->first('{{field_name}}', ' has-error') }}">
 
-									<label for="{{field_name}}" class="control-label">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}') }}} <i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/form.{{field_name}}_help') }}}"></i></label>
+									<label for="{{field_name}}" class="control-label">
+										<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}_help') }}}"></i>
+										{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}') }}}
+									</label>
 
 									<div class="checkbox">
 										<label>

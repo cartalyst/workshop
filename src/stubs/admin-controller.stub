@@ -1,12 +1,6 @@
 <?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\Admin;
 
-use DataGrid;
-use Input;
-use Lang;
 use Platform\Access\Controllers\AdminController;
-use Redirect;
-use Response;
-use View;
 use {{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface;
 
 class {{plural_name}}Controller extends AdminController {
@@ -56,7 +50,7 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	public function index()
 	{
-		return View::make('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.index');
+		return view('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.index');
 	}
 
 	/**
@@ -77,7 +71,7 @@ class {{plural_name}}Controller extends AdminController {
 			'direction' => 'desc',
 		];
 
-		return DataGrid::make($data, $columns, $settings);
+		return datagrid($data, $columns, $settings);
 	}
 
 	/**
@@ -146,19 +140,19 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	public function executeAction()
 	{
-		$action = Input::get('action');
+		$action = request()->input('action');
 
 		if (in_array($action, $this->actions))
 		{
-			foreach (Input::get('rows', []) as $entry)
+			foreach (request()->input('rows', []) as $row)
 			{
 				$this->{{plural_lower_model}}->{$action}($entry);
 			}
 
-			return Response::json('Success');
+			return response('Success');
 		}
 
-		return Response::json('Failed', 500);
+		return response('Failed', 500);
 	}
 
 	/**

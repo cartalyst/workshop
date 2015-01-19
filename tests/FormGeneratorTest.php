@@ -60,7 +60,7 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase {
 		$files->shouldReceive('put')->atLeast()->once();
 
 		$generator = m::mock('Cartalyst\Workshop\Generators\FormGenerator[getStub]', ['foo/bar', $files]);
-		$generator->shouldReceive('getStub')->once()->with('lang/en/form.stub');
+		$generator->shouldReceive('getStub')->once()->with('lang/en/model.stub');
 		$generator->shouldReceive('getStub')->once()->with('form.blade.stub');
 
 		$this->files     = $files;
