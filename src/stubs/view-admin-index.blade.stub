@@ -3,7 +3,7 @@
 {{-- Page title --}}
 @section('title')
 @parent
-: {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
+ {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
 @stop
 
 {{-- Queue assets --}}{{-- Queue assets --}}
