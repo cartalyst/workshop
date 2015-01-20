@@ -116,7 +116,7 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase {
 	public function it_will_merge_language_files_if_they_already_exist()
 	{
 		$this->files->shouldReceive('exists')->atLeast()->once()->andReturn(true);
-		$this->files->shouldReceive('getRequire')->once()->andReturn([]);
+		$this->files->shouldReceive('getRequire')->once()->andReturn(['general' => []]);
 
 		$this->generator->shouldReceive('getStub')->once()->with('form-input.stub');
 
