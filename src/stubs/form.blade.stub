@@ -44,7 +44,7 @@
 						<ul class="nav navbar-nav navbar-cancel">
 							<li>
 								<a class="tip" href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
-									<i class="fa fa-reply"></i>  <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
+									<i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
 								</a>
 							</li>
 						</ul>
@@ -60,14 +60,14 @@
 							@if (${{camel_model}}->exists)
 							<li>
 								<a href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.delete', ${{camel_model}}->id) }}" class="tip" data-action-delete data-toggle="tooltip" data-original-title="{{{ trans('action.delete') }}}" type="delete">
-									<i class="fa fa-trash-o"></i>  <span class="visible-xs-inline">{{{ trans('action.delete') }}}</span>
+									<i class="fa fa-trash-o"></i> <span class="visible-xs-inline">{{{ trans('action.delete') }}}</span>
 								</a>
 							</li>
 							@endif
 
 							<li>
 								<button class="btn btn-primary navbar-btn" data-toggle="tooltip" data-original-title="{{{ trans('action.save') }}}">
-									<i class="fa fa-save"></i>  <span class="visible-xs-inline">{{{ trans('action.save') }}}</span>
+									<i class="fa fa-save"></i> <span class="visible-xs-inline">{{{ trans('action.save') }}}</span>
 								</button>
 							</li>
 
