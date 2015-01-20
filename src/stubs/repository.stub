@@ -139,8 +139,8 @@ class {{class_name}} implements {{repository_interface}} {
 		// Get the {{lower_model}} object
 		${{lower_model}} = $this->find($id);
 
-		// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}updating' event
-		if ($this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}updating', [ ${{lower_model}}, $input ]) === false)
+		// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updating' event
+		if ($this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updating', [ ${{lower_model}}, $input ]) === false)
 		{
 			return false;
 		}
@@ -157,8 +157,8 @@ class {{class_name}} implements {{repository_interface}} {
 			// Update the {{lower_model}}
 			${{lower_model}}->fill($data)->save();
 
-			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}updated' event
-			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}updated', [ ${{lower_model}} ]);
+			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updated' event
+			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updated', [ ${{lower_model}} ]);
 		}
 
 		return [ $messages, ${{lower_model}} ];

@@ -31,16 +31,16 @@ class RepositoryGenerator extends AbstractGenerator {
 	public function create($model, $interface = true)
 	{
 		$model = $this->sanitize($model);
-		$model = Str::studly($model);
+		$model = ucfirst(Str::studly($model));
 
-		$repositoryInterface = Str::studly(ucfirst($model).'RepositoryInterface');
+		$repositoryInterface = Str::studly($model.'RepositoryInterface');
 
-		$repositoryName = Str::studly(ucfirst($model).'Repository');
+		$repositoryName = Str::studly($model.'Repository');
 
 		$stub = $this->getStub('repository-interface.stub');
 
 		$content = $this->prepare($stub, [
-			'model'                => ucfirst($model),
+			'model'                => $model,
 			'lower_model'          => Str::lower($model),
 			'class_name'           => $repositoryName,
 			'repository_interface' => $repositoryInterface,
@@ -55,7 +55,7 @@ class RepositoryGenerator extends AbstractGenerator {
 		$stub = $this->getStub('repository.stub');
 
 		$content = $this->prepare($stub, [
-			'model'                => ucfirst($model),
+			'model'                => $model,
 			'lower_model'          => Str::lower($model),
 			'class_name'           => $repositoryName,
 			'repository_interface' => $repositoryInterface,
@@ -67,7 +67,7 @@ class RepositoryGenerator extends AbstractGenerator {
 		$stub = $this->getStub('event-handler-interface.stub');
 
 		$content = $this->prepare($stub, [
-			'model'       => ucfirst($model),
+			'model'       => $model,
 			'lower_model' => Str::lower($model),
 		]);
 
@@ -75,41 +75,46 @@ class RepositoryGenerator extends AbstractGenerator {
 
 		$this->ensureDirectory($handlerPath);
 
-		$this->files->put($handlerPath.'EventHandlerInterface.php', $content);
+		$this->files->put($handlerPath.$model.'EventHandlerInterface.php', $content);
 
 		// Write event handler
 		$stub = $this->getStub('event-handler.stub');
 
 		$content = $this->prepare($stub, [
-			'model'       => ucfirst($model),
+			'model'       => $model,
 			'lower_model' => Str::lower($model),
 		]);
 
-		$this->files->put($handlerPath.'EventHandler.php', $content);
+		$this->files->put($handlerPath.$model.'EventHandler.php', $content);
 
 		// Write data handler interface
 		$stub = $this->getStub('data-handler-interface.stub');
 
-		$content = $this->prepare($stub);
+		$content = $this->prepare($stub, [
+			'model' => $model,
+		]);
 
 		$handlerPath = $this->path.'/src/Handlers/';
 
 		$this->ensureDirectory($handlerPath);
 
-		$this->files->put($handlerPath.'DataHandlerInterface.php', $content);
+		$this->files->put($handlerPath.$model.'DataHandlerInterface.php', $content);
 
 		// Write data handler
 		$stub = $this->getStub('data-handler.stub');
 
-		$content = $this->prepare($stub);
+		$content = $this->prepare($stub, [
+			'model' => $model,
+		]);
 
-		$this->files->put($handlerPath.'DataHandler.php', $content);
+		$this->files->put($handlerPath.$model.'DataHandler.php', $content);
 
 		// Write validator interface
 		$stub = $this->getStub('validator-interface.stub');
 
 		$content = $this->prepare($stub, [
-			'model' => ucfirst($model),
+			'model'       => $model,
+			'lower_model' => Str::lower($model),
 		]);
 
 		$validatorPath = $this->path.'/src/Handlers/';
@@ -122,7 +127,7 @@ class RepositoryGenerator extends AbstractGenerator {
 		$stub = $this->getStub('validator.stub');
 
 		$content = $this->prepare($stub, [
-			'model' => ucfirst($model),
+			'model' => $model,
 		]);
 
 		$this->files->put($validatorPath.$model.'Validator.php', $content);

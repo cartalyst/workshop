@@ -2,10 +2,10 @@
 		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}', '{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}Repository');
 
 		// Register the data handler
-		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.data', '{{studly_vendor}}\{{studly_name}}\Handlers\DataHandler');
+		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.data', '{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}DataHandler');
 
 		// Register the event handler
-		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event', '{{studly_vendor}}\{{studly_name}}\Handlers\EventHandler');
+		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event', '{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}EventHandler');
 
 		// Register the validator
 		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.validator', '{{studly_vendor}}\{{studly_name}}\Validator\{{model}}Validator');

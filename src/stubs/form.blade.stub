@@ -3,7 +3,7 @@
 {{-- Page title --}}
 @section('title')
 	@parent
-	: {{{ trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/general.{$mode}") }}} {{{ ${{camel_model}}->exists ? '- ' . ${{camel_model}}->name : null }}}
+	: {{{ trans("action.{$mode}") }}} {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
 @stop
 
 {{-- Inline scripts --}}

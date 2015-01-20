@@ -4,7 +4,7 @@ use Illuminate\Events\Dispatcher;
 use {{studly_vendor}}\{{studly_name}}\Models\{{model}};
 use Cartalyst\Support\Handlers\EventHandler as BaseEventHandler;
 
-class EventHandler extends BaseEventHandler implements EventHandlerInterface {
+class {{model}}EventHandler extends BaseEventHandler implements {{model}}EventHandlerInterface {
 
 	/**
 	 * {@inheritDoc}

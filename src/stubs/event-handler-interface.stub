@@ -3,7 +3,7 @@
 use {{studly_vendor}}\{{studly_name}}\Models\{{model}};
 use Cartalyst\Support\Handlers\EventHandlerInterface as BaseEventHandlerInterface;
 
-interface EventHandlerInterface extends BaseEventHandlerInterface {
+interface {{model}}EventHandlerInterface extends BaseEventHandlerInterface {
 
 	/**
 	 * When a {{lower_model}} is being created.
