@@ -34,7 +34,7 @@ jQuery(document).ready(function($) {
 		<h1>{{ trans('{{lower_vendor}}/{{lower_name}}::general.title') }}</h1>
 
 		<nav class="tertiary-navigation pull-right">
-			@widget('platform/menus::nav.show', array(2, 1, 'nav nav-pills', admin_uri()))
+			@nav('main', 0, 'nav navbar-nav navbar-right')
 		</nav>
 	</header>
 
