@@ -2,8 +2,8 @@
 
 {{-- Page title --}}
 @section('title')
-	@parent
-	: {{{ trans("action.{$mode}") }}} {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
+@parent
+{{{ trans("action.{$mode}") }}} {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
 @stop
 
 {{-- Inline scripts --}}
