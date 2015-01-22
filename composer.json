@@ -43,7 +43,7 @@
 	"require": {
 		"php": ">=5.4.0",
 		"illuminate/support": "~4.1|~5.0",
-		"cartalyst/extensions": "1.1.*"
+		"cartalyst/extensions": "1.2.*"
 	},
 	"require-dev": {
 		"illuminate/filesystem": "~4.1",
