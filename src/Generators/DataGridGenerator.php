@@ -93,7 +93,9 @@ class DataGridGenerator extends AbstractGenerator {
 	 */
 	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
 	{
-		$name = $this->sanitize($name);
+		$model = $model ?: $name;
+
+		$name  = $this->sanitize($name);
 		$model = $this->sanitize($model);
 
 		$this->writeLangFiles($columns, $model, $name);
