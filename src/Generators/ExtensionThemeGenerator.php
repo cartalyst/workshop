@@ -25,11 +25,11 @@ class ExtensionThemeGenerator extends AbstractGenerator
     /**
      * Writes the theme directories.
      *
-     * @param  string  $location
+     * @param  string  $area
      * @param  string  $theme
      * @return void
      */
-    public function create($location, $theme = 'default')
+    public function create($area, $theme = 'default')
     {
         $base = [
             'assets/js'  => 'script.js',
@@ -37,7 +37,7 @@ class ExtensionThemeGenerator extends AbstractGenerator
             'views'      => '.gitkeep',
         ];
 
-        $themeDirectory = $this->path.'/'."themes/{$location}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
+        $themeDirectory = $this->path.'/'."themes/{$area}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
 
         foreach ($base as $dir => $file) {
             $this->ensureDirectory($themeDirectory.$dir);
