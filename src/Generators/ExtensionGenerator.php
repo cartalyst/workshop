@@ -103,11 +103,11 @@ class ExtensionGenerator extends AbstractGenerator
      * Creates a new controller.
      *
      * @param  string  $name
-     * @param  string  $location
+     * @param  string  $area
      * @param  array  $args
      * @return void
      */
-    public function createController($name = null, $location = 'Admin', $args = [])
+    public function createController($name = null, $area = 'Admin', $args = [])
     {
         $name = $this->sanitize($name);
 
@@ -127,17 +127,17 @@ class ExtensionGenerator extends AbstractGenerator
 
         $controllerName = Str::studly(ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller'));
 
-        $location = ucfirst($location);
+        $area = ucfirst($area);
 
-        if (in_array($location, ['Admin', 'Frontend'])) {
-            $stub = Str::lower($location).'-controller.stub';
+        if (in_array($area, ['Admin', 'Frontend'])) {
+            $stub = Str::lower($area).'-controller.stub';
         } else {
             $stub = 'controller.stub';
         }
 
         $args = array_merge($args, [
             'class_name'         => $controllerName,
-            'location'           => $location,
+            'area'               => $area,
             'model'              => Str::studly(ucfirst($name)),
             'camel_model'        => Str::camel(Str::lower($name)),
             'plural_name'        => Str::studly(ucfirst(Str::plural($name))),
@@ -146,7 +146,7 @@ class ExtensionGenerator extends AbstractGenerator
 
         $content = $this->prepare($this->getStub($stub), $args);
 
-        $path = $this->path.'/src/Controllers/'.$location.'/';
+        $path = $this->path.'/src/Controllers/'.$area.'/';
 
         $this->ensureDirectory($path);
 

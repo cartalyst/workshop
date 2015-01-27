@@ -146,7 +146,7 @@ class {{plural_name}}Controller extends AdminController {
 		{
 			foreach (request()->input('rows', []) as $row)
 			{
-				$this->{{plural_lower_model}}->{$action}($entry);
+				$this->{{plural_lower_model}}->{$action}($row);
 			}
 
 			return response('Success');
