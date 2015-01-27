@@ -11,12 +11,12 @@
          syntaxCheck="false"
 >
     <testsuites>
-        <testsuite name="Workshop Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="Workshop Package Test Suite">
+            <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+        <whitelist>
             <directory suffix=".php">./src/</directory>
         </whitelist>
     </filter>
