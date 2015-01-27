@@ -28,10 +28,9 @@ class RepositoryGenerator extends AbstractGenerator
      * Create a new repository.
      *
      * @param  string  $model
-     * @param  bool  $interface
      * @return void
      */
-    public function create($model, $interface = true)
+    public function create($model)
     {
         $model = $this->sanitize($model);
         $model = ucfirst(Str::studly($model));
