@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Workshop\Tests;
+<?php
+
 /**
  * Part of the Workshop package.
  *
@@ -17,64 +18,65 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Workshop\Tests;
+
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Cartalyst\Workshop\Generators\DataGridGenerator;
 
-class DataGridGeneratorTest extends PHPUnit_Framework_TestCase {
+class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
 
-	/**
-	 * Close mockery.
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		m::close();
-	}
+    /** @test */
+    public function it_can_be_instantiated()
+    {
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
-	/** @test */
-	public function it_can_be_instantiated()
-	{
-		$files = m::mock('Illuminate\Filesystem\Filesystem');
-		$files->shouldReceive('isDirectory')->once()->andReturn(true);
+        $html = m::mock('Illuminate\Html\HtmlBuilder');
+        $form = m::mock('Illuminate\Html\FormBuilder');
 
-		$html = m::mock('Illuminate\Html\HtmlBuilder');
-		$form = m::mock('Illuminate\Html\FormBuilder');
+        $generator = new DataGridGenerator('foo/bar', $files, $html, $form);
 
-		$generator = new DataGridGenerator('foo/bar', $files, $html, $form);
+        $this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
+    }
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
-	}
+    /** @test */
+    public function it_can_create_data_grids()
+    {
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-	/** @test */
-	public function it_can_create_data_grids()
-	{
-		$files = m::mock('Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->times(10)->andReturn(true);
+        $files->shouldReceive('exists')->times(10)->andReturn(true);
+        $files->shouldReceive('getRequire')->once()->andReturn(['general' => []]);
+        $files->shouldReceive('get')->times(9);
+        $files->shouldReceive('put')->times(10);
 
-		$files->shouldReceive('isDirectory')->times(10)->andReturn(true);
-		$files->shouldReceive('exists')->times(10)->andReturn(true);
-		$files->shouldReceive('getRequire')->once()->andReturn(['general' => []]);
-		$files->shouldReceive('get')->times(9);
-		$files->shouldReceive('put')->times(10);
+        $html = m::mock('Illuminate\Html\HtmlBuilder');
+        $html->shouldReceive('decode');
+        $html->shouldReceive('link');
 
-		$html = m::mock('Illuminate\Html\HtmlBuilder');
-		$html->shouldReceive('decode');
-		$html->shouldReceive('link');
+        $form = m::mock('Illuminate\Html\FormBuilder');
+        $form->shouldReceive('checkbox')->times(5);
 
-		$form = m::mock('Illuminate\Html\FormBuilder');
-		$form->shouldReceive('checkbox')->times(5);
+        $generator = new DataGridGenerator('foo/bar', $files, $html, $form);
 
-		$generator = new DataGridGenerator('foo/bar', $files, $html, $form);
-
-		$generator->create('foo', 'admin', 'default', 'index', [
-			[
-				'field' => 'foo',
-			],
-			[
-				'field' => 'bar'
-			],
-		]);
-	}
-
+        $generator->create('foo', 'admin', 'default', 'index', [
+            [
+                'field' => 'foo',
+            ],
+            [
+                'field' => 'bar'
+            ],
+        ]);
+    }
 }

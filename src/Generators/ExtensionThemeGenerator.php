@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Workshop\Generators;
+<?php
+
 /**
  * Part of the Workshop package.
  *
@@ -17,31 +18,31 @@
  * @link       http://cartalyst.com
  */
 
-class ExtensionThemeGenerator extends AbstractGenerator {
+namespace Cartalyst\Workshop\Generators;
 
-	/**
-	 * Writes the theme directories.
-	 *
-	 * @param  string  $location
-	 * @param  string  $theme
-	 * @return void
-	 */
-	public function create($location, $theme = 'default')
-	{
-		$base = [
-			'assets/js'  => 'script.js',
-			'assets/css' => 'style.css',
-			'views'      => '.gitkeep',
-		];
+class ExtensionThemeGenerator extends AbstractGenerator
+{
+    /**
+     * Writes the theme directories.
+     *
+     * @param  string  $location
+     * @param  string  $theme
+     * @return void
+     */
+    public function create($location, $theme = 'default')
+    {
+        $base = [
+            'assets/js'  => 'script.js',
+            'assets/css' => 'style.css',
+            'views'      => '.gitkeep',
+        ];
 
-		$themeDirectory = $this->path.'/'."themes/{$location}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
+        $themeDirectory = $this->path.'/'."themes/{$location}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
 
-		foreach ($base as $dir => $file)
-		{
-			$this->ensureDirectory($themeDirectory.$dir);
+        foreach ($base as $dir => $file) {
+            $this->ensureDirectory($themeDirectory.$dir);
 
-			$this->files->put($themeDirectory.$dir.'/'.$file, null);
-		}
-	}
-
+            $this->files->put($themeDirectory.$dir.'/'.$file, null);
+        }
+    }
 }

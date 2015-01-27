@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Workshop\Generators;
+<?php
+
 /**
  * Part of the Workshop package.
  *
@@ -17,120 +18,121 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Workshop\Generators;
+
 use Illuminate\Support\Str;
 
-class RepositoryGenerator extends AbstractGenerator {
+class RepositoryGenerator extends AbstractGenerator
+{
+    /**
+     * Create a new repository.
+     *
+     * @param  string  $model
+     * @param  bool  $interface
+     * @return void
+     */
+    public function create($model, $interface = true)
+    {
+        $model = $this->sanitize($model);
+        $model = ucfirst(Str::studly($model));
 
-	/**
-	 * Create a new repository.
-	 *
-	 * @param  string  $model
-	 * @param  bool  $interface
-	 * @return void
-	 */
-	public function create($model, $interface = true)
-	{
-		$model = $this->sanitize($model);
-		$model = ucfirst(Str::studly($model));
+        $repositoryInterface = Str::studly($model.'RepositoryInterface');
 
-		$repositoryInterface = Str::studly($model.'RepositoryInterface');
+        $repositoryName = Str::studly($model.'Repository');
 
-		$repositoryName = Str::studly($model.'Repository');
+        $stub = $this->getStub('repository-interface.stub');
 
-		$stub = $this->getStub('repository-interface.stub');
+        $content = $this->prepare($stub, [
+            'model'                => $model,
+            'lower_model'          => Str::lower($model),
+            'class_name'           => $repositoryName,
+            'repository_interface' => $repositoryInterface,
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model'                => $model,
-			'lower_model'          => Str::lower($model),
-			'class_name'           => $repositoryName,
-			'repository_interface' => $repositoryInterface,
-		]);
+        $filePath = $this->path.'/src/Repositories/';
 
-		$filePath = $this->path.'/src/Repositories/';
+        $this->ensureDirectory($filePath);
 
-		$this->ensureDirectory($filePath);
+        $this->files->put($filePath.$repositoryInterface.'.php', $content);
 
-		$this->files->put($filePath.$repositoryInterface.'.php', $content);
+        $stub = $this->getStub('repository.stub');
 
-		$stub = $this->getStub('repository.stub');
+        $content = $this->prepare($stub, [
+            'model'                => $model,
+            'lower_model'          => Str::lower($model),
+            'class_name'           => $repositoryName,
+            'repository_interface' => $repositoryInterface,
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model'                => $model,
-			'lower_model'          => Str::lower($model),
-			'class_name'           => $repositoryName,
-			'repository_interface' => $repositoryInterface,
-		]);
+        $this->files->put($filePath.$repositoryName.'.php', $content);
 
-		$this->files->put($filePath.$repositoryName.'.php', $content);
+        // Write event handler interface
+        $stub = $this->getStub('event-handler-interface.stub');
 
-		// Write event handler interface
-		$stub = $this->getStub('event-handler-interface.stub');
+        $content = $this->prepare($stub, [
+            'model'       => $model,
+            'lower_model' => Str::lower($model),
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model'       => $model,
-			'lower_model' => Str::lower($model),
-		]);
+        $handlerPath = $this->path.'/src/Handlers/';
 
-		$handlerPath = $this->path.'/src/Handlers/';
+        $this->ensureDirectory($handlerPath);
 
-		$this->ensureDirectory($handlerPath);
+        $this->files->put($handlerPath.$model.'EventHandlerInterface.php', $content);
 
-		$this->files->put($handlerPath.$model.'EventHandlerInterface.php', $content);
+        // Write event handler
+        $stub = $this->getStub('event-handler.stub');
 
-		// Write event handler
-		$stub = $this->getStub('event-handler.stub');
+        $content = $this->prepare($stub, [
+            'model'       => $model,
+            'lower_model' => Str::lower($model),
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model'       => $model,
-			'lower_model' => Str::lower($model),
-		]);
+        $this->files->put($handlerPath.$model.'EventHandler.php', $content);
 
-		$this->files->put($handlerPath.$model.'EventHandler.php', $content);
+        // Write data handler interface
+        $stub = $this->getStub('data-handler-interface.stub');
 
-		// Write data handler interface
-		$stub = $this->getStub('data-handler-interface.stub');
+        $content = $this->prepare($stub, [
+            'model' => $model,
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model' => $model,
-		]);
+        $handlerPath = $this->path.'/src/Handlers/';
 
-		$handlerPath = $this->path.'/src/Handlers/';
+        $this->ensureDirectory($handlerPath);
 
-		$this->ensureDirectory($handlerPath);
+        $this->files->put($handlerPath.$model.'DataHandlerInterface.php', $content);
 
-		$this->files->put($handlerPath.$model.'DataHandlerInterface.php', $content);
+        // Write data handler
+        $stub = $this->getStub('data-handler.stub');
 
-		// Write data handler
-		$stub = $this->getStub('data-handler.stub');
+        $content = $this->prepare($stub, [
+            'model' => $model,
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model' => $model,
-		]);
+        $this->files->put($handlerPath.$model.'DataHandler.php', $content);
 
-		$this->files->put($handlerPath.$model.'DataHandler.php', $content);
+        // Write validator interface
+        $stub = $this->getStub('validator-interface.stub');
 
-		// Write validator interface
-		$stub = $this->getStub('validator-interface.stub');
+        $content = $this->prepare($stub, [
+            'model'       => $model,
+            'lower_model' => Str::lower($model),
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model'       => $model,
-			'lower_model' => Str::lower($model),
-		]);
+        $validatorPath = $this->path.'/src/Handlers/';
 
-		$validatorPath = $this->path.'/src/Handlers/';
+        $this->ensureDirectory($validatorPath);
 
-		$this->ensureDirectory($validatorPath);
+        $this->files->put($validatorPath.$model.'ValidatorInterface.php', $content);
 
-		$this->files->put($validatorPath.$model.'ValidatorInterface.php', $content);
+        // Write validator
+        $stub = $this->getStub('validator.stub');
 
-		// Write validator
-		$stub = $this->getStub('validator.stub');
+        $content = $this->prepare($stub, [
+            'model' => $model,
+        ]);
 
-		$content = $this->prepare($stub, [
-			'model' => $model,
-		]);
-
-		$this->files->put($validatorPath.$model.'Validator.php', $content);
-	}
-
+        $this->files->put($validatorPath.$model.'Validator.php', $content);
+    }
 }

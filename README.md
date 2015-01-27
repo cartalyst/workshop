@@ -4,51 +4,39 @@
 
 A workshop package for platform extensions and resources.
 
-Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](license.txt). Code well, rock on.
-
-## Package Story
-
-...
-
-## Requirements
-
-- PHP >=5.4
-
-## Installation
-
-...
+Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, rock on.
 
 ## Documentation
 
-...
+Reader-friendly Documentation can be found here. [Workshop Manual](https://cartalyst.com/manual/workshop).
 
-## Versioning
+Raw files can be found via this projects docs/version branch.
 
-We version under the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
+- [1.0](https://github.com/cartalyst/workshop/tree/docs/1.0)
 
-Releases will be numbered with the following format:
+## Changelog
 
-`<major>.<minor>.<patch>`
+Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
-And constructed with the following guidelines:
-
-* Breaking backward compatibility bumps the major (and resets the minor and patch)
-* New additions without breaking backward compatibility bumps the minor (and resets the patch)
-* Bug fixes and misc changes bumps the patch
-
-## Contributing
-
-Please read the [Contributing](contributing.md) guidelines.
+- [1.0](CHANGELOG.md) - 2015-01-27
 
 ## Support
 
-Have a bug? Please create an [issue](https://github.com/cartalyst/workshop/issues) here on GitHub that conforms with [necolas's guidelines](https://github.com/necolas/issue-guidelines).
+The following support channels can be used for contact.
 
-Follow us on Twitter, [@cartalyst](http://twitter.com/cartalyst).
+- [Twitter](https://cartalyst.com/@twitter)
+- [Email](mailto:help@cartalyst.com)
 
-Join us for a chat on IRC.
+Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
 
-Server: irc.freenode.net
-Channel: #cartalyst
+## Contributing & Protocols
 
-Email: help@cartalyst.com
+- [Versioning](CONTRIBUTING.md#versioning)
+- [Coding Standards](CONTRIBUTING.md#coding-standards)
+- [Pull Requests](CONTRIBUTING.md#pull-requests)
+
+## License
+
+This software is released under the [Cartalyst PSL](LICENSE) License.
+
+© 2011-2015 Cartalyst LLC, All rights reserved.

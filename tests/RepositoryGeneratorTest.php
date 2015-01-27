@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Workshop\Tests;
+<?php
+
 /**
  * Part of the Workshop package.
  *
@@ -17,46 +18,47 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Workshop\Tests;
+
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Cartalyst\Workshop\Generators\RepositoryGenerator;
 
-class RepositoryGeneratorTest extends PHPUnit_Framework_TestCase {
+class RepositoryGeneratorTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
 
-	/**
-	 * Close mockery.
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		m::close();
-	}
+    /** @test */
+    public function it_can_be_instantiated()
+    {
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
-	/** @test */
-	public function it_can_be_instantiated()
-	{
-		$files = m::mock('Illuminate\Filesystem\Filesystem');
-		$files->shouldReceive('isDirectory')->once()->andReturn(true);
+        $generator = new RepositoryGenerator('foo/bar', $files);
 
-		$generator = new RepositoryGenerator('foo/bar', $files);
+        $this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
+    }
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
-	}
+    /** @test */
+    public function it_can_create_repositories()
+    {
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-	/** @test */
-	public function it_can_create_repositories()
-	{
-		$files = m::mock('Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->times(5)->andReturn(true);
+        $files->shouldReceive('exists')->times(8)->andReturn(false);
+        $files->shouldReceive('get')->times(8)->andReturn('{{studly_vendor}}{{new_arg}}');
+        $files->shouldReceive('put')->times(8);
 
-		$files->shouldReceive('isDirectory')->times(5)->andReturn(true);
-		$files->shouldReceive('exists')->times(8)->andReturn(false);
-		$files->shouldReceive('get')->times(8)->andReturn('{{studly_vendor}}{{new_arg}}');
-		$files->shouldReceive('put')->times(8);
+        $generator = new RepositoryGenerator('foo/bar', $files);
 
-		$generator = new RepositoryGenerator('foo/bar', $files);
-
-		$generator->create('foo');
-	}
-
+        $generator->create('foo');
+    }
 }

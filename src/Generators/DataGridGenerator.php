@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Workshop\Generators;
+<?php
+
 /**
  * Part of the Workshop package.
  *
@@ -17,327 +18,315 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Workshop\Generators;
+
 use Illuminate\Support\Str;
 
-class DataGridGenerator extends AbstractGenerator {
-
-	/**
-	 * Html builder instance.
-	 *
-	 * @var \Illuminate\Html\HtmlBuilder
-	 */
-	protected $html;
-
-	/**
-	 * Form builder instance.
-	 *
-	 * @var \Illuminate\Html\FormBuilder
-	 */
-	protected $form;
-
-	/**
-	 * Data grid templates.
-	 *
-	 * @var array
-	 */
-	protected $dataGridTemplates = [
-		'results.blade.stub',
-		'filters.blade.stub',
-		'pagination.blade.stub',
-		'no_results.blade.stub',
-		'no_filters.blade.stub',
-	];
-
-	/**
-	 * Data grid columns.
-	 *
-	 * @var array
-	 */
-	protected $dataGridColumns = [
-		[
-			'type'                     => 'checkbox',
-			'name'                     => 'entries[]',
-			'value'                    => 'id',
-			'content'                  => 'id',
-			'input data-grid-checkbox' => '',
-		],
-	];
-
-	/**
-	 * Constructor.
-	 *
-	 * @param  string  $slug
-	 * @param  \Illuminate\Filesystem\Filesystem  $files
-	 * @param  \Illuminate\Html\HtmlBuilder  $html
-	 * @param  \Illuminate\Html\FormBuilder  $form
-	 * @return void
-	 */
-	public function __construct($slug, $files, $html, $form)
-	{
-		parent::__construct($slug, $files);
-
-		$this->html = $html;
-		$this->form = $form;
-	}
-
-	/**
-	 * Create a new data grid.
-	 *
-	 * @param  string  $name
-	 * @param  string  $themeType
-	 * @param  string  $theme
-	 * @param  string  $viewName
-	 * @param  array  $columns
-	 * @param  string  $model
-	 * @return void
-	 */
-	public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
-	{
-		$model = $model ?: $name;
-
-		$name  = $this->sanitize($name);
-		$model = $this->sanitize($model);
+class DataGridGenerator extends AbstractGenerator
+{
+    /**
+     * Html builder instance.
+     *
+     * @var \Illuminate\Html\HtmlBuilder
+     */
+    protected $html;
+
+    /**
+     * Form builder instance.
+     *
+     * @var \Illuminate\Html\FormBuilder
+     */
+    protected $form;
+
+    /**
+     * Data grid templates.
+     *
+     * @var array
+     */
+    protected $dataGridTemplates = [
+        'results.blade.stub',
+        'filters.blade.stub',
+        'pagination.blade.stub',
+        'no_results.blade.stub',
+        'no_filters.blade.stub',
+    ];
+
+    /**
+     * Data grid columns.
+     *
+     * @var array
+     */
+    protected $dataGridColumns = [
+        [
+            'type'                     => 'checkbox',
+            'name'                     => 'entries[]',
+            'value'                    => 'id',
+            'content'                  => 'id',
+            'input data-grid-checkbox' => '',
+        ],
+    ];
+
+    /**
+     * Constructor.
+     *
+     * @param  string  $slug
+     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param  \Illuminate\Html\HtmlBuilder  $html
+     * @param  \Illuminate\Html\FormBuilder  $form
+     * @return void
+     */
+    public function __construct($slug, $files, $html, $form)
+    {
+        parent::__construct($slug, $files);
+
+        $this->html = $html;
+        $this->form = $form;
+    }
+
+    /**
+     * Create a new data grid.
+     *
+     * @param  string  $name
+     * @param  string  $themeType
+     * @param  string  $theme
+     * @param  string  $viewName
+     * @param  array  $columns
+     * @param  string  $model
+     * @return void
+     */
+    public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
+    {
+        $model = $model ?: $name;
 
-		$this->writeLangFiles($columns, $model, $name);
+        $name  = $this->sanitize($name);
+        $model = $this->sanitize($model);
 
-		$basePath = $this->getPath($themeType, $theme, $model);
+        $this->writeLangFiles($columns, $model, $name);
 
-		$dir = $basePath.'grid/'.$viewName.'/';
+        $basePath = $this->getPath($themeType, $theme, $model);
 
-		$dgCols = [];
+        $dir = $basePath.'grid/'.$viewName.'/';
 
-		foreach ($columns as $column)
-		{
-			$dgCols[]['content'] = $this->sanitize($column['field'], '/[^a-zA-Z0-9_-]/');
-		}
+        $dgCols = [];
 
-		array_push($dgCols, ['content' => 'created_at']);
+        foreach ($columns as $column) {
+            $dgCols[]['content'] = $this->sanitize($column['field'], '/[^a-zA-Z0-9_-]/');
+        }
 
-		$this->dataGridColumns[] = [
-			'type'    => 'a',
-			'href'    => '#',
-			'content' => 'id',
-		];
+        array_push($dgCols, ['content' => 'created_at']);
 
-		$this->dataGridColumns = array_merge($this->dataGridColumns, $dgCols);
+        $this->dataGridColumns[] = [
+            'type'    => 'a',
+            'href'    => '#',
+            'content' => 'id',
+        ];
 
-		$contents = [];
+        $this->dataGridColumns = array_merge($this->dataGridColumns, $dgCols);
 
-		foreach ($this->dataGridTemplates as $template)
-		{
-			$templateContent = $this->processDataGridTemplate($name, $this->getStub($template), $model);
+        $contents = [];
 
-			$contents[$template] = $templateContent;
-		}
+        foreach ($this->dataGridTemplates as $template) {
+            $templateContent = $this->processDataGridTemplate($name, $this->getStub($template), $model);
 
-		foreach ($contents as $file => $content)
-		{
-			// Write data grid templates
-			$file = str_replace('.stub', '.php', $file);
+            $contents[$template] = $templateContent;
+        }
 
-			$this->ensureDirectory($dir);
+        foreach ($contents as $file => $content) {
+            // Write data grid templates
+            $file = str_replace('.stub', '.php', $file);
 
-			$this->files->put($dir.$file, $content);
+            $this->ensureDirectory($dir);
 
-			// Prepare view includes
-			$file = str_replace('.blade.php', '', $file);
+            $this->files->put($dir.$file, $content);
 
-			$includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::".Str::lower(Str::plural($model))."/grid/{$name}/{$file}')";
-		}
+            // Prepare view includes
+            $file = str_replace('.blade.php', '', $file);
 
-		$stub = $this->getStub('view-admin-index.blade.stub');
+            $includes[] = "@include('{$this->extension->lowerVendor}/{$this->extension->lowerName}::".Str::lower(Str::plural($model))."/grid/{$name}/{$file}')";
+        }
 
-		$columns = $this->dataGridColumns;
+        $stub = $this->getStub('view-admin-index.blade.stub');
 
-		array_shift($columns);
+        $columns = $this->dataGridColumns;
 
-		$headers = '<th><input data-grid-checkbox="all" type="checkbox"></th>';
+        array_shift($columns);
 
-		foreach ($columns as $column)
-		{
-			$trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
+        $headers = '<th><input data-grid-checkbox="all" type="checkbox"></th>';
 
-			$headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
-		}
+        foreach ($columns as $column) {
+            $trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
 
-		$headers = ltrim($headers);
+            $headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
+        }
 
-		$includes = implode("\n", $includes);
+        $headers = ltrim($headers);
 
-		$lowerModel = Str::lower($model);
+        $includes = implode("\n", $includes);
 
-		$view = $this->prepare($stub, [
-			'headers'            => $headers,
-			'includes'           => $includes,
-			'grid_name'          => $name,
-			'lower_model'        => $lowerModel,
-			'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
-		]);
+        $lowerModel = Str::lower($model);
 
-		$lowerModel = $lowerModel ?: $name;
+        $view = $this->prepare($stub, [
+            'headers'            => $headers,
+            'includes'           => $includes,
+            'grid_name'          => $name,
+            'lower_model'        => $lowerModel,
+            'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
+        ]);
 
-		$viewPath = $basePath.'/';
+        $lowerModel = $lowerModel ?: $name;
 
-		$this->ensureDirectory($viewPath);
+        $viewPath = $basePath.'/';
 
-		$viewPath .= $viewName.'.blade.php';
+        $this->ensureDirectory($viewPath);
 
-		$this->files->put($viewPath, $view);
+        $viewPath .= $viewName.'.blade.php';
 
-		// Write index.js
-		$jsStub = $this->getStub('index.js.stub');
+        $this->files->put($viewPath, $view);
 
-		$js = $this->prepare($jsStub, [
-			'grid_name' => $name,
-		]);
+        // Write index.js
+        $jsStub = $this->getStub('index.js.stub');
 
-		$jsPath = $this->getPath($themeType, $theme, $model, 'assets').'js';
+        $js = $this->prepare($jsStub, [
+            'grid_name' => $name,
+        ]);
 
-		$this->ensureDirectory($jsPath);
+        $jsPath = $this->getPath($themeType, $theme, $model, 'assets').'js';
 
-		$this->files->put($jsPath.'/index.js', $js);
+        $this->ensureDirectory($jsPath);
 
-		// Write help files
-		$helpStub = $this->getStub('help.blade.stub');
+        $this->files->put($jsPath.'/index.js', $js);
 
-		$help = $this->prepare($helpStub, [
-			'lower_model'        => $lowerModel,
-			'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
-		]);
+        // Write help files
+        $helpStub = $this->getStub('help.blade.stub');
 
-		$helpPath = $this->getPath($themeType, $theme, $model);
+        $help = $this->prepare($helpStub, [
+            'lower_model'        => $lowerModel,
+            'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
+        ]);
 
-		$this->files->put($helpPath.'help.blade.php', $help);
+        $helpPath = $this->getPath($themeType, $theme, $model);
 
-		$helpFilePath = $helpPath.'content/';
+        $this->files->put($helpPath.'help.blade.php', $help);
 
-		$this->ensureDirectory($helpFilePath);
+        $helpFilePath = $helpPath.'content/';
 
-		$this->files->put($helpFilePath.'help.md', null);
-	}
+        $this->ensureDirectory($helpFilePath);
 
-	/**
-	 * Process data grid templates.
-	 *
-	 * @param  string $name
-	 * @param  string $stub
-	 * @param  string $model
-	 * @return string
-	 */
-	protected function processDataGridTemplate($name, $stub, $model)
-	{
-		$el = $this->prepareColumns($model);
+        $this->files->put($helpFilePath.'help.md', null);
+    }
 
-		$columns = ("<td>".implode("</td>\n\t\t\t<td>", $el).'</td>');
+    /**
+     * Process data grid templates.
+     *
+     * @param  string $name
+     * @param  string $stub
+     * @param  string $model
+     * @return string
+     */
+    protected function processDataGridTemplate($name, $stub, $model)
+    {
+        $el = $this->prepareColumns($model);
 
-		$rows = count($this->dataGridColumns) + 1;
+        $columns = ("<td>".implode("</td>\n\t\t\t<td>", $el).'</td>');
 
-		return $this->prepare($stub, [
-			'columns'   => $columns,
-			'rows'      => $rows,
-			'grid_name' => $name,
-		]);
-	}
+        $rows = count($this->dataGridColumns) + 1;
 
-	/**
-	 * Prepare data grid columns.
-	 *
-	 * @param  bool  $results
-	 * @return array
-	 */
-	protected function prepareColumns($model)
-	{
-		$el = [];
+        return $this->prepare($stub, [
+            'columns'   => $columns,
+            'rows'      => $rows,
+            'grid_name' => $name,
+        ]);
+    }
 
-		foreach ($this->dataGridColumns as $attributes)
-		{
-			$type = array_pull($attributes, 'type');
+    /**
+     * Prepare data grid columns.
+     *
+     * @param  bool  $results
+     * @return array
+     */
+    protected function prepareColumns($model)
+    {
+        $el = [];
 
-			if ($type)
-			{
-				if ($type === 'a')
-				{
-					$elementContent = '<%= r.' . array_pull($attributes, 'content') . ' %>';
+        foreach ($this->dataGridColumns as $attributes) {
+            $type = array_pull($attributes, 'type');
 
-					$link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
+            if ($type) {
+                if ($type === 'a') {
+                    $elementContent = '<%= r.' . array_pull($attributes, 'content') . ' %>';
 
-					$link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/'.Str::lower(Str::plural($model)).'/<%= r.id %>\') }}"', $link);
+                    $link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-					$el[] = $link;
-				}
-				else if ($type === 'checkbox')
-				{
-					$checkBoxName = array_pull($attributes, 'name');
+                    $link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/'.Str::lower(Str::plural($model)).'/<%= r.id %>\') }}"', $link);
 
-					$value = array_pull($attributes, 'value');
+                    $el[] = $link;
+                } elseif ($type === 'checkbox') {
+                    $checkBoxName = array_pull($attributes, 'name');
 
-					$value = '<%= r.' . $value . ' %>';
+                    $value = array_pull($attributes, 'value');
 
-					$el[] = ($this->html->decode($this->form->checkbox($checkBoxName, $value, null, $attributes)));
-				}
-			}
-			else
-			{
-				$el[] = '<%= r.' . array_pull($attributes, 'content') . ' %>';
-			}
-		}
+                    $value = '<%= r.' . $value . ' %>';
 
-		return $el;
-	}
+                    $el[] = ($this->html->decode($this->form->checkbox($checkBoxName, $value, null, $attributes)));
+                }
+            } else {
+                $el[] = '<%= r.' . array_pull($attributes, 'content') . ' %>';
+            }
+        }
 
-	/**
-	 * Writes the data grid language file.
-	 *
-	 * @param  array  $columns
-	 * @return void
-	 */
-	protected function writeLangFiles($columns, $model, $name = null)
-	{
-		$model = $model ?: $name;
-		$model = Str::lower(Str::plural($model));
+        return $el;
+    }
 
-		$stub = $this->getStub('lang/en/model.stub');
+    /**
+     * Writes the data grid language file.
+     *
+     * @param  array  $columns
+     * @return void
+     */
+    protected function writeLangFiles($columns, $model, $name = null)
+    {
+        $model = $model ?: $name;
+        $model = Str::lower(Str::plural($model));
 
-		$filePath = $this->path.'/lang/en/'.Str::lower(Str::plural($model)).'/';
+        $stub = $this->getStub('lang/en/model.stub');
 
-		$this->ensureDirectory($filePath);
+        $filePath = $this->path.'/lang/en/'.Str::lower(Str::plural($model)).'/';
 
-		$filePath .= 'model.php';
+        $this->ensureDirectory($filePath);
 
-		$values['id'] = 'Id';
+        $filePath .= 'model.php';
 
-		foreach ($columns as $column)
-		{
-			$values[$column['field']] = Str::title($column['field']);
-		}
+        $values['id'] = 'Id';
 
-		$values['created_at'] = 'Created At';
+        foreach ($columns as $column) {
+            $values[$column['field']] = Str::title($column['field']);
+        }
 
-		if ($this->files->exists($filePath))
-		{
-			$trans = $this->files->getRequire($filePath);
+        $values['created_at'] = 'Created At';
 
-			$values = array_merge($values, array_get($trans, 'general'));
-		}
+        if ($this->files->exists($filePath)) {
+            $trans = $this->files->getRequire($filePath);
 
-		$trans = $this->wrapArray($values, "\t");
+            $values = array_merge($values, array_get($trans, 'general'));
+        }
 
-		$content = $this->prepare($stub, [
-			'fields' => rtrim($trans),
-		]);
+        $trans = $this->wrapArray($values, "\t");
 
-		$this->files->put($filePath, $content);
-	}
+        $content = $this->prepare($stub, [
+            'fields' => rtrim($trans),
+        ]);
 
-	/**
-	 * Returns the workbench dir path.
-	 *
-	 * @param  string  $dir
-	 * @return string
-	 */
-	protected function getPath($themeType, $theme, $model, $dir = 'views')
-	{
-		return $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
-	}
+        $this->files->put($filePath, $content);
+    }
 
+    /**
+     * Returns the workbench dir path.
+     *
+     * @param  string  $dir
+     * @return string
+     */
+    protected function getPath($themeType, $theme, $model, $dir = 'views')
+    {
+        return $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
+    }
 }

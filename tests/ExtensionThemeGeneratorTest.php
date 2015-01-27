@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Workshop\Tests;
+<?php
+
 /**
  * Part of the Workshop package.
  *
@@ -17,44 +18,45 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Workshop\Tests;
+
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Cartalyst\Workshop\Generators\ExtensionThemeGenerator;
 
-class ExtensionThemeGeneratorTest extends PHPUnit_Framework_TestCase {
+class ExtensionThemeGeneratorTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
 
-	/**
-	 * Close mockery.
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		m::close();
-	}
+    /** @test */
+    public function it_can_be_instantiated()
+    {
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
-	/** @test */
-	public function it_can_be_instantiated()
-	{
-		$files = m::mock('Illuminate\Filesystem\Filesystem');
-		$files->shouldReceive('isDirectory')->once()->andReturn(true);
+        $generator = new ExtensionThemeGenerator('foo/bar', $files);
 
-		$generator = new ExtensionThemeGenerator('foo/bar', $files);
+        $this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
+    }
 
-		$this->assertInstanceOf('Cartalyst\Workshop\Generators\AbstractGenerator', $generator);
-	}
+    /** @test */
+    public function it_can_create_repositories()
+    {
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-	/** @test */
-	public function it_can_create_repositories()
-	{
-		$files = m::mock('Illuminate\Filesystem\Filesystem');
+        $files->shouldReceive('isDirectory')->times(4)->andReturn(true);
+        $files->shouldReceive('put')->times(3);
 
-		$files->shouldReceive('isDirectory')->times(4)->andReturn(true);
-		$files->shouldReceive('put')->times(3);
+        $generator = new ExtensionThemeGenerator('foo/bar', $files);
 
-		$generator = new ExtensionThemeGenerator('foo/bar', $files);
-
-		$generator->create('foo');
-	}
-
+        $generator->create('foo');
+    }
 }

@@ -11,6 +11,11 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-### v1.0.0 - TBA
+### v1.0.0 - 2015-01-27
 
-- Initial release.
+- Form Generator
+- DataGrid Generator
+- Extension Generator
+- Extension Theme Generator
+- Migrations Generator
+- Repository Generator
