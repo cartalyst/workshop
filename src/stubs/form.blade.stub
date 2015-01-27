@@ -6,6 +6,9 @@
 {{{ trans("action.{$mode}") }}} {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
 @stop
 
+{{-- Queue assets --}}
+{{ Asset::queue('validate', 'platform/js/validate.js', 'jquery') }}
+
 {{-- Inline scripts --}}
 @section('scripts')
 @parent
@@ -22,7 +25,7 @@
 <section class="panel panel-default panel-tabs">
 
 	{{-- Form --}}
-	<form id="content-form" action="{{ request()->fullUrl() }}" role="form" method="post">
+	<form id="content-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
 
 		{{-- Form: CSRF Token --}}
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
