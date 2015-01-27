@@ -102,15 +102,15 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->shouldReceive('getStub')->once()->with('migration.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
 
-		$this->generator->create('foo', [
+		$this->generator->create('bar', [
 			'name' => 'string',
 		]);
 
 		$this->generator->seeder();
 
 		$this->assertContains('foo/bar/database/migrations', $this->generator->getMigrationPath());
-		$this->assertEquals('CreateFooTable', $this->generator->getMigrationClass());
-		$this->assertEquals('Foo\Bar\Database\Seeds\FooTableSeeder', $this->generator->getSeederClass());
+		$this->assertEquals('CreateBarTable', $this->generator->getMigrationClass());
+		$this->assertEquals('Foo\Bar\Database\Seeds\BarTableSeeder', $this->generator->getSeederClass());
 	}
 
 	/** @test */
@@ -124,7 +124,7 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->shouldReceive('getStub')->atLeast()->once()->with('migration.stub');
 		$this->generator->shouldReceive('getStub')->atLeast()->once()->with('seeder.stub');
 
-		$this->generator->create('foo', [
+		$this->generator->create('baz', [
 			'name' => 'boolean',
 		]);
 
@@ -142,7 +142,7 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase {
 		$this->generator->shouldReceive('getStub')->once()->with('migration.stub');
 		$this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
 
-		$this->generator->create('foo', [
+		$this->generator->create('test', [
 			'name'  => 'string|nullable|default:test',
 			'age'   => 'integer|nullable|unsigned',
 			'email' => 'test|unique',
