@@ -87,14 +87,14 @@ class DataGridGenerator extends AbstractGenerator
      * Create a new data grid.
      *
      * @param  string  $name
-     * @param  string  $themeType
+     * @param  string  $themeArea
      * @param  string  $theme
      * @param  string  $viewName
      * @param  array  $columns
      * @param  string  $model
      * @return void
      */
-    public function create($name, $themeType = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
+    public function create($name, $themeArea = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
     {
         $model = $model ?: $name;
 
@@ -103,7 +103,7 @@ class DataGridGenerator extends AbstractGenerator
 
         $this->writeLangFiles($columns, $model, $name);
 
-        $basePath = $this->getPath($themeType, $theme, $model);
+        $basePath = $this->getPath($themeArea, $theme, $model);
 
         $dir = $basePath.'grid/'.$viewName.'/';
 
@@ -190,7 +190,7 @@ class DataGridGenerator extends AbstractGenerator
             'grid_name' => $name,
         ]);
 
-        $jsPath = $this->getPath($themeType, $theme, $model, 'assets').'js';
+        $jsPath = $this->getPath($themeArea, $theme, $model, 'assets').'js';
 
         $this->ensureDirectory($jsPath);
 
@@ -204,7 +204,7 @@ class DataGridGenerator extends AbstractGenerator
             'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
         ]);
 
-        $helpPath = $this->getPath($themeType, $theme, $model);
+        $helpPath = $this->getPath($themeArea, $theme, $model);
 
         $this->files->put($helpPath.'help.blade.php', $help);
 
@@ -325,8 +325,8 @@ class DataGridGenerator extends AbstractGenerator
      * @param  string  $dir
      * @return string
      */
-    protected function getPath($themeType, $theme, $model, $dir = 'views')
+    protected function getPath($themeArea, $theme, $model, $dir = 'views')
     {
-        return $this->path.'/themes/'.$themeType.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
+        return $this->path.'/themes/'.$themeArea.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
     }
 }
