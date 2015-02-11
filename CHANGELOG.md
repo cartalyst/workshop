@@ -11,7 +11,15 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.0.1 - 2015-02-11
+
+`UPDATED`
+
+- Updated extension.stub to include permissions and application arguments.
+
 ### v1.0.0 - 2015-01-28
+
+`INIT`
 
 - DataGrid Generator
 - Extension Generator
