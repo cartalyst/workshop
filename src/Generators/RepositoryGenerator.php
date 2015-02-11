@@ -119,7 +119,7 @@ class RepositoryGenerator extends AbstractGenerator
             'lower_model' => Str::lower($model),
         ]);
 
-        $validatorPath = $this->path.'/src/Handlers/';
+        $validatorPath = $this->path.'/src/Validator/';
 
         $this->ensureDirectory($validatorPath);
 
