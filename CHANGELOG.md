@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.0.2 - 2015-02-11
+
+`FIXED`
+
+- Fixed the validator path on the RepositoryGenerator.
+
 ### v1.0.1 - 2015-02-11
 
 `UPDATED`
