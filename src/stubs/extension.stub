@@ -214,7 +214,7 @@ return [
 	|
 	*/
 
-	'settings' => function()
+	'settings' => function(Settings $settings, Application $app)
 	{
 
 	},
