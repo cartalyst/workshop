@@ -257,7 +257,7 @@ class DataGridGenerator extends AbstractGenerator
 
                     $link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
-                    $link = str_replace('href="#"', 'href="{{ URL::toAdmin(\''.$this->extension->lowerName.'/'.Str::lower(Str::plural($model)).'/<%= r.id %>\') }}"', $link);
+                    $link = str_replace('href="#"', 'href="<%= r.edit_uri %>"', $link);
 
                     $el[] = $link;
                 } elseif ($type === 'checkbox') {

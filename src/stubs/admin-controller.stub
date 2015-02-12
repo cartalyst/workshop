@@ -71,7 +71,14 @@ class {{plural_name}}Controller extends AdminController {
 			'direction' => 'desc',
 		];
 
-		return datagrid($data, $columns, $settings);
+		$transformer = function($element)
+		{
+			$element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
+
+			return $element;
+		};
+
+		return datagrid($data, $columns, $settings, $transformer);
 	}
 
 	/**
