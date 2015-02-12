@@ -1,4 +1,4 @@
-<div class="form-group{{ $errors->first('{{field_name}}', ' has-error') }}">
+<div class="form-group{{ Alert::onForm('{{field_name}}', ' has-error') }}">
 
 									<label for="{{field_name}}" class="control-label">
 										<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}_help') }}}"></i>
@@ -7,6 +7,6 @@
 
 									<input type="text" class="form-control" name="{{field_name}}" id="{{field_name}}" placeholder="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}') }}}" value="{{{ Input::old('{{field_name}}', ${{camel_model}}->{{field_name}}) }}}">
 
-									<span class="help-block">{{{ $errors->first('{{field_name}}', ':message') }}}</span>
+									<span class="help-block">{{{ Alert::onForm('{{field_name}}') }}}</span>
 
 								</div>
