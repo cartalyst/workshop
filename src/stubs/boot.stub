@@ -1,4 +1,6 @@
-// Register the attributes namespace
+$this->package('{{lower_vendor}}/{{lower_name}}', '{{lower_vendor}}/{{lower_name}}', __DIR__.'/../..');
+
+		// Register the attributes namespace
 		$this->app['platform.attributes.manager']->registerNamespace(
 			$this->app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']
 		);
