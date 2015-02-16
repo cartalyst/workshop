@@ -246,6 +246,7 @@ return [
 				'name'  => '{{name}}',
 				'class' => 'fa fa-circle-o',
 				'uri'   => '{{lower_name}}',
+				'regex' => '/:admin\/{{lower_name}}/i',
 			],
 
 		],
