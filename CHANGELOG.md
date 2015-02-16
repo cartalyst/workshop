@@ -11,6 +11,18 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v1.0.3 - 2015-02-17
+
+`REVISED`
+
+- Updated data grids to use a transformer and edit_uri.
+- Removed duplicate `package` call on the service provider stub.
+
+`FIXED`
+
+- Alerts on forms.
+- Regex for parent admin menus.
+
 ### v1.0.2 - 2015-02-11
 
 `FIXED`
