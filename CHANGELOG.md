@@ -11,6 +11,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.0 - 2015-02-17
+
+- `REVISED`
+
+- Loosen dependencies for L5.
+- Remove `package` call from the service provider stub.
+
 ### v1.0.3 - 2015-02-17
 
 `REVISED`
