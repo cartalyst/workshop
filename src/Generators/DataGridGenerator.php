@@ -156,7 +156,7 @@ class DataGridGenerator extends AbstractGenerator
         foreach ($columns as $column) {
             $trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
 
-            $headers .= "\n\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
+            $headers .= "\n\t\t\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
         }
 
         $headers = ltrim($headers);
