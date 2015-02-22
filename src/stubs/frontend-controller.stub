@@ -1,7 +1,6 @@
 <?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\Frontend;
 
 use Platform\Foundation\Controllers\Controller;
-use View;
 
 class {{class_name}} extends Controller {
 
@@ -12,7 +11,7 @@ class {{class_name}} extends Controller {
 	 */
 	public function index()
 	{
-		return View::make('{{lower_vendor}}/{{lower_name}}::index');
+		return view('{{lower_vendor}}/{{lower_name}}::index');
 	}
 
 }
