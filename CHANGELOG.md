@@ -11,9 +11,15 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.1 - 2015-02-27
+
+`REVISED`
+
+- Split resources into subdirs for `Handlers`, `Repositories` and `Validators`.
+
 ### v2.0.0 - 2015-02-17
 
-- `REVISED`
+`REVISED`
 
 - Loosen dependencies for L5.
 - Remove `package` call from the service provider stub.
