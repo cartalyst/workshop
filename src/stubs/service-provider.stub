@@ -1,4 +1,4 @@
-<?php namespace {{studly_vendor}}\{{studly_name}};
+<?php namespace {{studly_vendor}}\{{studly_name}}\Providers;
 
 use Cartalyst\Support\ServiceProvider;
 
