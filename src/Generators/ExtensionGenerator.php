@@ -272,7 +272,7 @@ class ExtensionGenerator extends AbstractGenerator
             'register'    => trim($this->writeMethod('register', $resource)),
         ]);
 
-        $dir = $this->path.'/src/';
+        $dir = $this->path.'/src/Providers/';
 
         $this->files->put($dir.$serviceProvider.'ServiceProvider.php', $content);
 
