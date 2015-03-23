@@ -274,6 +274,8 @@ class ExtensionGenerator extends AbstractGenerator
 
         $dir = $this->path.'/src/Providers/';
 
+        $this->ensureDirectory($dir);
+
         $this->files->put($dir.$serviceProvider.'ServiceProvider.php', $content);
 
         $extensionPhp = $this->files->get($this->getExtensionPhpPath());
