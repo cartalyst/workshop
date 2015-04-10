@@ -11,7 +11,7 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    1.0.3
+ * @version    2.0.1
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -48,7 +48,7 @@ class RepositoryGenerator extends AbstractGenerator
             'repository_interface' => $repositoryInterface,
         ]);
 
-        $filePath = $this->path.'/src/Repositories/';
+        $filePath = $this->path."/src/Repositories/{$model}/";
 
         $this->ensureDirectory($filePath);
 
@@ -73,7 +73,7 @@ class RepositoryGenerator extends AbstractGenerator
             'lower_model' => Str::lower($model),
         ]);
 
-        $handlerPath = $this->path.'/src/Handlers/';
+        $handlerPath = $this->path."/src/Handlers/{$model}/";
 
         $this->ensureDirectory($handlerPath);
 
@@ -96,7 +96,7 @@ class RepositoryGenerator extends AbstractGenerator
             'model' => $model,
         ]);
 
-        $handlerPath = $this->path.'/src/Handlers/';
+        $handlerPath = $this->path."/src/Handlers/{$model}/";
 
         $this->ensureDirectory($handlerPath);
 
@@ -119,7 +119,7 @@ class RepositoryGenerator extends AbstractGenerator
             'lower_model' => Str::lower($model),
         ]);
 
-        $validatorPath = $this->path.'/src/Validator/';
+        $validatorPath = $this->path."/src/Validator/{$model}/";
 
         $this->ensureDirectory($validatorPath);
 

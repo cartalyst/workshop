@@ -1,7 +1,7 @@
 <?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\Admin;
 
 use Platform\Access\Controllers\AdminController;
-use {{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface;
+use {{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface;
 
 class {{plural_name}}Controller extends AdminController {
 
@@ -15,7 +15,7 @@ class {{plural_name}}Controller extends AdminController {
 	/**
 	 * The {{studly_name}} repository.
 	 *
-	 * @var \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface
+	 * @var \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface
 	 */
 	protected ${{plural_lower_model}};
 
@@ -33,7 +33,7 @@ class {{plural_name}}Controller extends AdminController {
 	/**
 	 * Constructor.
 	 *
-	 * @param  \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}RepositoryInterface  ${{plural_lower_model}}
+	 * @param  \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface  ${{plural_lower_model}}
 	 * @return void
 	 */
 	public function __construct({{model}}RepositoryInterface ${{plural_lower_model}})
