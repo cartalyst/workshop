@@ -25,7 +25,7 @@
 <section class="panel panel-default panel-tabs">
 
 	{{-- Form --}}
-	<form id="content-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
+	<form id="{{lower_name}}-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
 
 		{{-- Form: CSRF Token --}}
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
