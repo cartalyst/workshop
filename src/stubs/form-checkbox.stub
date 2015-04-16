@@ -8,7 +8,7 @@
 									<div class="checkbox">
 										<label>
 											<input type="hidden" name="{{field_name}}" id="{{field_name}}" value="0" checked>
-											<input type="checkbox" name="{{field_name}}" id="{{field_name}}" @if(${{camel_model}}->{{field_name}}) }}}) checked @endif value="1"> {{ ucfirst('{{field_name}}') }}
+											<input type="checkbox" name="{{field_name}}" id="{{field_name}}" @if(${{camel_model}}->{{field_name}}) checked @endif value="1"> {{ ucfirst('{{field_name}}') }}
 										</label>
 									</div>
 
