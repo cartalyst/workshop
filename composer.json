@@ -1,6 +1,6 @@
 {
 	"name": "cartalyst/workshop",
-	"description": "Integration with Cartalyst's Extensions for Laravel's Workbench",
+	"description": "Generators for scaffolding Cartalyst Platform resources",
 	"keywords": [
 		"platform",
 		"extensions",
