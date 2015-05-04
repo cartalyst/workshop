@@ -11,6 +11,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.2 - 2015-05-04
+
+`REVISED`
+
+- Moved providers into a separate directory.
+- Updated composer.json stub dependencies.
+
 ### v2.0.1 - 2015-02-27
 
 `REVISED`
