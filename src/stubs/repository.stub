@@ -13,7 +13,7 @@ class {{class_name}} implements {{repository_interface}} {
 	/**
 	 * The Data handler.
 	 *
-	 * @var \{{studly_vendor}}\{{studly_name}}\Handlers\DataHandlerInterface
+	 * @var \{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}\{{model}}DataHandlerInterface
 	 */
 	protected $data;
 
