@@ -19,13 +19,13 @@
 @parent
 @stop
 
-{{-- Page --}}
+{{-- Page content --}}
 @section('page')
 
 <section class="panel panel-default panel-tabs">
 
 	{{-- Form --}}
-	<form id="content-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
+	<form id="{{lower_name}}-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
 
 		{{-- Form: CSRF Token --}}
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -44,13 +44,9 @@
 							<span class="icon-bar"></span>
 						</button>
 
-						<ul class="nav navbar-nav navbar-cancel">
-							<li>
-								<a class="tip" href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
-									<i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
-								</a>
-							</li>
-						</ul>
+						<a class="btn btn-navbar-cancel navbar-btn pull-left tip" href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
+							<i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
+						</a>
 
 						<span class="navbar-brand">{{{ trans("action.{$mode}") }}} <small>{{{ ${{camel_model}}->exists ? ${{camel_model}}->id : null }}}</small></span>
 					</div>
@@ -90,14 +86,14 @@
 
 				{{-- Form: Tabs --}}
 				<ul class="nav nav-tabs" role="tablist">
-					<li class="active" role="presentation"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.general') }}}</a></li>
+					<li class="active" role="presentation"><a href="#general-tab" aria-controls="general-tab" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.general') }}}</a></li>
 					<li role="presentation"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.attributes') }}}</a></li>
 				</ul>
 
 				<div class="tab-content">
 
-					{{-- Form: General --}}
-					<div role="tabpanel" class="tab-pane fade in active" id="general">
+					{{-- Tab: General --}}
+					<div role="tabpanel" class="tab-pane fade in active" id="general-tab">
 
 						<fieldset>
 
@@ -111,7 +107,7 @@
 
 					</div>
 
-					{{-- Form: Attributes --}}
+					{{-- Tab: Attributes --}}
 					<div role="tabpanel" class="tab-pane fade" id="attributes">
 						@attributes(${{camel_model}})
 					</div>
