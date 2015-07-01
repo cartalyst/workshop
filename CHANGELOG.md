@@ -11,6 +11,20 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.3 - 2015-06-30
+
+`FIXED`
+
+- Data Grid header alignment.
+- Blade page section on the `view-frontend-index.blade.stub` file.
+- Form stub not having a unique id.
+- Typo on `form-checkbox.stub` file.
+- Docblock on the data handler property on the `repository.stub`.
+
+`UPDATED`
+
+- Consistency tweaks.
+
 ### v2.0.2 - 2015-05-04
 
 `REVISED`
