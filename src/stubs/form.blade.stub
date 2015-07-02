@@ -48,7 +48,7 @@
 							<i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
 						</a>
 
-						<span class="navbar-brand">{{{ trans("action.{$mode}") }}} <small>{{{ ${{camel_model}}->exists ? ${{camel_model}}->id : null }}}</small></span>
+						<span class="navbar-brand">{{{ trans("action.{$mode}") }}} {{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.general') }}} <small>{{{ ${{camel_model}}->exists ? ${{camel_model}}->id : null }}}</small></span>
 					</div>
 
 					{{-- Form: Actions --}}
