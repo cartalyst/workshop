@@ -388,6 +388,7 @@ class ExtensionGenerator extends AbstractGenerator
             'name'  => Str::plural(Str::title($resource)),
             'class' => 'fa fa-circle-o',
             'uri'   => $this->extension->lowerName.'/'.Str::plural(Str::lower($resource)),
+            'regex' => '/:admin\/' . $this->extension->lowerName . '\/' . Str::lower($resource) . '/i',
         ];
 
         $menus = array_get($this->files->getRequire($extensionPhpPath), 'menus');
