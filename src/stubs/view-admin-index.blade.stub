@@ -6,7 +6,7 @@
 {{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}
 @stop
 
-{{-- Queue assets --}}{{-- Queue assets --}}
+{{-- Queue assets --}}
 {{ Asset::queue('bootstrap-daterange', 'bootstrap/css/daterangepicker-bs3.css', 'style') }}
 
 {{ Asset::queue('moment', 'moment/js/moment.js', 'jquery') }}
