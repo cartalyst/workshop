@@ -1,4 +1,4 @@
-<div class="form-group{{ Alert::onForm('{{field_name}}', ' has-error') }}">
+								<div class="form-group{{ Alert::onForm('{{field_name}}', ' has-error') }}">
 
 									<label for="{{field_name}}" class="control-label">
 										<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}_help') }}}"></i>

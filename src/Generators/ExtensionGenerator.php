@@ -11,7 +11,7 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    1.0.4
+ * @version    2.0.3
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -272,7 +272,9 @@ class ExtensionGenerator extends AbstractGenerator
             'register'    => trim($this->writeMethod('register', $resource)),
         ]);
 
-        $dir = $this->path.'/src/';
+        $dir = $this->path.'/src/Providers/';
+
+        $this->ensureDirectory($dir);
 
         $this->files->put($dir.$serviceProvider.'ServiceProvider.php', $content);
 
@@ -386,6 +388,7 @@ class ExtensionGenerator extends AbstractGenerator
             'name'  => Str::plural(Str::title($resource)),
             'class' => 'fa fa-circle-o',
             'uri'   => $this->extension->lowerName.'/'.Str::plural(Str::lower($resource)),
+            'regex' => '/:admin\/' . $this->extension->lowerName . '\/' . Str::lower($resource) . '/i',
         ];
 
         $menus = array_get($this->files->getRequire($extensionPhpPath), 'menus');

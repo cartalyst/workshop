@@ -11,6 +11,40 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.3 - 2015-06-30
+
+`FIXED`
+
+- Data Grid header alignment.
+- Blade page section on the `view-frontend-index.blade.stub` file.
+- Form stub not having a unique id.
+- Typo on `form-checkbox.stub` file.
+- Docblock on the data handler property on the `repository.stub`.
+
+`UPDATED`
+
+- Consistency tweaks.
+
+### v2.0.2 - 2015-05-04
+
+`REVISED`
+
+- Moved providers into a separate directory.
+- Updated composer.json stub dependencies.
+
+### v2.0.1 - 2015-02-27
+
+`REVISED`
+
+- Split resources into subdirs for `Handlers`, `Repositories` and `Validators`.
+
+### v2.0.0 - 2015-02-17
+
+`REVISED`
+
+- Loosen dependencies for L5.
+- Remove `package` call from the service provider stub.
+
 ### v1.0.4 - 2015-06-30
 
 `FIXED`
