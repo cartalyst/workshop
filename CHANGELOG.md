@@ -11,6 +11,26 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.4 - 2015-07-12
+
+`FIXED`
+
+- Duplicated comment on the admin index view stub.
+- Form element indentation on the form generator.
+
+`ADDED`
+
+- Menu regex to the generated extension.php file menus.
+- Named route to the frontend routes, to keep consistency.
+
+`UPDATED`
+
+- index.js stub to keep consistency.
+
+`REMOVED`
+
+- Unused import declarations from the repository stub file.
+
 ### v2.0.3 - 2015-06-30
 
 `FIXED`
