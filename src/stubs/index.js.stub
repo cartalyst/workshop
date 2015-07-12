@@ -12,9 +12,11 @@ var Extension;
 	// Initialize functions
 	Extension.Index.init = function()
 	{
-		Extension.Index.datePicker();
-		Extension.Index.dataGrid();
-		Extension.Index.listeners();
+		Extension.Index
+			.datePicker()
+			.dataGrid()
+			.listeners()
+		;
 	};
 
 	// Add Listeners
@@ -28,6 +30,8 @@ var Extension;
 			.on('click', '[data-grid-calendar-preset]', Extension.Index.calendarPresets)
 			.on('click', '[data-grid-bulk-action]:not([data-grid-bulk-action="delete"])', Extension.Index.bulkActions)
 		;
+
+		return this;
 	};
 
 	// Handle Data Grid checkboxes
@@ -221,6 +225,8 @@ var Extension;
 			.attr('data-range-end', '')
 			.attr('data-range-filter', 'created_at')
 		;
+
+		return this;
 	};
 
 	// Data Grid initialization
@@ -251,6 +257,8 @@ var Extension;
 		};
 
 		Extension.Index.Grid = $.datagrid('{{grid_name}}', '#data-grid', '#data-grid_pagination', '#data-grid_applied', config);
+
+		return this;
 	};
 
 	// Job done, lets run.

@@ -1,10 +1,8 @@
 <?php namespace {{studly_vendor}}\{{studly_name}}\Repositories;
 
-use Validator;
 use Cartalyst\Support\Traits;
 use Illuminate\Container\Container;
 use Symfony\Component\Finder\Finder;
-use {{studly_vendor}}\{{studly_name}}\Models\{{model}};
 
 class {{class_name}} implements {{repository_interface}} {
 
