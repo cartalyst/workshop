@@ -377,16 +377,22 @@ class ExtensionGenerator extends AbstractGenerator
     {
         $resource = $this->sanitize($resource);
 
+        $lowerResource = Str::lower($resource);
+
+        $lowerName = $this->extension->lowerName;
+
+        $lowerVendor = $this->extension->lowerVendor;
+
         $extensionPhpPath = $this->getExtensionPhpPath();
 
         $content = $this->files->get($extensionPhpPath);
 
         $newMenu = [
-            'slug'  => 'admin-'.$this->extension->lowerVendor.'-'.$this->extension->lowerName.'-'.Str::lower($resource),
-            'name'  => Str::plural(Str::title($resource)),
             'class' => 'fa fa-circle-o',
-            'uri'   => $this->extension->lowerName.'/'.Str::plural(Str::lower($resource)),
-            'regex' => '/:admin\/' . $this->extension->lowerName . '\/' . Str::lower($resource) . '/i',
+            'name'  => Str::plural(Str::title($resource)),
+            'uri'   => $lowerName.'/'.Str::plural($lowerResource),
+            'regex' => '/:admin\/'.$lowerName.'\/'.$lowerResource.'/i',
+            'slug'  => 'admin-'.$lowerVendor.'-'.$lowerName.'-'.$lowerResource,
         ];
 
         $menus = array_get($this->files->getRequire($extensionPhpPath), 'menus');
