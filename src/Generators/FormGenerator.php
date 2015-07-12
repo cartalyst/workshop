@@ -71,7 +71,7 @@ class FormGenerator extends AbstractGenerator
         }
 
         $content = $this->prepare($stub, [
-            'columns'            => implode("\n\t\t\t\t", $el),
+            'columns'            => implode("\n\t\t\t\t\t\t\t\t", $el),
             'camel_model'        => camel_case(strtolower($model)),
             'plural_lower_model' => strtolower(Str::plural($model)),
         ]);
