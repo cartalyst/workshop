@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.5 - 2015-07-17
+
+`FIXED`
+
+- Typo on the `index.js.stub` file for the bulk actions event listener.
+
 ### v2.0.4 - 2015-07-12
 
 `FIXED`
