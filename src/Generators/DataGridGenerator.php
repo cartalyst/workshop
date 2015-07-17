@@ -59,10 +59,9 @@ class DataGridGenerator extends AbstractGenerator
     protected $dataGridColumns = [
         [
             'type'                     => 'checkbox',
-            'name'                     => 'entries[]',
+            'name'                     => 'row[]',
             'value'                    => 'id',
-            'content'                  => 'id',
-            'input data-grid-checkbox' => '',
+            'data-grid-checkbox'       => '',
         ],
     ];
 
