@@ -26,7 +26,7 @@ var Extension;
 			.on('click', '[data-grid-row]', Extension.Index.checkRow)
 			.on('click', '[data-grid-row] a', Extension.Index.titleClick)
 			.on('click', '[data-grid-checkbox]', Extension.Index.checkboxes)
-			.on('click', '#modal-confirm a.confirm', Extension.Index.bulkActions)
+			.on('click', '#modal-confirm button.confirm', Extension.Index.bulkActions)
 			.on('click', '[data-grid-calendar-preset]', Extension.Index.calendarPresets)
 			.on('click', '[data-grid-bulk-action]:not([data-grid-bulk-action="delete"])', Extension.Index.bulkActions)
 		;
