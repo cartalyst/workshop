@@ -11,14 +11,14 @@
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "http://packages.cartalyst.com"
+			"url": "https://packages.cartalyst.com"
 		}
 	],
 	"require": {
 		"php": ">=5.4.0",
 		"cartalyst/composer-installers": "1.2.*",
 		"illuminate/support": "~5.0",
-		"platform/foundation": "2.0.*"
+		"platform/foundation": "~2.0|~3.0"
 	},
 	"autoload": {
 		"classmap": [
