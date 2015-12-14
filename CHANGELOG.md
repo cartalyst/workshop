@@ -11,6 +11,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.6 - 2015-12-14
+
+`FIXED`
+
+- Loosened platform/foundation version composer.json stub.
+- Use https url for the cartalyst repository on the composer.json stub.
+
 ### v2.0.5 - 2015-07-17
 
 `FIXED`
