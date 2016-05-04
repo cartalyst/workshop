@@ -17,6 +17,7 @@ class {{model}}EventHandler extends BaseEventHandler implements {{model}}EventHa
 		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updating', __CLASS__.'@updating');
 		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.updated', __CLASS__.'@updated');
 
+		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', __CLASS__.'@deleting');
 		$dispatcher->listen('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', __CLASS__.'@deleted');
 	}
 
@@ -50,6 +51,14 @@ class {{model}}EventHandler extends BaseEventHandler implements {{model}}EventHa
 	public function updated({{model}} ${{lower_model}})
 	{
 		$this->flushCache(${{lower_model}});
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function deleting({{model}} ${{lower_model}}, array $data)
+	{
+
 	}
 
 	/**
