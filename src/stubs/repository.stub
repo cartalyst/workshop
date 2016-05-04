@@ -170,11 +170,14 @@ class {{class_name}} implements {{repository_interface}} {
 		// Check if the {{lower_model}} exists
 		if (${{lower_model}} = $this->find($id))
 		{
-			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted' event
-			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', [ ${{lower_model}} ]);
+			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleting' event
+			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleting', [ ${{lower_model}} ]);
 
 			// Delete the {{lower_model}} entry
 			${{lower_model}}->delete();
+
+			// Fire the '{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted' event
+			$this->fireEvent('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.deleted', [ ${{lower_model}} ]);
 
 			return true;
 		}

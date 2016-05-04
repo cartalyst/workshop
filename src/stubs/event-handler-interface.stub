@@ -39,6 +39,14 @@ interface {{model}}EventHandlerInterface extends BaseEventHandlerInterface {
 	public function updated({{model}} ${{lower_model}});
 
 	/**
+	 * When a {{lower_model}} is being deleted.
+	 *
+	 * @param  \{{studly_vendor}}\{{studly_name}}\Models\{{model}}  ${{lower_model}}
+	 * @return mixed
+	 */
+	public function deleting({{model}} ${{lower_model}});
+
+	/**
 	 * When a {{lower_model}} is deleted.
 	 *
 	 * @param  \{{studly_vendor}}\{{studly_name}}\Models\{{model}}  ${{lower_model}}
