@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.7 - 2016-05-13
+
+`UPDATED`
+
+- Tweaked how events are fired on deletions.
+
 ### v2.0.6 - 2015-12-14
 
 `FIXED`
