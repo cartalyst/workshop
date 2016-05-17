@@ -56,7 +56,7 @@ class {{model}}EventHandler extends BaseEventHandler implements {{model}}EventHa
 	/**
 	 * {@inheritDoc}
 	 */
-	public function deleting({{model}} ${{lower_model}}, array $data)
+	public function deleting({{model}} ${{lower_model}})
 	{
 
 	}
