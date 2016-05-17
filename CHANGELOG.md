@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.8 - 2016-05-17
+
+`FIXED`
+
+- Fixed event handler which had an incorrect and unnecessary argument.
+
 ### v2.0.7 - 2016-05-13
 
 `UPDATED`
