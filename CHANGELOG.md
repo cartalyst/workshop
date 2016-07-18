@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.9 - 2016-07-18
+
+`FIXED`
+
+- Fixed a duplicate `href` attribute on generated data grid result templates.
+
 ### v2.0.8 - 2016-05-17
 
 `FIXED`
