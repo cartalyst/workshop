@@ -1,6 +1,6 @@
 # Workshop
 
-[![Build Status](http://ci.cartalyst.com/build-status/svg/21)](http://ci.cartalyst.com/build-status/view/21)
+[![Build Status](https://travis-ci.com/cartalyst/workshop.svg?token=98Zt8zYdwyheTKqziswS&branch=2.0)](https://travis-ci.com/cartalyst/workshop)
 
 A workshop package for platform extensions and resources.
 
@@ -41,4 +41,4 @@ Bug reports, feature requests, and pull requests can be submitted by following o
 
 This software is released under the [Cartalyst PSL](LICENSE) License.
 
-© 2011-2015 Cartalyst LLC, All rights reserved.
+© 2011-2016 Cartalyst LLC, All rights reserved.
