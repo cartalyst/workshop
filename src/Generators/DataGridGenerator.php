@@ -117,7 +117,6 @@ class DataGridGenerator extends AbstractGenerator
 
         $this->dataGridColumns[] = [
             'type'    => 'a',
-            'href'    => '#',
             'content' => 'id',
         ];
 
