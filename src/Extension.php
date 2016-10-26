@@ -115,10 +115,10 @@ class Extension
         $vendor = head($slug);
         $name   = last($slug);
 
-        $this->name         = ucfirst($name);
+        $this->name         = addslashes(ucfirst($name));
         $this->email        = $email;
         $this->vendor       = ucfirst($vendor);
-        $this->author       = $author;
+        $this->author       = addslashes($author);
         $this->lowerName    = Str::snake($name, '-');
         $this->lowerVendor  = Str::snake($vendor, '-');
         $this->studlyName   = Str::studly($name);

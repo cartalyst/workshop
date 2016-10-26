@@ -164,6 +164,12 @@ class ExtensionGenerator extends AbstractGenerator
     {
         $content = $this->prepare($this->getStub('composer.json'));
 
+        $search = [ $this->extension->name, $this->extension->author ];
+
+        $replace = [ stripslashes($this->extension->name), stripslashes($this->extension->author) ];
+
+        $content = str_replace($search, $replace, $content);
+
         $autoloads = [
             'database/migrations',
             'database/seeds',

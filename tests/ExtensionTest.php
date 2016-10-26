@@ -29,9 +29,10 @@ class ExtensionTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_be_instantiated()
     {
-        $extension = new Extension('foo_bar/baz');
+        $extension = new Extension('foo_bar/baz', "O'Reilly");
 
         $this->assertEquals('Baz', $extension->name);
+        $this->assertEquals("O\'Reilly", $extension->author);
         $this->assertEquals('Foo_bar', $extension->vendor);
 
         $this->assertEquals('baz', $extension->lowerName);
