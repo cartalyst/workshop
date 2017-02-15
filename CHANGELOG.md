@@ -11,6 +11,10 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.0 - TBA
+
+Updated for Platfrom 6 & Platform 7.
+
 ### v2.0.9 - 2016-07-18
 
 `FIXED`
