@@ -111,7 +111,7 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->seeder();
 
-        $this->assertContains('foo/bar/database/migrations', $this->generator->getMigrationPath());
+        $this->assertContains('foo/bar/resources/database/migrations', $this->generator->getMigrationPath());
         $this->assertEquals('CreateBarTable', $this->generator->getMigrationClass());
         $this->assertEquals('Foo\Bar\Database\Seeds\BarTableSeeder', $this->generator->getSeederClass());
     }
@@ -164,10 +164,8 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
 
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->atLeast()->once()->andReturn(true);
         $files->shouldReceive('exists')->once()->andReturn(true);
         $files->shouldReceive('get')->atLeast()->once()->andReturn('{{studly_vendor}}{{new_arg}}');
-        $files->shouldReceive('put')->atLeast()->once();
 
         $generator = new MigrationsGenerator('foo/bar', $files);
 
@@ -186,8 +184,6 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
-        $files->shouldReceive('isDirectory')->twice()->andReturn(false);
         $files->shouldReceive('exists')->once()->andReturn(true);
         $files->shouldReceive('get')->atLeast()->once();
 

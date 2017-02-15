@@ -60,25 +60,21 @@ class {{plural_name}}Controller extends AdminController {
 	 */
 	public function grid()
 	{
-		$data = $this->{{plural_lower_model}}->grid();
-
-		$columns = [
-			{{columns}}
-		];
-
 		$settings = [
-			'sort'      => 'created_at',
-			'direction' => 'desc',
+			'columns' => [
+				{{columns}}
+			],
+			'sort'        => 'created_at',
+			'direction'   => 'desc',
+			'transformer' => function($element)
+			{
+				$element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
+
+				return $element;
+			},
 		];
 
-		$transformer = function($element)
-		{
-			$element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
-
-			return $element;
-		};
-
-		return datagrid($data, $columns, $settings, $transformer);
+		return datagrid($this->{{plural_lower_model}}->grid(), $settings);
 	}
 
 	/**

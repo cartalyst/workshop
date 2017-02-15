@@ -78,11 +78,7 @@ abstract class AbstractGenerator
 
         $this->files = $files;
 
-        $this->path = __DIR__.str_repeat('/..', 5).'/workbench/'.$this->extension->getFullName();
-
-        if (! $this->files->isDirectory($this->path)) {
-            $this->path = str_replace('workbench', 'extensions', $this->path);
-        }
+        $this->path = __DIR__.str_repeat('/..', 5).'/extensions/'.$this->extension->getFullName();
 
         $this->defaultStubsDir = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
     }
@@ -169,7 +165,7 @@ abstract class AbstractGenerator
     {
         $self = $this;
 
-        $indentation = $indentation . "\t";
+        $indentation = $indentation."\t";
 
         array_walk($array, function ($value, $key) use ($indentation, &$text, $self) {
             if (is_array($value)) {
@@ -179,7 +175,7 @@ abstract class AbstractGenerator
                     $text .= $indentation."[\n\t";
                 }
 
-                $text .= $indentation.$self->wrapArray($value, $indentation) . "\n";
+                $text .= $indentation.$self->wrapArray($value, $indentation)."\n";
 
                 $text .= $indentation."],\n";
             }
@@ -203,11 +199,7 @@ abstract class AbstractGenerator
         $path = $this->path.'/extension.php';
 
         if (! $this->files->exists($path)) {
-            $path = str_replace('workbench', 'extensions', $path);
-
-            if (! $this->files->exists($path)) {
-                throw new LogicException('extension.php could not be found.');
-            }
+            throw new LogicException('extension.php could not be found.');
         }
 
         return $path;
@@ -225,7 +217,7 @@ abstract class AbstractGenerator
             $newArray = [];
 
             foreach ($element as $key => $string) {
-                $key = static::sanitize($key, $pattern);
+                $key    = static::sanitize($key, $pattern);
                 $string = static::sanitize($string, $pattern);
 
                 $newArray[$key] = $string;

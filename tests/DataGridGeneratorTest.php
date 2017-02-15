@@ -40,7 +40,6 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
     public function it_can_be_instantiated()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
         $html = m::mock('Illuminate\Html\HtmlBuilder');
         $form = m::mock('Illuminate\Html\FormBuilder');
@@ -55,7 +54,7 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->times(10)->andReturn(true);
+        $files->shouldReceive('isDirectory')->times(9)->andReturn(true);
         $files->shouldReceive('exists')->times(10)->andReturn(true);
         $files->shouldReceive('getRequire')->once()->andReturn(['general' => []]);
         $files->shouldReceive('get')->times(9);
@@ -75,7 +74,7 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
                 'field' => 'foo',
             ],
             [
-                'field' => 'bar'
+                'field' => 'bar',
             ],
         ]);
     }

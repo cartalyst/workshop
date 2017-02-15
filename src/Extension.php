@@ -39,7 +39,7 @@ class Extension
     public $lowerVendor;
 
     /**
-     * The studly-cased version of the vendor
+     * The studly-cased version of the vendor.
      *
      * @var string
      */
@@ -60,7 +60,7 @@ class Extension
     public $lowerName;
 
     /**
-     * The studly-cased version of the package
+     * The studly-cased version of the package.
      *
      * @var string
      */

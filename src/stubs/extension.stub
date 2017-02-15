@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Application;
 use Cartalyst\Extensions\ExtensionInterface;
 use Cartalyst\Settings\Repository as Settings;
+use Illuminate\Contracts\Foundation\Application;
 use Cartalyst\Permissions\Container as Permissions;
+use Illuminate\Contracts\Routing\Registrar as Router;
 
 return [
 
@@ -125,23 +126,23 @@ return [
 
 	],
 
-	/*
-	|--------------------------------------------------------------------------
-	| Routes
-	|--------------------------------------------------------------------------
-	|
-	| Closure that is called when the extension is started. You can register
-	| any custom routing logic here.
-	|
-	| The closure parameters are:
-	|
-	|	object \Cartalyst\Extensions\ExtensionInterface  $extension
-	|	object \Illuminate\Foundation\Application        $app
-	|
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Routes
+    |--------------------------------------------------------------------------
+    |
+    | Closure that is called when the extension is started. You can register
+    | any custom routing logic here.
+    |
+    | The closure parameters are:
+    |
+    |   object \Illuminate\Contracts\Routing\Registrar  $router
+    |	object \Cartalyst\Extensions\ExtensionInterface  $extension
+    |	object \Illuminate\Contracts\Foundation\Application  $app
+    |
+    */
 
-	'routes' => function(ExtensionInterface $extension, Application $app)
-	{
+	'routes' => function(Router $router, ExtensionInterface $extension, Application $app) {
 
 	},
 
@@ -180,12 +181,37 @@ return [
 	| For detailed instructions on how to register the permissions, please
 	| refer to the following url https://cartalyst.com/manual/permissions
 	|
+	| The closure parameters are:
+	|
+	|   object \Cartalyst\Permissions\Container  $permissions
+	|	object \Illuminate\Contracts\Foundation\Application  $app
+	|
 	*/
 
-	'permissions' => function(Permissions $permissions)
-	{
+	'permissions' => function (Permissions $permissions, Application $app) {
 
-	},
+    },
+
+    /*
+    |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    |
+    | Register here all the settings that this extension has.
+    |
+    | For detailed instructions on how to register the settings, please
+    | refer to the following url https://cartalyst.com/manual/settings
+    |
+    | The closure parameters are:
+    |
+    |   object \Cartalyst\Settings\Repository  $settings
+    |	object \Illuminate\Contracts\Foundation\Application  $app
+    |
+    */
+
+    'settings' => function (Settings $settings, Application $app) {
+
+    },
 
 	/*
 	|--------------------------------------------------------------------------
@@ -199,23 +225,7 @@ return [
 	|
 	*/
 
-	'widgets' => function()
-	{
-
-	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Settings
-	|--------------------------------------------------------------------------
-	|
-	| Register any settings for your extension. You can also configure
-	| the namespace and group that a setting belongs to.
-	|
-	*/
-
-	'settings' => function(Settings $settings, Application $app)
-	{
+	'widgets' => function() {
 
 	},
 

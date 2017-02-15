@@ -37,7 +37,7 @@ class ExtensionThemeGenerator extends AbstractGenerator
             'views'      => '.gitkeep',
         ];
 
-        $themeDirectory = $this->path.'/'."themes/{$area}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
+        $themeDirectory = $this->path.'/'."resources/themes/{$area}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
 
         foreach ($base as $dir => $file) {
             $this->ensureDirectory($themeDirectory.$dir);

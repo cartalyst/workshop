@@ -22,7 +22,6 @@ namespace Cartalyst\Workshop\Tests;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Cartalyst\Workshop\Generators\ExtensionGenerator;
 
 class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -58,7 +57,7 @@ class ExtensionGeneratorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
-        $files->shouldReceive('isDirectory')->atLeast()->once()->andReturn(true);
+        $files->shouldReceive('isDirectory')->andReturn(true);
         $files->shouldReceive('get')->atLeast()->once()->andReturn('{{studly_vendor}}{{new_arg}}');
         $files->shouldReceive('put')->atLeast()->once();
 

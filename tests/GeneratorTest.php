@@ -40,7 +40,6 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     public function it_can_be_instantiated()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
         $generator = new GeneratorStub('foo/bar', $files);
 
@@ -55,8 +54,6 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
-
         $generator = new GeneratorStub('foo/bar', $files);
 
         $generator->setStubsDir('test');
@@ -69,7 +66,6 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
         $files->shouldReceive('get')->once()->with('foo.stub')->andReturn('{{studly_vendor}}{{new_arg}}');
 
         $generator = new GeneratorStub('foo/bar', $files);
@@ -85,9 +81,6 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
-        $files->shouldReceive('exists')->twice()->andReturn(false);
-
         $generator = new GeneratorStub('foo/bar', $files);
         $generator->check();
     }
@@ -99,7 +92,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->twice()->andReturn(false);
+        $files->shouldReceive('isDirectory')->once()->andReturn(false);
         $files->shouldReceive('makeDirectory')->with('directory', 0777, true);
 
         $generator = new GeneratorStub('foo/bar', $files);
@@ -109,7 +102,6 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
 
 class GeneratorStub extends AbstractGenerator
 {
-
     public function check()
     {
         return $this->getExtensionPhpPath();

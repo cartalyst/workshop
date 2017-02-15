@@ -118,7 +118,7 @@ class MigrationsGenerator extends AbstractGenerator
 
         $fileName = $migrationName.'.php';
 
-        $dir = $this->path.'/database/migrations/';
+        $dir = $this->path.'/resources/database/migrations/';
 
         $this->ensureExtension($dir);
 
@@ -251,21 +251,21 @@ class MigrationsGenerator extends AbstractGenerator
                 case 'tinyInteger':
                 case 'boolean':
 
-                    $cols[] = "'$name' => ".'rand(0, 1)'.",";
+                    $cols[] = "'$name' => ".'rand(0, 1)'.',';
                     break;
 
                 case 'text':
                 case 'mediumText':
                 case 'longText':
 
-                    $cols[] = "'$name' => ".'$faker->text()'.",";
+                    $cols[] = "'$name' => ".'$faker->text()'.',';
                     break;
 
                 case 'float':
                 case 'double':
                 case 'decimal':
 
-                    $cols[] = "'$name' => ".'$faker->randomFloat()'.",";
+                    $cols[] = "'$name' => ".'$faker->randomFloat()'.',';
                     break;
 
                 case 'integer':
@@ -273,28 +273,28 @@ class MigrationsGenerator extends AbstractGenerator
                 case 'mediumInteger':
                 case 'bigInteger':
 
-                    $cols[] = "'$name' => ".'$faker->randomDigit()'.",";
+                    $cols[] = "'$name' => ".'$faker->randomDigit()'.',';
                     break;
 
                 case 'dateTime':
 
-                    $cols[] = "'$name' => ".'$faker->dateTime()'.",";
+                    $cols[] = "'$name' => ".'$faker->dateTime()'.',';
                     break;
 
                 case 'time':
 
-                    $cols[] = "'$name' => ".'$faker->time()'.",";
+                    $cols[] = "'$name' => ".'$faker->time()'.',';
                     break;
 
                 default:
-                    $cols[] = "'$name' => ".'$faker->sentence()'.",";
+                    $cols[] = "'$name' => ".'$faker->sentence()'.',';
                     break;
             }
         }
 
         if ($this->timestamps) {
-            $cols[] = "'created_at' => ".'$faker->dateTime()'.",";
-            $cols[] = "'updated_at' => ".'$faker->dateTime()'.",";
+            $cols[] = "'created_at' => ".'$faker->dateTime()'.',';
+            $cols[] = "'updated_at' => ".'$faker->dateTime()'.',';
         }
 
         return implode("\n\t\t\t//\t", $cols);
@@ -314,9 +314,9 @@ class MigrationsGenerator extends AbstractGenerator
             return;
         }
 
-        $cols = [];
+        $cols     = [];
         $nullable = '';
-        $default = '';
+        $default  = '';
 
         if ($increments) {
             $cols[] = '$table->'."increments('id');";
@@ -363,7 +363,7 @@ class MigrationsGenerator extends AbstractGenerator
         }
 
         if ($timestamps) {
-            $cols[] = '$table->'."timestamps();";
+            $cols[] = '$table->'.'timestamps();';
         }
 
         return implode("\n\t\t\t", $cols);
@@ -379,11 +379,7 @@ class MigrationsGenerator extends AbstractGenerator
     protected function ensureExtension($dir)
     {
         if (! $this->files->isDirectory($dir)) {
-            $dir = str_replace('workbench', 'extensions', $dir);
-
-            if (! $this->files->isDirectory($dir)) {
-                throw new LogicException('Extension does not exist.');
-            }
+            throw new LogicException('Extension does not exist.');
         }
     }
 

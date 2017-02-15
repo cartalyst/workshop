@@ -153,7 +153,7 @@ class DataGridGenerator extends AbstractGenerator
         $headers = '<th><input data-grid-checkbox="all" type="checkbox"></th>';
 
         foreach ($columns as $column) {
-            $trans = "{{{ trans('".$this->extension->lowerVendor."/".$this->extension->lowerName."::".Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
+            $trans = "{{{ trans('".$this->extension->lowerVendor.'/'.$this->extension->lowerName.'::'.Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
 
             $headers .= "\n\t\t\t\t\t".'<th class="sortable" data-sort="'.$column['content'].'">'.$trans.'</th>';
         }
@@ -226,7 +226,7 @@ class DataGridGenerator extends AbstractGenerator
     {
         $el = $this->prepareColumns($model);
 
-        $columns = ("<td>".implode("</td>\n\t\t\t<td>", $el).'</td>');
+        $columns = ('<td>'.implode("</td>\n\t\t\t<td>", $el).'</td>');
 
         $rows = count($this->dataGridColumns) + 1;
 
@@ -252,7 +252,7 @@ class DataGridGenerator extends AbstractGenerator
 
             if ($type) {
                 if ($type === 'a') {
-                    $elementContent = '<%= r.' . array_pull($attributes, 'content') . ' %>';
+                    $elementContent = '<%= r.'.array_pull($attributes, 'content').' %>';
 
                     $link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
@@ -264,12 +264,12 @@ class DataGridGenerator extends AbstractGenerator
 
                     $value = array_pull($attributes, 'value');
 
-                    $value = '<%= r.' . $value . ' %>';
+                    $value = '<%= r.'.$value.' %>';
 
                     $el[] = ($this->html->decode($this->form->checkbox($checkBoxName, $value, null, $attributes)));
                 }
             } else {
-                $el[] = '<%= r.' . array_pull($attributes, 'content') . ' %>';
+                $el[] = '<%= r.'.array_pull($attributes, 'content').' %>';
             }
         }
 
@@ -289,7 +289,7 @@ class DataGridGenerator extends AbstractGenerator
 
         $stub = $this->getStub('lang/en/model.stub');
 
-        $filePath = $this->path.'/lang/en/'.Str::lower(Str::plural($model)).'/';
+        $filePath = $this->path.'/resources/lang/en/'.Str::lower(Str::plural($model)).'/';
 
         $this->ensureDirectory($filePath);
 
@@ -326,6 +326,6 @@ class DataGridGenerator extends AbstractGenerator
      */
     protected function getPath($themeArea, $theme, $model, $dir = 'views')
     {
-        return $this->path.'/themes/'.$themeArea.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
+        return $this->path.'/resources/themes/'.$themeArea.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
     }
 }

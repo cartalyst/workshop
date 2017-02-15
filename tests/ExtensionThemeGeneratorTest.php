@@ -40,7 +40,6 @@ class ExtensionThemeGeneratorTest extends PHPUnit_Framework_TestCase
     public function it_can_be_instantiated()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
         $generator = new ExtensionThemeGenerator('foo/bar', $files);
 
@@ -52,7 +51,7 @@ class ExtensionThemeGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->times(4)->andReturn(true);
+        $files->shouldReceive('isDirectory')->times(3)->andReturn(true);
         $files->shouldReceive('put')->times(3);
 
         $generator = new ExtensionThemeGenerator('foo/bar', $files);

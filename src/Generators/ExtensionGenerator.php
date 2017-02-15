@@ -21,7 +21,6 @@
 namespace Cartalyst\Workshop\Generators;
 
 use Illuminate\Support\Str;
-use Illuminate\Filesystem\Filesystem;
 
 class ExtensionGenerator extends AbstractGenerator
 {
@@ -32,8 +31,6 @@ class ExtensionGenerator extends AbstractGenerator
      */
     public function create()
     {
-        $this->path = str_replace('extensions', 'workbench', $this->path);
-
         // Create extension dir
         $this->ensureDirectory($this->path);
 
@@ -115,17 +112,17 @@ class ExtensionGenerator extends AbstractGenerator
             $cols = "'id',\n";
 
             foreach ($args['columns'] as $column) {
-                $cols .= "\t\t\t'".$column['field']."',\n";
+                $cols .= "\t\t\t\t'".$column['field']."',\n";
             }
 
-            $cols .= "\t\t\t'created_at',\n";
+            $cols .= "\t\t\t\t'created_at',\n";
 
             $args['columns'] = trim($cols);
         } else {
             $args['columns'] = "'*',";
         }
 
-        $controllerName = Str::studly(ucfirst(($name ? Str::plural($name): $this->extension->name).'Controller'));
+        $controllerName = Str::studly(ucfirst(($name ? Str::plural($name) : $this->extension->name).'Controller'));
 
         $area = ucfirst($area);
 
@@ -165,8 +162,8 @@ class ExtensionGenerator extends AbstractGenerator
         $content = $this->prepare($this->getStub('composer.json'));
 
         $autoloads = [
-            'database/migrations',
-            'database/seeds',
+            'resources/database/migrations',
+            'resources/database/seeds',
         ];
 
         $content = str_replace('{{classmap_autoloads}}', implode(",\n\t\t\t", array_map(function ($autoload) {
@@ -224,9 +221,9 @@ class ExtensionGenerator extends AbstractGenerator
             'routes' => rtrim($routes),
         ]);
 
-        preg_match('/'.'\'routes\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $content, $oldRoutes);
+        preg_match('/'.'\'routes\' => function\(.*?\)\s*\s*{(.*?)\s*},/s', $content, $oldRoutes);
 
-        preg_match('/'.'\'routes\' => function\(.*?\)\s*\n\s*{(.*?)\s*},/s', $newRoutes, $newRoutes);
+        preg_match('/'.'\'routes\' => function\(.*?\)\s*\s*{(.*?)\s*},/s', $newRoutes, $newRoutes);
 
         $oldRoutes = last($oldRoutes);
         $newRoutes = last($newRoutes);
@@ -444,7 +441,7 @@ class ExtensionGenerator extends AbstractGenerator
     {
         $resource = $this->sanitize($resource);
 
-        $this->ensureDirectory($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/');
+        $this->ensureDirectory($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/');
 
         $stub = $this->getStub('lang/en/common.stub');
 
@@ -454,7 +451,7 @@ class ExtensionGenerator extends AbstractGenerator
             'plural_model' => Str::title(Str::plural($resource)),
         ]);
 
-        $this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/common.php', $content);
+        $this->files->put($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/common.php', $content);
 
         $stub = $this->getStub('lang/en/message.stub');
 
@@ -463,7 +460,7 @@ class ExtensionGenerator extends AbstractGenerator
             'lower_model' => Str::lower($resource),
         ]);
 
-        $this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/message.php', $content);
+        $this->files->put($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/message.php', $content);
 
         $stub = $this->getStub('lang/en/permissions.stub');
 
@@ -472,7 +469,7 @@ class ExtensionGenerator extends AbstractGenerator
             'plural_name' => ucfirst(Str::plural($resource)),
         ]);
 
-        $this->files->put($this->path.'/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php', $content);
+        $this->files->put($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php', $content);
     }
 
     /**
@@ -482,11 +479,11 @@ class ExtensionGenerator extends AbstractGenerator
      */
     protected function databaseDirs()
     {
-        $this->ensureDirectory($this->path.'/database/migrations');
-        $this->ensureDirectory($this->path.'/database/seeds');
+        $this->ensureDirectory($this->path.'/resources/database/migrations');
+        $this->ensureDirectory($this->path.'/resources/database/seeds');
 
-        $this->files->put($this->path.'/database/migrations/.gitkeep', '');
-        $this->files->put($this->path.'/database/seeds/.gitkeep', '');
+        $this->files->put($this->path.'/resources/database/migrations/.gitkeep', '');
+        $this->files->put($this->path.'/resources/database/seeds/.gitkeep', '');
     }
 
     /**

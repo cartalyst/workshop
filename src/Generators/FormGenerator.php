@@ -76,7 +76,7 @@ class FormGenerator extends AbstractGenerator
             'plural_lower_model' => strtolower(Str::plural($model)),
         ]);
 
-        $filePath = $this->path.'/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/';
+        $filePath = $this->path.'/resources/themes/admin/default/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/views/'.Str::plural(strtolower($model)).'/';
 
         $this->ensureDirectory($filePath);
 
@@ -97,11 +97,11 @@ class FormGenerator extends AbstractGenerator
         $values = [];
 
         foreach ($columns as $column) {
-            $values[$column['field']] = Str::title($column['field']);
+            $values[$column['field']]         = Str::title($column['field']);
             $values[$column['field'].'_help'] = 'Enter the '.Str::title($column['field']).' here';
         }
 
-        $filePath = $this->path.'/lang/en/'.strtolower(Str::plural($model)).'/';
+        $filePath = $this->path.'/resources/lang/en/'.strtolower(Str::plural($model)).'/';
 
         $this->ensureDirectory($filePath);
 

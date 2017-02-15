@@ -40,7 +40,6 @@ class RepositoryGeneratorTest extends PHPUnit_Framework_TestCase
     public function it_can_be_instantiated()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
-        $files->shouldReceive('isDirectory')->once()->andReturn(true);
 
         $generator = new RepositoryGenerator('foo/bar', $files);
 
@@ -52,7 +51,7 @@ class RepositoryGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->times(5)->andReturn(true);
+        $files->shouldReceive('isDirectory')->times(4)->andReturn(true);
         $files->shouldReceive('exists')->times(8)->andReturn(false);
         $files->shouldReceive('get')->times(8)->andReturn('{{studly_vendor}}{{new_arg}}');
         $files->shouldReceive('put')->times(8);

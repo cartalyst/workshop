@@ -1,65 +1,49 @@
 {
-	"name": "cartalyst/workshop",
-	"description": "Generators for scaffolding Cartalyst Platform resources",
-	"keywords": [
-		"platform",
-		"extensions",
-		"laravel",
-		"bootstrap"
-	],
-	"license": "proprietary",
-	"authors": [
-		{
-			"name": "Cartalyst LLC",
-			"email": "help@cartalyst.com"
-		},
-		{
-			"name": "Ben Corlett",
-			"email": "ben.corlett@cartalyst.com",
-			"role": "Developer"
-		},
-		{
-			"name": "Bruno Gaspar",
-			"email": "bruno.gaspar@cartalyst.com",
-			"role": "Developer"
-		},
-		{
-			"name": "Dan Syme",
-			"email": "dan.syme@cartalyst.com",
-			"role": "Project Lead"
-		},
-		{
-			"name": "Suhayb Wardany",
-			"email": "su.wardany@cartalyst.com",
-			"role": "Developer"
-		}
-	],
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://packages.cartalyst.com"
-		}
-	],
-	"require": {
-		"php": ">=5.4.0",
-		"illuminate/support": "~4.1|~5.0"
-	},
-	"require-dev": {
-		"illuminate/filesystem": "~4.1|~5.0",
-		"illuminate/html": "~4.1|~5.0",
-		"mockery/mockery": "~0.9",
-		"phpunit/phpunit": "~4.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Cartalyst\\Workshop\\": "src"
-		}
-	},
-	"extra": {
-		"component":"package",
-		"branch-alias": {
-			"dev-master": "2.0.x-dev"
-		}
-	},
-	"minimum-stability": "dev"
+    "name": "cartalyst/workshop",
+    "description": "Generators for scaffolding Cartalyst Platform resources",
+    "keywords": [
+        "platform",
+        "extensions",
+        "laravel",
+        "bootstrap"
+    ],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Cartalyst LLC",
+            "email": "help@cartalyst.com",
+            "homepage": "https://cartalyst.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.cartalyst.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "illuminate/support": "^5.0"
+    },
+    "require-dev": {
+        "illuminate/filesystem": "^5.0",
+        "laravelcollective/html": "^5.0",
+        "mockery/mockery": "^0.9",
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cartalyst\\Workshop\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { "Cartalyst\\Workshop\\Tests\\": "tests/" }
+    },
+    "extra": {
+        "component":"package",
+        "branch-alias": {
+            "dev-master": "3.0.x-dev"
+        }
+    },
+    "minimum-stability": "stable"
 }

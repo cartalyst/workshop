@@ -22,7 +22,6 @@ namespace Cartalyst\Workshop\Tests;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Cartalyst\Workshop\Generators\FormGenerator;
 
 class FormGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -79,9 +78,9 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->create('foo', [
             [
-                'type' => 'text',
+                'type'  => 'text',
                 'field' => 'foo',
-            ]
+            ],
         ]);
     }
 
@@ -94,9 +93,9 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->create('foo', [
             [
-                'type' => 'boolean',
+                'type'  => 'boolean',
                 'field' => 'foo',
-            ]
+            ],
         ]);
     }
 
@@ -109,9 +108,9 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->create('foo', [
             [
-                'type' => 'string',
+                'type'  => 'string',
                 'field' => 'foo',
-            ]
+            ],
         ]);
     }
 
@@ -125,9 +124,9 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->create('foo', [
             [
-                'type' => 'string',
+                'type'  => 'string',
                 'field' => 'foo',
-            ]
+            ],
         ]);
     }
 }
