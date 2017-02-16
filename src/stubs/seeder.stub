@@ -13,16 +13,15 @@ class {{class_name}} extends Seeder {
 	 */
 	public function run()
 	{
-		// $faker = Faker::create();
+		$faker = Faker::create();
 
 		DB::table('{{table}}')->truncate();
 
 		foreach(range(1, {{records}}) as $index)
 		{
-			// DB::table('{{table}}')->insert([
-			// 	{{columns}}
-			// ]);
+			DB::table('{{table}}')->insert([
+				{{columns}}
+			]);
 		}
 	}
-
 }

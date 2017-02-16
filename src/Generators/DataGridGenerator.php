@@ -48,7 +48,6 @@ class DataGridGenerator extends AbstractGenerator
         'filters.blade.stub',
         'pagination.blade.stub',
         'no_results.blade.stub',
-        'no_filters.blade.stub',
     ];
 
     /**

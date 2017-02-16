@@ -10,8 +10,9 @@
 {{ Asset::queue('bootstrap-daterange', 'bootstrap/css/daterangepicker-bs3.css', 'style') }}
 
 {{ Asset::queue('moment', 'moment/js/moment.js', 'jquery') }}
+{{ Asset::queue('lodash', 'cartalyst/js/lodash.min.js') }}
+{{ Asset::queue('exojs', 'cartalyst/js/exoskeleton.min.js', 'lodash') }}
 {{ Asset::queue('data-grid', 'cartalyst/js/data-grid.js', 'jquery') }}
-{{ Asset::queue('underscore', 'underscore/js/underscore.js', 'jquery') }}
 {{ Asset::queue('index', '{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/js/index.js', 'platform') }}
 {{ Asset::queue('bootstrap-daterange', 'bootstrap/js/daterangepicker.js', 'jquery') }}
 
@@ -47,7 +48,6 @@
 					</button>
 
 					<span class="navbar-brand">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.title') }}}</span>
-
 				</div>
 
 				{{-- Grid: Actions --}}
@@ -56,7 +56,7 @@
 					<ul class="nav navbar-nav navbar-left">
 
 						<li class="disabled">
-							<a class="disabled" data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
+							<a data-grid-bulk-action="disable" data-toggle="tooltip" data-original-title="{{{ trans('action.bulk.disable') }}}">
 								<i class="fa fa-eye-slash"></i> <span class="visible-xs-inline">{{{ trans('action.bulk.disable') }}}</span>
 							</a>
 						</li>
@@ -73,14 +73,14 @@
 							</a>
 						</li>
 
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle tip" data-toggle="dropdown" role="button" aria-expanded="false" data-original-title="{{{ trans('action.export') }}}">
+						<li class="dropdown disabled">
+							<a href="#" data-grid-exporter class="dropdown-toggle tip" data-toggle="dropdown" role="button" aria-expanded="false" data-original-title="{{{ trans('action.export') }}}">
 								<i class="fa fa-download"></i> <span class="visible-xs-inline">{{{ trans('action.export') }}}</span>
 							</a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a data-download="json"><i class="fa fa-file-code-o"></i> JSON</a></li>
-								<li><a data-download="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
-								<li><a data-download="pdf"><i class="fa fa-file-pdf-o"></i> PDF</a></li>
+								<li><a data-grid-download="json"><i class="fa fa-file-code-o"></i> JSON</a></li>
+								<li><a data-grid-download="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
+								<li><a data-grid-download="pdf"><i class="fa fa-file-pdf-o"></i> PDF</a></li>
 							</ul>
 						</li>
 
@@ -93,7 +93,7 @@
 					</ul>
 
 					{{-- Grid: Filters --}}
-					<form class="navbar-form navbar-right" method="post" accept-charset="utf-8" data-search data-grid="{{grid_name}}" role="form">
+					<form class="navbar-form navbar-right" method="post" accept-charset="utf-8" data-grid-search data-grid="{{grid_name}}" role="form">
 
 						<div class="input-group">
 
@@ -111,13 +111,13 @@
 								<ul class="dropdown-menu" role="menu">
 
 									<li>
-										<a data-grid="{{grid_name}}" data-filter="enabled:1" data-label="enabled::{{{ trans('common.all_enabled') }}}" data-reset>
+										<a data-grid="{{grid_name}}" data-grid-filter="enabled:1" data-grid-label="enabled::{{{ trans('common.all_enabled') }}}" data-grid-reset>
 											<i class="fa fa-eye"></i> {{{ trans('common.show_enabled') }}}
 										</a>
 									</li>
 
 									<li>
-										<a data-toggle="tooltip" data-placement="top" data-original-title="" data-grid="{{grid_name}}" data-filter="enabled:0" data-label="enabled::{{{ trans('common.all_disabled') }}}" data-reset>
+										<a data-grid="{{grid_name}}" data-grid-filter="enabled:0" data-grid-label="enabled::{{{ trans('common.all_disabled') }}}" data-grid-reset>
 											<i class="fa fa-eye-slash"></i> {{{ trans('common.show_disabled') }}}
 										</a>
 									</li>
@@ -144,7 +144,7 @@
 
 								</ul>
 
-								<button class="btn btn-default hidden-xs" type="button" data-grid-calendar data-range-filter="created_at">
+								<button class="btn btn-default hidden-xs" type="button" data-grid-calendar data-grid-range-filter="created_at">
 									<i class="fa fa-calendar"></i>
 								</button>
 
@@ -158,7 +158,7 @@
 									<span class="fa fa-search"></span>
 								</button>
 
-								<button class="btn btn-default" data-grid="{{grid_name}}" data-reset>
+								<button class="btn btn-default" data-grid="{{grid_name}}" data-grid-reset>
 									<i class="fa fa-refresh fa-sm"></i>
 								</button>
 
@@ -190,13 +190,13 @@
 	{{-- Grid: Table --}}
 	<div class="table-responsive">
 
-		<table id="data-grid" class="table table-hover" data-source="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid') }}" data-grid="{{grid_name}}">
+		<table id="data-grid" class="table table-hover" data-grid-source="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid') }}" data-grid="{{grid_name}}">
 			<thead>
 				<tr>
 					{{headers}}
 				</tr>
 			</thead>
-			<tbody></tbody>
+			<tbody data-grid-layout="results"></tbody>
 		</table>
 
 	</div>
@@ -204,7 +204,7 @@
 	<footer class="panel-footer clearfix">
 
 		{{-- Grid: Pagination --}}
-		<div id="data-grid_pagination" data-grid="{{grid_name}}"></div>
+		<div id="data-grid_pagination" data-grid-layout="pagination" data-grid="{{grid_name}}"></div>
 
 	</footer>
 
@@ -216,8 +216,6 @@
 
 </section>
 
-@if (config('platform.app.help'))
-	@include('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/help')
-@endif
+@help('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/help')
 
 @stop

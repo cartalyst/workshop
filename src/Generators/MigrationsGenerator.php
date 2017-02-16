@@ -164,7 +164,7 @@ class MigrationsGenerator extends AbstractGenerator
             'columns'    => $columns,
         ]);
 
-        $dir = $this->path.'/database/seeds/';
+        $dir = $this->path.'/resources/database/seeds/';
 
         $this->ensureExtension($dir);
 
@@ -172,29 +172,39 @@ class MigrationsGenerator extends AbstractGenerator
 
         $this->files->put($filePath, $content);
 
-        // Add the new seeder to the extension
-        $extensionPhp = $this->getExtensionPhpPath();
+        // Add the new seeder to the seed runner
+        $stub = $this->getStub('database_seeder.stub');
 
-        $currentSeeds = array_get($this->files->getRequire($extensionPhp), 'seeds', []);
+        $content = $this->prepare($stub, [
+            'namespace' => 'namespace '.$namespace.';',
+            'seeder'    => '$this->call(\''.$this->seederClass.'\');',
+        ]);
 
-        $seeds = null;
+        $filePath = $dir.'DatabaseSeeder.php';
 
-        foreach ($currentSeeds as $s) {
-            $seeds .= "'$s',\n\t\t";
-        }
+        if (! $this->files->exists($filePath)) {
+            $this->files->put($filePath, $content);
+        } else {
+            $content = $this->files->get($filePath);
 
-        $extensionContent = $this->files->get($extensionPhp);
+            preg_match_all('/\$this->call.*?\n;?/s', $content, $matches);
 
-        if (! in_array("{$namespace}\\{$seederClass}", $currentSeeds)) {
-            $seeds .= "'{$namespace}\\{$seederClass}',";
+            $seeders = head($matches);
 
-            $extensionContent = preg_replace(
-                "/('seeds' => \[)(\s*.*?)],/s",
-                "'seeds' => [\n\n\t\t{$seeds}\n\n\t],",
-                $extensionContent
-            );
+            $seeders[] = '$this->call(\''.$this->seederClass.'\');';
 
-            $this->files->put($extensionPhp, $extensionContent);
+            $seeders = implode($seeders, "\t\t");
+
+            $stub = $this->getStub('database_seeder.stub');
+
+            $content = $this->prepare($stub, [
+                'namespace' => 'namespace '.$namespace.';',
+                'seeder'    => $seeders,
+            ]);
+
+            $filePath = $dir.'DatabaseSeeder.php';
+
+            $this->files->put($filePath, $content);
         }
 
         return $this;
@@ -297,7 +307,7 @@ class MigrationsGenerator extends AbstractGenerator
             $cols[] = "'updated_at' => ".'$faker->dateTime()'.',';
         }
 
-        return implode("\n\t\t\t//\t", $cols);
+        return implode("\n\t\t\t\t", $cols);
     }
 
     /**

@@ -2,7 +2,6 @@ var Extension;
 
 ;(function(window, document, $, undefined)
 {
-
 	'use strict';
 
 	Extension = Extension || {
@@ -67,9 +66,9 @@ var Extension;
 
 	Extension.Index.bulkStatus = function()
 	{
-		var rows = $('[data-grid-checkbox]').not('[data-grid-checkbox="all"]').length;
+		var rows = $('[data-grid-checkbox]').not('[data-grid-checkbox="all"]').not('[data-grid-checkbox][disabled]').length;
 
-		var checked = $('[data-grid-checkbox]:checked').not('[data-grid-checkbox="all"]').length;
+		var checked = $('[data-grid-checkbox]:checked').not('[data-grid-checkbox="all"]').not('[data-grid-checkbox][disabled]').length;
 
 		$('[data-grid-bulk-action]').closest('li').toggleClass('disabled', ! checked);
 
@@ -86,6 +85,15 @@ var Extension;
 			.prop('disabled', rows < 1)
 			.prop('checked', rows < 1 ? false : rows === checked)
 		;
+
+		return this;
+	};
+
+	Extension.Index.exporterStatus = function(grid)
+	{
+		$('[data-grid-exporter]').closest('li').toggleClass('disabled', grid.pagination.filtered == 0);
+
+		return this;
 	};
 
 	// Handle Data Grid bulk actions
@@ -252,11 +260,16 @@ var Extension;
 
 				$('[data-action]').prop('disabled', true);
 
-				Extension.Index.bulkStatus();
+				Extension.Index
+					.bulkStatus()
+					.exporterStatus(this)
+				;
 			}
 		};
 
-		Extension.Index.Grid = $.datagrid('{{grid_name}}', '#data-grid', '#data-grid_pagination', '#data-grid_applied', config);
+		var dg = new DataGridManager();
+
+		Extension.Index.Grid = dg.create('{{grid_name}}', config);
 
 		return this;
 	};

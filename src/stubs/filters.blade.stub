@@ -1,8 +1,10 @@
-<script type="text/template" data-grid="{{grid_name}}" data-template="filters">
+<script type="text/template" data-grid="{{grid_name}}" data-grid-template="filters">
 
 	<% _.each(filters, function(f) { %>
 
-		<button class="btn btn-default">
+		<button class="btn btn-default btn-sm">
+
+			<span><i class="fa fa-trash-o"></i></span>
 
 			<% if (f.from !== undefined && f.to !== undefined) { %>
 
@@ -28,13 +30,11 @@
 
 				<% } else { %>
 
-					<%= f.value %> in <em><%= f.column %></em>
+					<%= f.value %> {{{ trans('common.in') }}} <em><%= f.column %></em>
 
 				<% } %>
 
 			<% } %>
-
-			<span><i class="fa fa-times-circle"></i></span>
 
 		</button>
 

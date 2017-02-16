@@ -1,11 +1,23 @@
-<script type="text/template" data-grid="{{grid_name}}" data-template="results">
+<script type="text/template" data-grid="{{grid_name}}" data-grid-template="results">
 
-	<% _.each(results, function(r) { %>
+    <% var results = response.results; %>
 
-		<tr data-grid-row>
-			{{columns}}
-		</tr>
+    <% if (_.isEmpty(results)) { %>
 
-	<% }); %>
+        <tr>
+            <td colspan="5">{{{ trans('common.no_results') }}}</td>
+        </tr>
+
+    <% } else { %>
+
+        <% _.each(results, function(r) { %>
+
+            <tr data-grid-row>
+                {{columns}}
+            </tr>
+
+        <% }); %>
+
+    <% } %>
 
 </script>
