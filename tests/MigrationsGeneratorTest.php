@@ -87,9 +87,9 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
         $this->prepare();
 
         $this->files->shouldReceive('exists')->once()->andReturn(true);
-        $this->files->shouldReceive('getRequire')->once()->andReturn([]);
 
         $this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
+        $this->generator->shouldReceive('getStub')->twice()->with('database_seeder.stub');
 
         $this->generator->seeder();
     }
@@ -100,10 +100,10 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
         $this->prepare();
 
         $this->files->shouldReceive('exists')->once()->andReturn(true);
-        $this->files->shouldReceive('getRequire')->once()->andReturn([]);
 
         $this->generator->shouldReceive('getStub')->once()->with('migration.stub');
         $this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
+        $this->generator->shouldReceive('getStub')->twice()->with('database_seeder.stub');
 
         $this->generator->create('bar', [
             'name' => 'string',
@@ -122,10 +122,10 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
         $this->prepare();
 
         $this->files->shouldReceive('exists')->atLeast()->once()->andReturn(true);
-        $this->files->shouldReceive('getRequire')->atLeast()->once()->andReturn(['seeds' => ['Seeder']]);
 
         $this->generator->shouldReceive('getStub')->atLeast()->once()->with('migration.stub');
         $this->generator->shouldReceive('getStub')->atLeast()->once()->with('seeder.stub');
+        $this->generator->shouldReceive('getStub')->twice()->with('database_seeder.stub');
 
         $this->generator->create('baz', [
             'name' => 'boolean',
@@ -140,10 +140,10 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
         $this->prepare();
 
         $this->files->shouldReceive('exists')->once()->andReturn(true);
-        $this->files->shouldReceive('getRequire')->once()->andReturn([]);
 
         $this->generator->shouldReceive('getStub')->once()->with('migration.stub');
         $this->generator->shouldReceive('getStub')->once()->with('seeder.stub');
+        $this->generator->shouldReceive('getStub')->twice()->with('database_seeder.stub');
 
         $this->generator->create('test', [
             'name'  => 'string|nullable|default:test',

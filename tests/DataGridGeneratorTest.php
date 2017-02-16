@@ -54,18 +54,18 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('isDirectory')->times(9)->andReturn(true);
-        $files->shouldReceive('exists')->times(10)->andReturn(true);
+        $files->shouldReceive('isDirectory')->times(8)->andReturn(true);
+        $files->shouldReceive('exists')->times(9)->andReturn(true);
         $files->shouldReceive('getRequire')->once()->andReturn(['general' => []]);
-        $files->shouldReceive('get')->times(9);
-        $files->shouldReceive('put')->times(10);
+        $files->shouldReceive('get')->times(8);
+        $files->shouldReceive('put')->times(9);
 
         $html = m::mock('Illuminate\Html\HtmlBuilder');
         $html->shouldReceive('decode');
         $html->shouldReceive('link');
 
         $form = m::mock('Illuminate\Html\FormBuilder');
-        $form->shouldReceive('checkbox')->times(5);
+        $form->shouldReceive('checkbox')->times(4);
 
         $generator = new DataGridGenerator('foo/bar', $files, $html, $form);
 
