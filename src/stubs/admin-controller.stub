@@ -1,6 +1,7 @@
 <?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\Admin;
 
 use Platform\Access\Controllers\AdminController;
+use Cartalyst\DataGrid\Export\Providers\ExportProvider;
 use {{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface;
 
 class {{plural_name}}Controller extends AdminController {
@@ -74,7 +75,10 @@ class {{plural_name}}Controller extends AdminController {
 			},
 		];
 
-		return datagrid($this->{{plural_lower_model}}->grid(), $settings);
+		// Create export provider
+		$provider = new ExportProvider();
+
+		return datagrid($this->{{plural_lower_model}}->grid(), $settings, $provider);
 	}
 
 	/**

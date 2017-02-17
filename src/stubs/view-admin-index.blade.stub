@@ -73,7 +73,7 @@
 							</a>
 						</li>
 
-						<li class="dropdown disabled">
+						<li class="dropdown disabled" data-grid="{{grid_name}}">
 							<a href="#" data-grid-exporter class="dropdown-toggle tip" data-toggle="dropdown" role="button" aria-expanded="false" data-original-title="{{{ trans('action.export') }}}">
 								<i class="fa fa-download"></i> <span class="visible-xs-inline">{{{ trans('action.export') }}}</span>
 							</a>
@@ -111,13 +111,13 @@
 								<ul class="dropdown-menu" role="menu">
 
 									<li>
-										<a data-grid="{{grid_name}}" data-grid-filter="enabled:1" data-grid-label="enabled::{{{ trans('common.all_enabled') }}}" data-grid-reset>
+										<a data-grid="{{grid_name}}" data-grid-filter="enabled" data-grid-query="enabled:1" data-grid-label="enabled::{{{ trans('common.all_enabled') }}}" data-grid-reset>
 											<i class="fa fa-eye"></i> {{{ trans('common.show_enabled') }}}
 										</a>
 									</li>
 
 									<li>
-										<a data-grid="{{grid_name}}" data-grid-filter="enabled:0" data-grid-label="enabled::{{{ trans('common.all_disabled') }}}" data-grid-reset>
+										<a data-grid="{{grid_name}}" data-grid-filter="disabled" data-grid-query="enabled:0" data-grid-label="enabled::{{{ trans('common.all_disabled') }}}" data-grid-reset>
 											<i class="fa fa-eye-slash"></i> {{{ trans('common.show_disabled') }}}
 										</a>
 									</li>
