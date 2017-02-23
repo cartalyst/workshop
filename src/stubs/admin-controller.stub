@@ -1,218 +1,211 @@
-<?php namespace {{studly_vendor}}\{{studly_name}}\Controllers\Admin;
+<?php
+
+namespace {{studly_vendor}}\{{studly_name}}\Controllers\Admin;
 
 use Platform\Access\Controllers\AdminController;
 use Cartalyst\DataGrid\Export\Providers\ExportProvider;
 use {{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface;
 
-class {{plural_name}}Controller extends AdminController {
+class {{plural_name}}Controller extends AdminController
+{
+    /**
+     * {@inheritDoc}
+     */
+    protected $csrfWhitelist = [
+        'executeAction',
+    ];
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected $csrfWhitelist = [
-		'executeAction',
-	];
+    /**
+     * The {{studly_name}} repository.
+     *
+     * @var \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface
+     */
+    protected ${{plural_lower_model}};
 
-	/**
-	 * The {{studly_name}} repository.
-	 *
-	 * @var \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface
-	 */
-	protected ${{plural_lower_model}};
+    /**
+     * Holds all the mass actions we can execute.
+     *
+     * @var array
+     */
+    protected $actions = [
+        'delete',
+        'enable',
+        'disable',
+    ];
 
-	/**
-	 * Holds all the mass actions we can execute.
-	 *
-	 * @var array
-	 */
-	protected $actions = [
-		'delete',
-		'enable',
-		'disable',
-	];
+    /**
+     * Constructor.
+     *
+     * @param  \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface  ${{plural_lower_model}}
+     * @return void
+     */
+    public function __construct({{model}}RepositoryInterface ${{plural_lower_model}})
+    {
+        parent::__construct();
 
-	/**
-	 * Constructor.
-	 *
-	 * @param  \{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}RepositoryInterface  ${{plural_lower_model}}
-	 * @return void
-	 */
-	public function __construct({{model}}RepositoryInterface ${{plural_lower_model}})
-	{
-		parent::__construct();
+        $this->{{plural_lower_model}} = ${{plural_lower_model}};
+    }
 
-		$this->{{plural_lower_model}} = ${{plural_lower_model}};
-	}
+    /**
+     * Display a listing of {{camel_model}}.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
+    {
+        return view('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.index');
+    }
 
-	/**
-	 * Display a listing of {{camel_model}}.
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function index()
-	{
-		return view('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.index');
-	}
+    /**
+     * Datasource for the {{camel_model}} Data Grid.
+     *
+     * @return \Cartalyst\DataGrid\DataGrid
+     */
+    public function grid()
+    {
+        $settings = [
+            'columns' => [
+                {{columns}}
+            ],
+            'sort'        => 'created_at',
+            'direction'   => 'desc',
+            'transformer' => function($element) {
+                $element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
 
-	/**
-	 * Datasource for the {{camel_model}} Data Grid.
-	 *
-	 * @return \Cartalyst\DataGrid\DataGrid
-	 */
-	public function grid()
-	{
-		$settings = [
-			'columns' => [
-				{{columns}}
-			],
-			'sort'        => 'created_at',
-			'direction'   => 'desc',
-			'transformer' => function($element)
-			{
-				$element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
+                return $element;
+            },
+        ];
 
-				return $element;
-			},
-		];
+        // Create export provider
+        $provider = new ExportProvider();
 
-		// Create export provider
-		$provider = new ExportProvider();
+        return datagrid($this->{{plural_lower_model}}->grid(), $settings, $provider);
+    }
 
-		return datagrid($this->{{plural_lower_model}}->grid(), $settings, $provider);
-	}
+    /**
+     * Show the form for creating new {{camel_model}}.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return $this->showForm('create');
+    }
 
-	/**
-	 * Show the form for creating new {{camel_model}}.
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function create()
-	{
-		return $this->showForm('create');
-	}
+    /**
+     * Handle posting of the form for creating new {{camel_model}}.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store()
+    {
+        return $this->processForm('create');
+    }
 
-	/**
-	 * Handle posting of the form for creating new {{camel_model}}.
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function store()
-	{
-		return $this->processForm('create');
-	}
+    /**
+     * Show the form for updating {{camel_model}}.
+     *
+     * @param  int  $id
+     * @return mixed
+     */
+    public function edit($id)
+    {
+        return $this->showForm('update', $id);
+    }
 
-	/**
-	 * Show the form for updating {{camel_model}}.
-	 *
-	 * @param  int  $id
-	 * @return mixed
-	 */
-	public function edit($id)
-	{
-		return $this->showForm('update', $id);
-	}
+    /**
+     * Handle posting of the form for updating {{camel_model}}.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($id)
+    {
+        return $this->processForm('update', $id);
+    }
 
-	/**
-	 * Handle posting of the form for updating {{camel_model}}.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function update($id)
-	{
-		return $this->processForm('update', $id);
-	}
+    /**
+     * Remove the specified {{camel_model}}.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($id)
+    {
+        $type = $this->{{plural_lower_model}}->delete($id) ? 'success' : 'error';
 
-	/**
-	 * Remove the specified {{camel_model}}.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function delete($id)
-	{
-		$type = $this->{{plural_lower_model}}->delete($id) ? 'success' : 'error';
+        $this->alerts->{$type}(
+            trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.{$type}.delete")
+        );
 
-		$this->alerts->{$type}(
-			trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.{$type}.delete")
-		);
+        return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
+    }
 
-		return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
-	}
+    /**
+     * Executes the mass action.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function executeAction()
+    {
+        $action = request()->input('action');
 
-	/**
-	 * Executes the mass action.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function executeAction()
-	{
-		$action = request()->input('action');
+        if (in_array($action, $this->actions)) {
+            foreach (request()->input('rows', []) as $row) {
+                $this->{{plural_lower_model}}->{$action}($row);
+            }
 
-		if (in_array($action, $this->actions))
-		{
-			foreach (request()->input('rows', []) as $row)
-			{
-				$this->{{plural_lower_model}}->{$action}($row);
-			}
+            return response('Success');
+        }
 
-			return response('Success');
-		}
+        return response('Failed', 500);
+    }
 
-		return response('Failed', 500);
-	}
+    /**
+     * Shows the form.
+     *
+     * @param  string  $mode
+     * @param  int  $id
+     * @return mixed
+     */
+    protected function showForm($mode, $id = null)
+    {
+        // Do we have a {{camel_model}} identifier?
+        if (isset($id)) {
+            if ( ! ${{camel_model}} = $this->{{plural_lower_model}}->find($id)) {
+                $this->alerts->error(trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.not_found', compact('id')));
 
-	/**
-	 * Shows the form.
-	 *
-	 * @param  string  $mode
-	 * @param  int  $id
-	 * @return mixed
-	 */
-	protected function showForm($mode, $id = null)
-	{
-		// Do we have a {{camel_model}} identifier?
-		if (isset($id))
-		{
-			if ( ! ${{camel_model}} = $this->{{plural_lower_model}}->find($id))
-			{
-				$this->alerts->error(trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.not_found', compact('id')));
+                return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
+            }
+        } else {
+            ${{camel_model}} = $this->{{plural_lower_model}}->createModel();
+        }
 
-				return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
-			}
-		}
-		else
-		{
-			${{camel_model}} = $this->{{plural_lower_model}}->createModel();
-		}
+        // Show the page
+        return view('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.form', compact('mode', '{{camel_model}}'));
+    }
 
-		// Show the page
-		return view('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}.form', compact('mode', '{{camel_model}}'));
-	}
+    /**
+     * Processes the form.
+     *
+     * @param  string  $mode
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function processForm($mode, $id = null)
+    {
+        // Store the {{camel_model}}
+        list($messages) = $this->{{plural_lower_model}}->store($id, request()->all());
 
-	/**
-	 * Processes the form.
-	 *
-	 * @param  string  $mode
-	 * @param  int  $id
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	protected function processForm($mode, $id = null)
-	{
-		// Store the {{camel_model}}
-		list($messages) = $this->{{plural_lower_model}}->store($id, request()->all());
+        // Do we have any errors?
+        if ($messages->isEmpty()) {
+            $this->alerts->success(trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.{$mode}"));
 
-		// Do we have any errors?
-		if ($messages->isEmpty())
-		{
-			$this->alerts->success(trans("{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/message.success.{$mode}"));
+            return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
+        }
 
-			return redirect()->route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
-		}
+        $this->alerts->error($messages, 'form');
 
-		$this->alerts->error($messages, 'form');
-
-		return redirect()->back()->withInput();
-	}
-
+        return redirect()->back()->withInput();
+    }
 }

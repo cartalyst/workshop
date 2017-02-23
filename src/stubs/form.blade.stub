@@ -24,101 +24,101 @@
 
 <section class="panel panel-default panel-tabs">
 
-	{{-- Form --}}
-	<form id="{{lower_name}}-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
+    {{-- Form --}}
+    <form id="{{lower_name}}-form" action="{{ request()->fullUrl() }}" role="form" method="post" data-parsley-validate>
 
-		{{-- Form: CSRF Token --}}
-		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+        {{-- Form: CSRF Token --}}
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-		<header class="panel-heading">
+        <header class="panel-heading">
 
-			<nav class="navbar navbar-default navbar-actions">
+            <nav class="navbar navbar-default navbar-actions">
 
-				<div class="container-fluid">
+                <div class="container-fluid">
 
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#actions">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#actions">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
 
-						<a class="btn btn-navbar-cancel navbar-btn pull-left tip" href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
-							<i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
-						</a>
+                        <a class="btn btn-navbar-cancel navbar-btn pull-left tip" href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all') }}" data-toggle="tooltip" data-original-title="{{{ trans('action.cancel') }}}">
+                            <i class="fa fa-reply"></i> <span class="visible-xs-inline">{{{ trans('action.cancel') }}}</span>
+                        </a>
 
-						<span class="navbar-brand">{{{ trans("action.{$mode}") }}} <small>{{{ ${{camel_model}}->exists ? ${{camel_model}}->id : null }}}</small></span>
-					</div>
+                        <span class="navbar-brand">{{{ trans("action.{$mode}") }}} <small>{{{ ${{camel_model}}->exists ? ${{camel_model}}->id : null }}}</small></span>
+                    </div>
 
-					{{-- Form: Actions --}}
-					<div class="collapse navbar-collapse" id="actions">
+                    {{-- Form: Actions --}}
+                    <div class="collapse navbar-collapse" id="actions">
 
-						<ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-right">
 
-							@if (${{camel_model}}->exists)
-							<li>
-								<a href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.delete', ${{camel_model}}->id) }}" class="tip" data-action-delete data-toggle="tooltip" data-original-title="{{{ trans('action.delete') }}}" type="delete">
-									<i class="fa fa-trash-o"></i> <span class="visible-xs-inline">{{{ trans('action.delete') }}}</span>
-								</a>
-							</li>
-							@endif
+                            @if (${{camel_model}}->exists)
+                            <li>
+                                <a href="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.delete', ${{camel_model}}->id) }}" class="tip" data-action-delete data-toggle="tooltip" data-original-title="{{{ trans('action.delete') }}}" type="delete">
+                                    <i class="fa fa-trash-o"></i> <span class="visible-xs-inline">{{{ trans('action.delete') }}}</span>
+                                </a>
+                            </li>
+                            @endif
 
-							<li>
-								<button class="btn btn-primary navbar-btn" data-toggle="tooltip" data-original-title="{{{ trans('action.save') }}}">
-									<i class="fa fa-save"></i> <span class="visible-xs-inline">{{{ trans('action.save') }}}</span>
-								</button>
-							</li>
+                            <li>
+                                <button class="btn btn-primary navbar-btn" data-toggle="tooltip" data-original-title="{{{ trans('action.save') }}}">
+                                    <i class="fa fa-save"></i> <span class="visible-xs-inline">{{{ trans('action.save') }}}</span>
+                                </button>
+                            </li>
 
-						</ul>
+                        </ul>
 
-					</div>
+                    </div>
 
-				</div>
+                </div>
 
-			</nav>
+            </nav>
 
-		</header>
+        </header>
 
-		<div class="panel-body">
+        <div class="panel-body">
 
-			<div role="tabpanel">
+            <div role="tabpanel">
 
-				{{-- Form: Tabs --}}
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="active" role="presentation"><a href="#general-tab" aria-controls="general-tab" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.general') }}}</a></li>
-					<li role="presentation"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.attributes') }}}</a></li>
-				</ul>
+                {{-- Form: Tabs --}}
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active" role="presentation"><a href="#general-tab" aria-controls="general-tab" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.general') }}}</a></li>
+                    <li role="presentation"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/common.tabs.attributes') }}}</a></li>
+                </ul>
 
-				<div class="tab-content">
+                <div class="tab-content">
 
-					{{-- Tab: General --}}
-					<div role="tabpanel" class="tab-pane fade in active" id="general-tab">
+                    {{-- Tab: General --}}
+                    <div role="tabpanel" class="tab-pane fade in active" id="general-tab">
 
-						<fieldset>
+                        <fieldset>
 
-							<div class="row">
+                            <div class="row">
 
-								{{columns}}
+                                {{columns}}
 
-							</div>
+                            </div>
 
-						</fieldset>
+                        </fieldset>
 
-					</div>
+                    </div>
 
-					{{-- Tab: Attributes --}}
-					<div role="tabpanel" class="tab-pane fade" id="attributes">
-						@attributes(${{camel_model}})
-					</div>
+                    {{-- Tab: Attributes --}}
+                    <div role="tabpanel" class="tab-pane fade" id="attributes">
+                        @attributes(${{camel_model}})
+                    </div>
 
-				</div>
+                </div>
 
-			</div>
+            </div>
 
-		</div>
+        </div>
 
-	</form>
+    </form>
 
 </section>
 @stop

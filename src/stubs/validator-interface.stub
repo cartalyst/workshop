@@ -1,12 +1,13 @@
-<?php namespace {{studly_vendor}}\{{studly_name}}\Validator\{{model}};
+<?php
 
-interface {{model}}ValidatorInterface {
+namespace {{studly_vendor}}\{{studly_name}}\Validator\{{model}};
 
-	/**
-	 * Updating a {{lower_model}} scenario.
-	 *
-	 * @return void
-	 */
-	public function onUpdate();
-
+interface {{model}}ValidatorInterface
+{
+    /**
+     * Updating a {{lower_model}} scenario.
+     *
+     * @return void
+     */
+    public function onUpdate();
 }

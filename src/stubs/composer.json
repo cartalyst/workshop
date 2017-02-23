@@ -1,33 +1,30 @@
 {
-	"name": "{{lower_vendor}}/{{lower_name}}",
-	"type": "platform-extension",
-	"description": "{{description}}",
-	"authors": [
-		{
-			"name": "{{author}}",
-			"email": "{{email}}"
-		}
-	],
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://packages.cartalyst.com"
-		}
-	],
-	"require": {
-		"php": ">=5.4.0",
-		"cartalyst/composer-installers": "1.2.*",
-		"illuminate/support": "~5.0",
-		"platform/foundation": "~2.0|~3.0"
-	},
-	"autoload": {
-		"classmap": [
-			{{classmap_autoloads}}
-		],
-		"psr-4": {
-			"{{studly_vendor}}\\{{studly_name}}\\": "src/"
-		}
-	},
-	"minimum-stability": "dev",
-	"prefer-stable": true
+    "name": "{{lower_vendor}}/{{lower_name}}",
+    "type": "platform-extension",
+    "description": "{{description}}",
+    "authors": [
+        {
+            "name": "{{author}}",
+            "email": "{{email}}"
+        }
+    ],
+    "repositories": [
+        { "type": "composer", "url": "https://packages.cartalyst.com" }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "cartalyst/composer-installers": "~2.0",
+        "illuminate/support": "~5.0",
+        "platform/foundation": "~5.0|~6.0"
+    },
+    "autoload": {
+        "classmap": [
+            {{classmap_autoloads}}
+        ],
+        "psr-4": {
+            "{{studly_vendor}}\\{{studly_name}}\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

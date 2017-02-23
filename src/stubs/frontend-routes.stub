@@ -1,7 +1,6 @@
-		Route::group([
-			'prefix'    => '{{lower_name}}/{{plural_lower_model}}',
-			'namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers\Frontend',
-		], function()
-		{
-			Route::get('/', ['as' => '{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.index', 'uses' => '{{plural_name}}Controller@index']);
-		});
+        Route::group([
+            'prefix'    => '{{lower_name}}/{{plural_lower_model}}',
+            'namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers\Frontend',
+        ], function() {
+            Route::get('/', ['as' => '{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.index', 'uses' => '{{plural_name}}Controller@index']);
+        });

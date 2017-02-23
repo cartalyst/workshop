@@ -1,32 +1,27 @@
-		$permissions->group('{{lower_model}}', function($g)
-		{
-			$g->name = '{{plural_name}}';
+        $permissions->group('{{lower_model}}', function($g) {
+            $g->name = '{{plural_name}}';
 
-			$g->permission('{{lower_model}}.index', function($p)
-			{
-				$p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.index');
+            $g->permission('{{lower_model}}.index', function($p) {
+                $p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.index');
 
-				$p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'index, grid');
-			});
+                $p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'index, grid');
+            });
 
-			$g->permission('{{lower_model}}.create', function($p)
-			{
-				$p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.create');
+            $g->permission('{{lower_model}}.create', function($p) {
+                $p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.create');
 
-				$p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'create, store');
-			});
+                $p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'create, store');
+            });
 
-			$g->permission('{{lower_model}}.edit', function($p)
-			{
-				$p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.edit');
+            $g->permission('{{lower_model}}.edit', function($p) {
+                $p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.edit');
 
-				$p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'edit, update');
-			});
+                $p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'edit, update');
+            });
 
-			$g->permission('{{lower_model}}.delete', function($p)
-			{
-				$p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.delete');
+            $g->permission('{{lower_model}}.delete', function($p) {
+                $p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.delete');
 
-				$p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'delete');
-			});
-		});
+                $p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'delete');
+            });
+        });

@@ -1,78 +1,79 @@
-<?php namespace {{studly_vendor}}\{{studly_name}}\Repositories\{{model}};
+<?php
 
-interface {{repository_interface}} {
+namespace {{studly_vendor}}\{{studly_name}}\Repositories\{{model}};
 
-	/**
-	 * Returns a dataset compatible with data grid.
-	 *
-	 * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
-	 */
-	public function grid();
+interface {{repository_interface}}
+{
+    /**
+     * Returns a dataset compatible with data grid.
+     *
+     * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
+     */
+    public function grid();
 
-	/**
-	 * Returns all the {{lower_name}} entries.
-	 *
-	 * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
-	 */
-	public function findAll();
+    /**
+     * Returns all the {{lower_name}} entries.
+     *
+     * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
+     */
+    public function findAll();
 
-	/**
-	 * Returns a {{lower_name}} entry by its primary key.
-	 *
-	 * @param  int  $id
-	 * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
-	 */
-	public function find($id);
+    /**
+     * Returns a {{lower_name}} entry by its primary key.
+     *
+     * @param  int  $id
+     * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
+     */
+    public function find($id);
 
-	/**
-	 * Determines if the given {{lower_name}} is valid for creation.
-	 *
-	 * @param  array  $data
-	 * @return \Illuminate\Support\MessageBag
-	 */
-	public function validForCreation(array $data);
+    /**
+     * Determines if the given {{lower_name}} is valid for creation.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Support\MessageBag
+     */
+    public function validForCreation(array $data);
 
-	/**
-	 * Determines if the given {{lower_name}} is valid for update.
-	 *
-	 * @param  int  $id
-	 * @param  array  $data
-	 * @return \Illuminate\Support\MessageBag
-	 */
-	public function validForUpdate($id, array $data);
+    /**
+     * Determines if the given {{lower_name}} is valid for update.
+     *
+     * @param  int  $id
+     * @param  array  $data
+     * @return \Illuminate\Support\MessageBag
+     */
+    public function validForUpdate($id, array $data);
 
-	/**
-	 * Creates or updates the given {{lower_name}}.
-	 *
-	 * @param  int  $id
-	 * @param  array  $input
-	 * @return bool|array
-	 */
-	public function store($id, array $input);
+    /**
+     * Creates or updates the given {{lower_name}}.
+     *
+     * @param  int  $id
+     * @param  array  $input
+     * @return bool|array
+     */
+    public function store($id, array $input);
 
-	/**
-	 * Creates a {{lower_name}} entry with the given data.
-	 *
-	 * @param  array  $data
-	 * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
-	 */
-	public function create(array $data);
+    /**
+     * Creates a {{lower_name}} entry with the given data.
+     *
+     * @param  array  $data
+     * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
+     */
+    public function create(array $data);
 
-	/**
-	 * Updates the {{lower_name}} entry with the given data.
-	 *
-	 * @param  int  $id
-	 * @param  array  $data
-	 * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
-	 */
-	public function update($id, array $data);
+    /**
+     * Updates the {{lower_name}} entry with the given data.
+     *
+     * @param  int  $id
+     * @param  array  $data
+     * @return \{{studly_vendor}}\{{studly_name}}\Models\{{model}}
+     */
+    public function update($id, array $data);
 
-	/**
-	 * Deletes the {{lower_name}} entry.
-	 *
-	 * @param  int  $id
-	 * @return bool
-	 */
-	public function delete($id);
-
+    /**
+     * Deletes the {{lower_name}} entry.
+     *
+     * @param  int  $id
+     * @return bool
+     */
+    public function delete($id);
 }

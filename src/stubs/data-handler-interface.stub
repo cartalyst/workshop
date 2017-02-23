@@ -1,13 +1,14 @@
-<?php namespace {{studly_vendor}}\{{studly_name}}\Handlers\{{model}};
+<?php
 
-interface {{model}}DataHandlerInterface {
+namespace {{studly_vendor}}\{{studly_name}}\Handlers\{{model}};
 
-	/**
-	 * Prepares the given data for being stored.
-	 *
-	 * @param  array  $data
-	 * @return mixed
-	 */
-	public function prepare(array $data);
-
+interface {{model}}DataHandlerInterface
+{
+    /**
+     * Prepares the given data for being stored.
+     *
+     * @param  array  $data
+     * @return mixed
+     */
+    public function prepare(array $data);
 }

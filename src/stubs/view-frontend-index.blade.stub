@@ -30,21 +30,21 @@ jQuery(document).ready(function($) {
 @section('page')
 <section id="groups">
 
-	<header class="clearfix">
-		<h1>{{ trans('{{lower_vendor}}/{{lower_name}}::general.title') }}</h1>
+    <header class="clearfix">
+        <h1>{{ trans('{{lower_vendor}}/{{lower_name}}::general.title') }}</h1>
 
-		<nav class="tertiary-navigation pull-right">
-			@nav('main', 0, 'nav navbar-nav navbar-right')
-		</nav>
-	</header>
+        <nav class="tertiary-navigation pull-right">
+            @nav('main', 0, 'nav navbar-nav navbar-right')
+        </nav>
+    </header>
 
-	<hr>
+    <hr>
 
-	<section class="content">
+    <section class="content">
 
-		<h3>{{ trans('{{lower_vendor}}/{{lower_name}}::general.byline') }}</h3>
+        <h3>{{ trans('{{lower_vendor}}/{{lower_name}}::general.byline') }}</h3>
 
-	</section>
+    </section>
 
 </section>
 @stop

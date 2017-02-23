@@ -1,17 +1,17 @@
 <div class="form-group{{ Alert::onForm('{{field_name}}', ' has-error') }}">
 
-									<label for="{{field_name}}" class="control-label">
-										<i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}_help') }}}"></i>
-										{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}') }}}
-									</label>
+                                    <label for="{{field_name}}" class="control-label">
+                                        <i class="fa fa-info-circle" data-toggle="popover" data-content="{{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}_help') }}}"></i>
+                                        {{{ trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/model.general.{{field_name}}') }}}
+                                    </label>
 
-									<div class="checkbox">
-										<label>
-											<input type="hidden" name="{{field_name}}" id="{{field_name}}" value="0" checked>
-											<input type="checkbox" name="{{field_name}}" id="{{field_name}}" @if(${{camel_model}}->{{field_name}}) checked @endif value="1"> {{ ucfirst('{{field_name}}') }}
-										</label>
-									</div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="hidden" name="{{field_name}}" id="{{field_name}}" value="0" checked>
+                                            <input type="checkbox" name="{{field_name}}" id="{{field_name}}" @if(${{camel_model}}->{{field_name}}) checked @endif value="1"> {{ ucfirst('{{field_name}}') }}
+                                        </label>
+                                    </div>
 
-									<span class="help-block">{{{ Alert::onForm('{{field_name}}') }}}</span>
+                                    <span class="help-block">{{{ Alert::onForm('{{field_name}}') }}}</span>
 
-								</div>
+                                </div>

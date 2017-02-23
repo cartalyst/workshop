@@ -1,13 +1,14 @@
-<?php namespace {{studly_vendor}}\{{studly_name}}\Handlers\{{model}};
+<?php
 
-class {{model}}DataHandler implements {{model}}DataHandlerInterface {
+namespace {{studly_vendor}}\{{studly_name}}\Handlers\{{model}};
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function prepare(array $data)
-	{
-		return $data;
-	}
-
+class {{model}}DataHandler implements {{model}}DataHandlerInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function prepare(array $data)
+    {
+        return $data;
+    }
 }

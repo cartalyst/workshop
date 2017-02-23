@@ -1,6 +1,5 @@
-Route::get('grid', function()
-{
-	return DataGrid::make(new {{model}}, [
-		{{columns}}
-	]);
+Route::get('grid', function() {
+    return DataGrid::make(new {{model}}, [
+        {{columns}}
+    ]);
 });

@@ -1,29 +1,29 @@
 <section class="panel panel-default panel-help">
 
-	<header class="panel-heading collapsed"  data-toggle="collapse" data-target="#help-body" aria-expanded="false" aria-controls="help-body">
+    <header class="panel-heading collapsed"  data-toggle="collapse" data-target="#help-body" aria-expanded="false" aria-controls="help-body">
 
-		<h4>
+        <h4>
 
-			<i class="fa fa-life-ring" data-toggle="popover" data-content="{{{ trans('common.help.setting') }}}"></i> {{{ trans('common.help.title') }}}
+            <i class="fa fa-life-ring" data-toggle="popover" data-content="{{{ trans('common.help.setting') }}}"></i> {{{ trans('common.help.title') }}}
 
-			<span class="panel-close small pull-right" data-toggle="tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
+            <span class="panel-close small pull-right" data-toggle="tip" data-original-title="{{{ trans('action.collapse') }}}"></span>
 
-		</h4>
+        </h4>
 
-	</header>
+    </header>
 
-	<div class="panel-body collapse" id="help-body">
+    <div class="panel-body collapse" id="help-body">
 
-		<div class="row">
+        <div class="row">
 
-			<div class="col-md-10 col-md-offset-1 help">
+            <div class="col-md-10 col-md-offset-1 help">
 
-				@content('{{lower_vendor}}-{{lower_name}}-{{plural_lower_model}}-help', '{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/content/help.md')
+                @content('{{lower_vendor}}-{{lower_name}}-{{plural_lower_model}}-help', '{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/content/help.md')
 
-			</div>
+            </div>
 
-		</div>
+        </div>
 
-	</div>
+    </div>
 
 </section>

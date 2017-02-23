@@ -15,12 +15,6 @@
             "homepage": "https://cartalyst.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.cartalyst.com"
-        }
-    ],
     "require": {
         "php": ">=5.6.4",
         "illuminate/support": "^5.0"

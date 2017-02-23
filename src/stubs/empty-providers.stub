@@ -1,5 +1,5 @@
 'providers' => [
 
-		{{content}}
+        {{content}}
 
-	],
+    ],

@@ -4,24 +4,23 @@ use DB;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
-class {{class_name}} extends Seeder {
+class {{class_name}} extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $faker = Faker::create();
 
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
-		$faker = Faker::create();
+        DB::table('{{table}}')->truncate();
 
-		DB::table('{{table}}')->truncate();
-
-		foreach(range(1, {{records}}) as $index)
-		{
-			DB::table('{{table}}')->insert([
-				{{columns}}
-			]);
-		}
-	}
+        foreach(range(1, {{records}}) as $index) {
+            DB::table('{{table}}')->insert([
+                {{columns}}
+            ]);
+        }
+    }
 }

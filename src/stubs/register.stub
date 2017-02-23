@@ -1,11 +1,11 @@
 // Register the repository
-		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}', '{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}Repository');
+        $this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}', '{{studly_vendor}}\{{studly_name}}\Repositories\{{model}}\{{model}}Repository');
 
-		// Register the data handler
-		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.data', '{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}\{{model}}DataHandler');
+        // Register the data handler
+        $this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.data', '{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}\{{model}}DataHandler');
 
-		// Register the event handler
-		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event', '{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}\{{model}}EventHandler');
+        // Register the event handler
+        $this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event', '{{studly_vendor}}\{{studly_name}}\Handlers\{{model}}\{{model}}EventHandler');
 
-		// Register the validator
-		$this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.validator', '{{studly_vendor}}\{{studly_name}}\Validator\{{model}}\{{model}}Validator');
+        // Register the validator
+        $this->bindIf('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.validator', '{{studly_vendor}}\{{studly_name}}\Validator\{{model}}\{{model}}Validator');

@@ -1,7 +1,7 @@
 // Register the attributes namespace
-		$this->app['platform.attributes.manager']->registerNamespace(
-			$this->app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']
-		);
+        $this->app['platform.attributes.manager']->registerNamespace(
+            $this->app['{{studly_vendor}}\{{studly_name}}\Models\{{model}}']
+        );
 
-		// Subscribe the registered event handler
-		$this->app['events']->subscribe('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event');
+        // Subscribe the registered event handler
+        $this->app['events']->subscribe('{{lower_vendor}}.{{lower_name}}.{{lower_model}}.handler.event');

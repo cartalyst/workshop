@@ -1,4 +1,3 @@
-'permissions' => function(Permissions $permissions)
-	{
-		{{content}}
-	},
+'permissions' => function(Permissions $permissions) {
+        {{content}}
+    },
