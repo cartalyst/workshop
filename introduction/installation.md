@@ -6,7 +6,7 @@ The best and easiest way to install the workshop package is with [Composer](http
 
 Open your `composer.json` file and add the following to the `require` array:
 
-    "cartalyst/workshop": "2.0.*"
+    "cartalyst/workshop": "3.0.*"
 
 > **Note:** Make sure that after the required changes your `composer.json` file is valid by running `composer validate`.
 
