@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.1 - 2017-02-27
+
+`FIXED`
+
+- A bug refreshing the grid upon item deletion.
+
 ### v3.0.0 - 2017-02-24
 
 Updated for Platfrom 6 & Platform 7.
