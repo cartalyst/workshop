@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.2 - 2017-03-11
+
+`FIXED`
+
+- A bug initializing the date picker.
+
 ### v3.0.1 - 2017-02-27
 
 `FIXED`
