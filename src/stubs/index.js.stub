@@ -137,17 +137,17 @@ var Extension;
         switch ($(this).data('grid-calendar-preset'))
         {
             case 'day':
-                start = end = moment().subtract(1, 'day').startOf('day').format('MM/DD/YYYY');
+                start = end = moment().subtract(1, 'day').startOf('day').format('YYYY-MM-DD');
             break;
 
             case 'week':
-                start = moment().startOf('week').format('MM/DD/YYYY');
-                end   = moment().endOf('week').format('MM/DD/YYYY');
+                start = moment().startOf('week').format('YYYY-MM-DD');
+                end   = moment().endOf('week').format('YYYY-MM-DD');
             break;
 
             case 'month':
-                start = moment().startOf('month').format('MM/DD/YYYY');
-                end   = moment().endOf('month').format('MM/DD/YYYY');
+                start = moment().startOf('month').format('YYYY-MM-DD');
+                end   = moment().endOf('month').format('YYYY-MM-DD');
             break;
 
             default:
