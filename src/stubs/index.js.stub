@@ -210,9 +210,9 @@ var Extension;
             $('input[name="daterangepicker_start"]').trigger('change');
         });
 
-        $('.daterangepicker_start_input').attr('data-grid', 'main');
+        $('.daterangepicker_start_input').attr('data-grid', '{{grid_name}}');
 
-        $('.daterangepicker_end_input').attr('data-grid', 'main');
+        $('.daterangepicker_end_input').attr('data-grid', '{{grid_name}}');
 
         $('input[name="daterangepicker_start"]')
             .attr('data-grid-type', 'range')
