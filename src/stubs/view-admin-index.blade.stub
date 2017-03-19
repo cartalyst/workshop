@@ -30,7 +30,7 @@
 @section('page')
 
 {{-- Grid --}}
-<section class="panel panel-default panel-grid">
+<section class="panel panel-default panel-grid" data-grid="{{grid_name}}">
 
     {{-- Grid: Header --}}
     <header class="panel-heading">
@@ -73,7 +73,7 @@
                             </a>
                         </li>
 
-                        <li class="dropdown disabled" data-grid="{{grid_name}}">
+                        <li class="dropdown disabled">
                             <a href="#" data-grid-exporter class="dropdown-toggle tip" data-toggle="dropdown" role="button" aria-expanded="false" data-original-title="{{{ trans('action.export') }}}">
                                 <i class="fa fa-download"></i> <span class="visible-xs-inline">{{{ trans('action.export') }}}</span>
                             </a>
@@ -93,7 +93,7 @@
                     </ul>
 
                     {{-- Grid: Filters --}}
-                    <form class="navbar-form navbar-right" method="post" accept-charset="utf-8" data-grid-search data-grid="{{grid_name}}" role="form">
+                    <form class="navbar-form navbar-right" method="post" accept-charset="utf-8" data-grid-search role="form">
 
                         <div class="input-group">
 
@@ -111,13 +111,13 @@
                                 <ul class="dropdown-menu" role="menu">
 
                                     <li>
-                                        <a data-grid="{{grid_name}}" data-grid-filter="enabled" data-grid-query="enabled:1" data-grid-label="enabled::{{{ trans('common.all_enabled') }}}" data-grid-reset>
+                                        <a data-grid-filter="enabled" data-grid-query="enabled:1" data-grid-label="enabled::{{{ trans('common.all_enabled') }}}" data-grid-reset>
                                             <i class="fa fa-eye"></i> {{{ trans('common.show_enabled') }}}
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a data-grid="{{grid_name}}" data-grid-filter="disabled" data-grid-query="enabled:0" data-grid-label="enabled::{{{ trans('common.all_disabled') }}}" data-grid-reset>
+                                        <a data-grid-filter="disabled" data-grid-query="enabled:0" data-grid-label="enabled::{{{ trans('common.all_disabled') }}}" data-grid-reset>
                                             <i class="fa fa-eye-slash"></i> {{{ trans('common.show_disabled') }}}
                                         </a>
                                     </li>
@@ -158,7 +158,7 @@
                                     <span class="fa fa-search"></span>
                                 </button>
 
-                                <button class="btn btn-default" data-grid="{{grid_name}}" data-grid-reset>
+                                <button class="btn btn-default" data-grid-reset>
                                     <i class="fa fa-refresh fa-sm"></i>
                                 </button>
 
@@ -181,7 +181,7 @@
         {{-- Grid: Applied Filters --}}
         <div class="btn-toolbar" role="toolbar" aria-label="data-grid-applied-filters">
 
-            <div id="data-grid_applied" class="btn-group" data-grid="{{grid_name}}" data-grid-layout="filters"></div>
+            <div id="data-grid_applied" class="btn-group"></div>
 
         </div>
 
@@ -190,7 +190,7 @@
     {{-- Grid: Table --}}
     <div class="table-responsive">
 
-        <table id="data-grid" class="table table-hover" data-grid-source="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid') }}" data-grid="{{grid_name}}">
+        <table id="data-grid" class="table table-hover" data-grid-source="{{ route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid') }}">
             <thead>
                 <tr>
                     {{headers}}
@@ -204,7 +204,7 @@
     <footer class="panel-footer clearfix">
 
         {{-- Grid: Pagination --}}
-        <div id="data-grid_pagination" data-grid-layout="pagination" data-grid="{{grid_name}}"></div>
+        <div id="data-grid_pagination" data-grid-layout="pagination"></div>
 
     </footer>
 
