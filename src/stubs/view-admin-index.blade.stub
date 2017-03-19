@@ -181,7 +181,7 @@
         {{-- Grid: Applied Filters --}}
         <div class="btn-toolbar" role="toolbar" aria-label="data-grid-applied-filters">
 
-            <div id="data-grid_applied" class="btn-group" data-grid="{{grid_name}}"></div>
+            <div id="data-grid_applied" class="btn-group" data-grid="{{grid_name}}" data-grid-layout="filters"></div>
 
         </div>
 
