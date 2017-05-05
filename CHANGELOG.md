@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.4 - 2017-05-05
+
+`FIXED`
+
+- Permissions generation.
+
 ### v3.0.3 - 2017-03-19
 
 `FIXED`
