@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.5 - 2017-08-10
+
+`REVISED`
+
+- Updated routes to match the latest style.
+
 ### v3.0.4 - 2017-05-05
 
 `FIXED`

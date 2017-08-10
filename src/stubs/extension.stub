@@ -142,7 +142,7 @@ return [
     |
     */
 
-    'routes' => function(Router $router, ExtensionInterface $extension, Application $app) {
+    'routes' => function (Router $router, ExtensionInterface $extension, Application $app) {
 
     },
 
