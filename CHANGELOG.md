@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.6 - 2017-10-26
+
+`FIXED`
+
+- Data grid sort syntax on the admin controller stub.
+
 ### v3.0.5 - 2017-08-10
 
 `REVISED`
