@@ -67,8 +67,10 @@ class {{plural_name}}Controller extends AdminController
             'columns' => [
                 {{columns}}
             ],
-            'sort'        => 'created_at',
-            'direction'   => 'desc',
+            'sorts' => [
+                'column'    => 'created_at',
+                'direction' => 'desc',
+            ],
             'transformer' => function($element) {
                 $element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
 
