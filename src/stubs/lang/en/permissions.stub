@@ -2,9 +2,10 @@
 
 return [
 
-	'index'  => 'List {{plural_name}}',
-	'create' => 'Create new {{model}}',
-	'edit'   => 'Edit {{model}}',
-	'delete' => 'Delete {{model}}',
+    'index'        => 'List {{plural_name}}',
+    'create'       => 'Create new {{model}}',
+    'edit'         => 'Edit {{model}}',
+    'delete'       => 'Delete {{model}}',
+    'bulk_actions' => 'Bulk Actions',
 
 ];

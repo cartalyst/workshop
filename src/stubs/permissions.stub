@@ -24,4 +24,10 @@
 
                 $p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'delete');
             });
+
+            $g->permission('{{lower_model}}.bulk_actions', function($p) {
+                $p->label = trans('{{lower_vendor}}/{{lower_name}}::{{plural_lower_model}}/permissions.bulk_actions');
+
+                $p->controller('{{studly_vendor}}\{{studly_name}}\Controllers\Admin\{{plural_name}}Controller', 'executeAction');
+            });
         });
