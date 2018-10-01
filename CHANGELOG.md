@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.8 - 2018-10-01
+
+`FIXED`
+
+- Added missing `data-grid-layout="filters"` attribute for applied filters to the admin index template.
+
 ### v3.0.7 - 2017-12-19
 
 `FIXED`
