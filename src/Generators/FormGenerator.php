@@ -14,7 +14,7 @@
  * @version    3.0.8
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
+ * @copyright  (c) 2011-2018, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
