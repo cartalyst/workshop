@@ -1,3 +1,5 @@
 'routes' => function(Router $router, ExtensionInterface $extension, Application $app) {
-        {{routes}}
+        if (! $app->routesAreCached()) {
+            {{routes}}
+        }
     },

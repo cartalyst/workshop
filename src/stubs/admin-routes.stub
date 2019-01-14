@@ -1,16 +1,16 @@
 $router->group(['namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers\Admin'], function (Router $router){
-            $router->group(['prefix' => admin_uri().'/{{lower_name}}/{{plural_lower_model}}'], function (Router $router){
-                $router->get('/', '{{plural_name}}Controller@index')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
-                $router->post('/', '{{plural_name}}Controller@executeAction')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
+                $router->group(['prefix' => admin_uri().'/{{lower_name}}/{{plural_lower_model}}'], function (Router $router){
+                    $router->get('/', '{{plural_name}}Controller@index')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
+                    $router->post('/', '{{plural_name}}Controller@executeAction')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.all');
 
-                $router->get('grid', '{{plural_name}}Controller@grid')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid');
+                    $router->get('grid', '{{plural_name}}Controller@grid')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.grid');
 
-                $router->get('create' , '{{plural_name}}Controller@create')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create');
-                $router->post('create', '{{plural_name}}Controller@store')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create');
+                    $router->get('create' , '{{plural_name}}Controller@create')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create');
+                    $router->post('create', '{{plural_name}}Controller@store')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.create');
 
-                $router->get('{id}', '{{plural_name}}Controller@edit')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit');
-                $router->post('{id}', '{{plural_name}}Controller@update')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit');
+                    $router->get('{id}', '{{plural_name}}Controller@edit')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit');
+                    $router->post('{id}', '{{plural_name}}Controller@update')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit');
 
-                $router->delete('{id}', '{{plural_name}}Controller@delete')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.delete');
+                    $router->delete('{id}', '{{plural_name}}Controller@delete')->name('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.delete');
+                });
             });
-        });

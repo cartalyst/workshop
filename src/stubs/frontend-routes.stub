@@ -1,6 +1,5 @@
-        $router->group(['namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers\Frontend'], function (Router $router){
-            $router->group(['prefix' => '{{lower_name}}/{{plural_lower_model}}'], function (Router $router){
-                $router->get('/', '{{plural_name}}Controller@index')->name('{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.index');
+            $router->group(['namespace' => '{{studly_vendor}}\{{studly_name}}\Controllers\Frontend'], function (Router $router){
+                $router->group(['prefix' => '{{lower_name}}/{{plural_lower_model}}'], function (Router $router){
+                    $router->get('/', '{{plural_name}}Controller@index')->name('{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.index');
+                });
             });
-        });
-        
