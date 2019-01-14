@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.9 - 2019-01-14
+
+`FIXED`
+
+- Added route caching to route stubs.
+
 ### v3.0.8 - 2018-10-01
 
 `FIXED`
