@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.10 - 2019-04-23
+
+`REVISED`
+
+- Create relative edit URIs for data grid results.
+
 ### v3.0.9 - 2019-01-14
 
 `FIXED`
