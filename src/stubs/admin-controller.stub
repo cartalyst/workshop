@@ -72,7 +72,7 @@ class {{plural_name}}Controller extends AdminController
                 'direction' => 'desc',
             ],
             'transformer' => function($element) {
-                $element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id);
+                $element->edit_uri = route('admin.{{lower_vendor}}.{{lower_name}}.{{plural_lower_model}}.edit', $element->id, false);
 
                 return $element;
             },
