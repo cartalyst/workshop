@@ -20,6 +20,7 @@
         "illuminate/support": "^5.0"
     },
     "require-dev": {
+        "cartalyst/php-cs-fixer-config": "^1.0",
         "illuminate/filesystem": "^5.0",
         "laravelcollective/html": "^5.0",
         "mockery/mockery": "^0.9",
