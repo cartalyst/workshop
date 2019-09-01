@@ -31,13 +31,21 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "Cartalyst\\Workshop\\Tests\\": "tests/" }
+        "psr-4": {
+            "Cartalyst\\Workshop\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "extra": {
-        "component":"package",
+        "component": "package",
         "branch-alias": {
             "dev-master": "3.0.x-dev"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
