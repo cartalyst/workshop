@@ -12,10 +12,10 @@
         { "type": "composer", "url": "https://packages.cartalyst.com" }
     ],
     "require": {
-        "php": ">=5.6.4",
-        "cartalyst/composer-installers": "~2.0",
-        "illuminate/support": "~5.0",
-        "platform/foundation": "~5.0|~6.0"
+        "php": "^7.2",
+        "cartalyst/composer-installers": "^2.0",
+        "cartalyst/support": "^3.0",
+        "platform/foundation": "^8.0"
     },
     "autoload": {
         "classmap": [
