@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -77,13 +77,14 @@ class MigrationsGenerator extends AbstractGenerator
     /**
      * Creates a new migration.
      *
-     * @param  string  $table
-     * @param  array  $columns
-     * @param  bool  $increments
-     * @param  bool  $timestamps
-     * @return this
+     * @param string $table
+     * @param array  $columns
+     * @param bool   $increments
+     * @param bool   $timestamps
+     *
+     * @return $this
      */
-    public function create($table, $columns = [], $increments = true, $timestamps = true)
+    public function create(string $table, array $columns = [], bool $increments = true, bool $timestamps = true): self
     {
         $table = $this->sanitize($table, '/[^a-zA-Z0-9_-]/');
 
@@ -118,7 +119,7 @@ class MigrationsGenerator extends AbstractGenerator
 
         $fileName = $migrationName.'.php';
 
-        $dir = $this->path.'/resources/database/migrations/';
+        $dir = $this->getFullPath('resources/database/migrations/');
 
         $this->ensureExtension($dir);
 
@@ -132,14 +133,14 @@ class MigrationsGenerator extends AbstractGenerator
     }
 
     /**
-     * Creates the seeder and updates the
-     * seeders array on extension.php.
+     * Creates the seeder and updates the seeders array on extension.php.
      *
-     * @param  int  $records
-     * @param  string  $table
-     * @return this
+     * @param int         $records
+     * @param string|null $table
+     *
+     * @return $this
      */
-    public function seeder($records = 1, $table = null)
+    public function seeder(int $records = 1, ?string $table = null): self
     {
         $table = $this->sanitize($table, '/[^a-zA-Z0-9_-]/');
 
@@ -164,7 +165,7 @@ class MigrationsGenerator extends AbstractGenerator
             'columns'    => $columns,
         ]);
 
-        $dir = $this->path.'/resources/database/seeds/';
+        $dir = $this->getFullPath('resources/database/seeds/');
 
         $this->ensureExtension($dir);
 
@@ -215,7 +216,7 @@ class MigrationsGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getMigrationPath()
+    public function getMigrationPath(): string
     {
         return $this->migrationPath;
     }
@@ -225,7 +226,7 @@ class MigrationsGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getMigrationClass()
+    public function getMigrationClass(): string
     {
         return $this->migrationClass;
     }
@@ -235,7 +236,7 @@ class MigrationsGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getSeederClass()
+    public function getSeederClass(): string
     {
         return $this->seederClass;
     }
@@ -243,13 +244,14 @@ class MigrationsGenerator extends AbstractGenerator
     /**
      * Prepares the seeder columns.
      *
-     * @param  array  $columns
+     * @param array $columns
+     *
      * @return string
      */
-    protected function prepareSeederColumns($columns)
+    protected function prepareSeederColumns(array $columns): string
     {
         if (! $columns) {
-            return;
+            return '';
         }
 
         $cols = [];
@@ -261,43 +263,44 @@ class MigrationsGenerator extends AbstractGenerator
                 case 'tinyInteger':
                 case 'boolean':
 
-                    $cols[] = "'$name' => ".'rand(0, 1)'.',';
-                    break;
+                    $cols[] = "'${name}' => ".'rand(0, 1)'.',';
 
+                    break;
                 case 'text':
                 case 'mediumText':
                 case 'longText':
 
-                    $cols[] = "'$name' => ".'$faker->text()'.',';
-                    break;
+                    $cols[] = "'${name}' => ".'$faker->text()'.',';
 
+                    break;
                 case 'float':
                 case 'double':
                 case 'decimal':
 
-                    $cols[] = "'$name' => ".'$faker->randomFloat()'.',';
-                    break;
+                    $cols[] = "'${name}' => ".'$faker->randomFloat()'.',';
 
+                    break;
                 case 'integer':
                 case 'smallInteger':
                 case 'mediumInteger':
                 case 'bigInteger':
 
-                    $cols[] = "'$name' => ".'$faker->randomDigit()'.',';
-                    break;
+                    $cols[] = "'${name}' => ".'$faker->randomDigit()'.',';
 
+                    break;
                 case 'dateTime':
 
-                    $cols[] = "'$name' => ".'$faker->dateTime()'.',';
-                    break;
+                    $cols[] = "'${name}' => ".'$faker->dateTime()'.',';
 
+                    break;
                 case 'time':
 
-                    $cols[] = "'$name' => ".'$faker->time()'.',';
-                    break;
+                    $cols[] = "'${name}' => ".'$faker->time()'.',';
 
+                    break;
                 default:
-                    $cols[] = "'$name' => ".'$faker->sentence()'.',';
+                    $cols[] = "'${name}' => ".'$faker->sentence()'.',';
+
                     break;
             }
         }
@@ -313,15 +316,16 @@ class MigrationsGenerator extends AbstractGenerator
     /**
      * Prepares the migration columns.
      *
-     * @param  array  $columns
-     * @param  bool  $increments
-     * @param  bool  $timestamps
+     * @param array $columns
+     * @param bool  $increments
+     * @param bool  $timestamps
+     *
      * @return string
      */
-    protected function prepareColumns($columns, $increments, $timestamps)
+    protected function prepareColumns(array $columns, bool $increments, bool $timestamps): string
     {
         if (! $columns) {
-            return;
+            return '';
         }
 
         $cols     = [];
@@ -342,7 +346,7 @@ class MigrationsGenerator extends AbstractGenerator
                     if (strpos($part, ':') !== false) {
                         $default = last(explode(':', $part));
 
-                        $default = "->default('$default')";
+                        $default = "->default('${default}')";
                     }
                 }
             } else {
@@ -369,7 +373,7 @@ class MigrationsGenerator extends AbstractGenerator
 
             $type = head(explode('|', $type));
 
-            $cols[] = '$table->'.$type."('$name'){$nullable}{$default}{$unsigned}{$unique};";
+            $cols[] = '$table->'.$type."('${name}'){$nullable}{$default}{$unsigned}{$unique};";
         }
 
         if ($timestamps) {
@@ -382,11 +386,13 @@ class MigrationsGenerator extends AbstractGenerator
     /**
      * Ensures the extension exists.
      *
-     * @param  string  $dir
-     * @return void
+     * @param string $dir
+     *
      * @throws \LogicException
+     *
+     * @return void
      */
-    protected function ensureExtension($dir)
+    protected function ensureExtension(string $dir): void
     {
         if (! $this->files->isDirectory($dir)) {
             throw new LogicException('Extension does not exist.');
@@ -396,11 +402,13 @@ class MigrationsGenerator extends AbstractGenerator
     /**
      * Ensures a class does not exist.
      *
-     * @param  string  $class
-     * @return void
+     * @param string $class
+     *
      * @throws \LogicException
+     *
+     * @return void
      */
-    protected function ensureClassDoesNotExist($class)
+    protected function ensureClassDoesNotExist(string $class): void
     {
         if (class_exists($class)) {
             throw new LogicException('This class already exists.');

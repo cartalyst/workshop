@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -23,6 +23,7 @@ namespace Cartalyst\Workshop\Generators;
 use LogicException;
 use Illuminate\Support\Str;
 use Cartalyst\Workshop\Extension;
+use Illuminate\Filesystem\Filesystem;
 
 abstract class AbstractGenerator
 {
@@ -41,34 +42,28 @@ abstract class AbstractGenerator
     protected $files;
 
     /**
-     * Extension path.
+     * The base path where the the generated Extension will be stored.
      *
      * @var string
      */
-    protected $path;
+    protected $basePath;
 
     /**
-     * Stubs directory.
+     * The stubs directory.
      *
      * @var string
      */
     protected static $stubsDir;
 
     /**
-     * Default stubs directory.
-     *
-     * @var string
-     */
-    protected $defaultStubsDir;
-
-    /**
      * Constructor.
      *
-     * @param  \Cartalyst\Workshop\Extension|string  $extension
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Cartalyst\Workshop\Extension|string $extension
+     * @param \Illuminate\Filesystem\Filesystem    $files
+     *
      * @return void
      */
-    public function __construct($extension, $files)
+    public function __construct($extension, Filesystem $files)
     {
         if (is_string($extension)) {
             $this->extension = new Extension($extension);
@@ -78,18 +73,17 @@ abstract class AbstractGenerator
 
         $this->files = $files;
 
-        $this->path = __DIR__.str_repeat('/..', 5).'/extensions/'.$this->extension->getFullName();
-
-        $this->defaultStubsDir = __DIR__.'/..'.str_replace($this->path, '/stubs/', $this->path);
+        $this->basePath = __DIR__.str_repeat('/..', 5);
     }
 
     /**
      * Sets the stubs directory.
      *
-     * @param  string  $dir
+     * @param string $dir
+     *
      * @return void
      */
-    public static function setStubsDir($dir)
+    public static function setStubsDir(string $dir): void
     {
         static::$stubsDir = $dir;
     }
@@ -99,7 +93,7 @@ abstract class AbstractGenerator
      *
      * @return string
      */
-    public static function getStubsDir()
+    public static function getStubsDir(): string
     {
         return static::$stubsDir;
     }
@@ -107,10 +101,11 @@ abstract class AbstractGenerator
     /**
      * Returns the stub file path.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return string
      */
-    public function getStub($path)
+    public function getStub(string $path): string
     {
         $overriddenPath = static::$stubsDir.DIRECTORY_SEPARATOR.$path;
 
@@ -118,13 +113,28 @@ abstract class AbstractGenerator
             return $overriddenPath;
         }
 
-        return $this->defaultStubsDir.$path;
+        return __DIR__.'/../stubs/'.$path;
+    }
+
+    public function getFullPath(string $file): string
+    {
+        return $this->basePath.'/extensions/'.$this->extension->getFullName().'/'.($file ?? '');
+    }
+
+    public function setBasePath(string $basePath): void
+    {
+        $this->basePath = $basePath;
     }
 
     /**
-     * {@inheritDoc}
+     * Prepares the file contents.
+     *
+     * @param string $path
+     * @param array  $args
+     *
+     * @return string
      */
-    public function prepare($path, $args = [])
+    public function prepare(string $path, array $args = []): string
     {
         $content = $this->files->get($path);
 
@@ -142,10 +152,11 @@ abstract class AbstractGenerator
     /**
      * Ensure the directory exists or create it.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return void
      */
-    protected function ensureDirectory($path)
+    protected function ensureDirectory(string $path): void
     {
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 
@@ -157,17 +168,18 @@ abstract class AbstractGenerator
     /**
      * Wraps an array for text output.
      *
-     * @param  array  $array
-     * @param  string  $indentation
+     * @param array       $array
+     * @param string|null $indentation
+     *
      * @return string
      */
-    protected function wrapArray($array, $indentation = null)
+    protected function wrapArray(array $array, string $indentation = null): string
     {
-        $self = $this;
+        $text = '';
 
         $indentation = $indentation."\t";
 
-        array_walk($array, function ($value, $key) use ($indentation, &$text, $self) {
+        array_walk($array, function ($value, $key) use ($indentation, &$text) {
             if (is_array($value)) {
                 if (! is_numeric($key)) {
                     $text .= $indentation."'".$key."' => [\n\t";
@@ -175,7 +187,7 @@ abstract class AbstractGenerator
                     $text .= $indentation."[\n\t";
                 }
 
-                $text .= $indentation.$self->wrapArray($value, $indentation)."\n";
+                $text .= $indentation.$this->wrapArray($value, $indentation)."\n";
 
                 $text .= $indentation."],\n";
             }
@@ -191,12 +203,13 @@ abstract class AbstractGenerator
     /**
      * Returns the extension.php file path.
      *
-     * @return string
      * @throws \LogicException
+     *
+     * @return string
      */
-    protected function getExtensionPhpPath()
+    protected function getExtensionPhpPath(): string
     {
-        $path = $this->path.'/extension.php';
+        $path = $this->getFullPath('extension.php');
 
         if (! $this->files->exists($path)) {
             throw new LogicException('extension.php could not be found.');
@@ -208,16 +221,19 @@ abstract class AbstractGenerator
     /**
      * Sanitizes a string.
      *
-     * @param  string|array  $element
-     * @return string
+     * @param array|string $element
+     * @param string       $pattern
+     *
+     * @return array|string
      */
-    public static function sanitize($element, $pattern = '/[^a-zA-Z0-9]/')
+    public static function sanitize($element, string $pattern = '/[^a-zA-Z0-9]/')
     {
         if (is_array($element)) {
             $newArray = [];
 
             foreach ($element as $key => $string) {
-                $key    = static::sanitize($key, $pattern);
+                $key = static::sanitize($key, $pattern);
+
                 $string = static::sanitize($string, $pattern);
 
                 $newArray[$key] = $string;

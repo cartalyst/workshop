@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -27,13 +27,16 @@ class RepositoryGenerator extends AbstractGenerator
     /**
      * Create a new repository.
      *
-     * @param  string  $model
+     * @param string $model
+     *
      * @return void
      */
-    public function create($model)
+    public function create(string $model): void
     {
         $model = $this->sanitize($model);
         $model = ucfirst(Str::studly($model));
+
+        $lowerModel = Str::lower($model);
 
         $repositoryInterface = Str::studly($model.'RepositoryInterface');
 
@@ -43,12 +46,12 @@ class RepositoryGenerator extends AbstractGenerator
 
         $content = $this->prepare($stub, [
             'model'                => $model,
-            'lower_model'          => Str::lower($model),
+            'lower_model'          => $lowerModel,
             'class_name'           => $repositoryName,
             'repository_interface' => $repositoryInterface,
         ]);
 
-        $filePath = $this->path."/src/Repositories/{$model}/";
+        $filePath = $this->getFullPath("src/Repositories/{$model}/");
 
         $this->ensureDirectory($filePath);
 
@@ -58,7 +61,7 @@ class RepositoryGenerator extends AbstractGenerator
 
         $content = $this->prepare($stub, [
             'model'                => $model,
-            'lower_model'          => Str::lower($model),
+            'lower_model'          => $lowerModel,
             'class_name'           => $repositoryName,
             'repository_interface' => $repositoryInterface,
         ]);
@@ -70,10 +73,10 @@ class RepositoryGenerator extends AbstractGenerator
 
         $content = $this->prepare($stub, [
             'model'       => $model,
-            'lower_model' => Str::lower($model),
+            'lower_model' => $lowerModel,
         ]);
 
-        $handlerPath = $this->path."/src/Handlers/{$model}/";
+        $handlerPath = $this->getFullPath("src/Handlers/{$model}/");
 
         $this->ensureDirectory($handlerPath);
 
@@ -84,7 +87,7 @@ class RepositoryGenerator extends AbstractGenerator
 
         $content = $this->prepare($stub, [
             'model'       => $model,
-            'lower_model' => Str::lower($model),
+            'lower_model' => $lowerModel,
         ]);
 
         $this->files->put($handlerPath.$model.'EventHandler.php', $content);
@@ -96,7 +99,7 @@ class RepositoryGenerator extends AbstractGenerator
             'model' => $model,
         ]);
 
-        $handlerPath = $this->path."/src/Handlers/{$model}/";
+        $handlerPath = $this->getFullPath("src/Handlers/{$model}/");
 
         $this->ensureDirectory($handlerPath);
 
@@ -116,10 +119,10 @@ class RepositoryGenerator extends AbstractGenerator
 
         $content = $this->prepare($stub, [
             'model'       => $model,
-            'lower_model' => Str::lower($model),
+            'lower_model' => $lowerModel,
         ]);
 
-        $validatorPath = $this->path."/src/Validator/{$model}/";
+        $validatorPath = $this->getFullPath("src/Validator/{$model}/");
 
         $this->ensureDirectory($validatorPath);
 

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -20,6 +20,7 @@
 
 namespace Cartalyst\Workshop\Generators;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ExtensionGenerator extends AbstractGenerator
@@ -27,12 +28,12 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Create a new extension.
      *
-     * @return string
+     * @return void
      */
-    public function create()
+    public function create(): void
     {
         // Create extension dir
-        $this->ensureDirectory($this->path);
+        $this->ensureDirectory($this->getFullPath());
 
         // Create database dirs
         $this->databaseDirs();
@@ -47,10 +48,11 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Creates a new model.
      *
-     * @param  string  $name
+     * @param string|null $name
+     *
      * @return void
      */
-    public function createModel($name = null)
+    public function createModel(?string $name = null): void
     {
         $name = $this->sanitize($name);
 
@@ -62,7 +64,7 @@ class ExtensionGenerator extends AbstractGenerator
             'lower_model' => Str::lower($name),
         ]);
 
-        $path = $this->path.'/src/Models/';
+        $path = $this->getFullPath('src/Models/');
 
         $this->ensureDirectory($path);
 
@@ -74,10 +76,11 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Creates a new widget.
      *
-     * @param  string  $name
+     * @param string|null $name
+     *
      * @return void
      */
-    public function createWidget($name = null)
+    public function createWidget(?string $name = null): void
     {
         $name = $this->sanitize($name);
 
@@ -87,7 +90,7 @@ class ExtensionGenerator extends AbstractGenerator
             'class_name' => $name,
         ]);
 
-        $path = $this->path.'/src/Widgets/';
+        $path = $this->getFullPath('src/Widgets/');
 
         $this->ensureDirectory($path);
 
@@ -99,12 +102,13 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Creates a new controller.
      *
-     * @param  string  $name
-     * @param  string  $area
-     * @param  array  $args
+     * @param string|null $name
+     * @param string      $area
+     * @param array       $args
+     *
      * @return void
      */
-    public function createController($name = null, $area = 'Admin', $args = [])
+    public function createController(?string $name = null, string $area = 'Admin', array $args = []): void
     {
         $name = $this->sanitize($name);
 
@@ -143,7 +147,7 @@ class ExtensionGenerator extends AbstractGenerator
 
         $content = $this->prepare($this->getStub($stub), $args);
 
-        $path = $this->path.'/src/Controllers/'.$area.'/';
+        $path = $this->getFullPath('src/Controllers/'.$area.'/');
 
         $this->ensureDirectory($path);
 
@@ -157,7 +161,7 @@ class ExtensionGenerator extends AbstractGenerator
      *
      * @return void
      */
-    public function writeComposerFile()
+    public function writeComposerFile(): void
     {
         $content = $this->prepare($this->getStub('composer.json'));
 
@@ -170,7 +174,9 @@ class ExtensionGenerator extends AbstractGenerator
             return '"'.$autoload.'"';
         }, $autoloads)), $content);
 
-        $this->files->put($this->path.'/composer.json', $content);
+        $this->files->put(
+            $this->getFullPath('composer.json'), $content
+        );
     }
 
     /**
@@ -178,33 +184,40 @@ class ExtensionGenerator extends AbstractGenerator
      *
      * @return void
      */
-    public function writeExtensionFile()
+    public function writeExtensionFile(): void
     {
         $content = $this->prepare($this->getStub('extension.stub'));
 
-        $this->files->put($this->path.'/extension.php', $content);
+        $this->files->put(
+            $this->getFullPath('extension.php'), $content
+        );
     }
 
     /**
      * Writes the routes section.
      *
-     * @param  string  $resource
-     * @param  bool  $adminRoutes
-     * @param  bool  $frontendRoutes
+     * @param string $resource
+     * @param bool   $adminRoutes
+     * @param bool   $frontendRoutes
+     *
      * @return void
      */
-    public function writeRoutes($resource, $adminRoutes = null, $frontendRoutes = null)
+    public function writeRoutes(string $resource, bool $adminRoutes = false, bool $frontendRoutes = false): void
     {
+        $routes = 'null';
+
         $resource = $this->sanitize($resource);
 
         $content = $this->files->get($this->getExtensionPhpPath());
 
-        $routes = null;
+        $pluralResource       = Str::plural($resource);
+        $lowerPluralResource  = Str::lower($pluralResource);
+        $studlyPluralResource = Str::studly(ucfirst($pluralResource));
 
         if ($adminRoutes) {
             $routes .= $this->prepare($this->getStub('admin-routes.stub'), [
-                'plural_name'        => Str::studly(ucfirst(Str::plural($resource))),
-                'plural_lower_model' => Str::lower(Str::plural($resource)),
+                'plural_name'        => $studlyPluralResource,
+                'plural_lower_model' => $lowerPluralResource,
             ]);
         }
 
@@ -212,8 +225,8 @@ class ExtensionGenerator extends AbstractGenerator
             $routes = $routes ? $routes."\n" : '';
 
             $routes .= $this->prepare($this->getStub('frontend-routes.stub'), [
-                'plural_name'        => Str::studly(ucfirst(Str::plural($resource))),
-                'plural_lower_model' => Str::lower(Str::plural($resource)),
+                'plural_name'        => $studlyPluralResource,
+                'plural_lower_model' => $lowerPluralResource,
             ]);
         }
 
@@ -253,10 +266,11 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Writes the service provider.
      *
-     * @param  string  $resource
+     * @param string $resource
+     *
      * @return void
      */
-    public function writeServiceProvider($resource)
+    public function writeServiceProvider(string $resource): void
     {
         $resource = $this->sanitize($resource);
 
@@ -269,7 +283,7 @@ class ExtensionGenerator extends AbstractGenerator
             'register'    => trim($this->writeMethod('register', $resource)),
         ]);
 
-        $dir = $this->path.'/src/Providers/';
+        $dir = $this->getFullPath('src/Providers/');
 
         $this->ensureDirectory($dir);
 
@@ -309,11 +323,12 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Writes a method from its stub.
      *
-     * @param  string  $name
-     * @param  string  $resource
+     * @param string $name
+     * @param string $resource
+     *
      * @return string
      */
-    protected function writeMethod($name, $resource)
+    protected function writeMethod(string $name, string $resource): string
     {
         return $this->prepare($this->getStub($name.'.stub'), [
             'model'       => Str::studly(ucfirst($resource)),
@@ -324,10 +339,11 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Writes the permissions section.
      *
-     * @param  string  $resource
+     * @param string $resource
+     *
      * @return void
      */
-    public function writePermissions($resource)
+    public function writePermissions(string $resource): void
     {
         $resource = $this->sanitize($resource);
 
@@ -369,10 +385,11 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Writes the menu items.
      *
-     * @param  string  $resource
+     * @param string $resource
+     *
      * @return void
      */
-    public function writeMenus($resource)
+    public function writeMenus(string $resource): void
     {
         $resource = $this->sanitize($resource);
 
@@ -394,13 +411,13 @@ class ExtensionGenerator extends AbstractGenerator
             'slug'  => 'admin-'.$lowerVendor.'-'.$lowerName.'-'.$lowerResource,
         ];
 
-        $menus = array_get($this->files->getRequire($extensionPhpPath), 'menus');
+        $menus = Arr::get($this->files->getRequire($extensionPhpPath), 'menus');
 
         $children = [];
 
-        if ($admin = array_get($menus, 'admin')) {
+        if ($admin = Arr::get($menus, 'admin')) {
             foreach ($admin as $child) {
-                if ($children = array_get($child, 'children')) {
+                if ($children = Arr::get($child, 'children')) {
                     foreach ($children as $_child) {
                         if ($_child === $newMenu) {
                             return;
@@ -434,14 +451,17 @@ class ExtensionGenerator extends AbstractGenerator
     /**
      * Writes the language files.
      *
-     * @param  string  $resource
+     * @param string $resource
+     *
      * @return void
      */
-    public function writeLang($resource)
+    public function writeLang(string $resource): void
     {
         $resource = $this->sanitize($resource);
 
-        $this->ensureDirectory($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/');
+        $this->ensureDirectory(
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/')
+        );
 
         $stub = $this->getStub('lang/en/common.stub');
 
@@ -451,7 +471,9 @@ class ExtensionGenerator extends AbstractGenerator
             'plural_model' => Str::title(Str::plural($resource)),
         ]);
 
-        $this->files->put($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/common.php', $content);
+        $this->files->put(
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/common.php'), $content
+        );
 
         $stub = $this->getStub('lang/en/message.stub');
 
@@ -460,7 +482,9 @@ class ExtensionGenerator extends AbstractGenerator
             'lower_model' => Str::lower($resource),
         ]);
 
-        $this->files->put($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/message.php', $content);
+        $this->files->put(
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/message.php'), $content
+        );
 
         $stub = $this->getStub('lang/en/permissions.stub');
 
@@ -469,7 +493,9 @@ class ExtensionGenerator extends AbstractGenerator
             'plural_name' => ucfirst(Str::plural($resource)),
         ]);
 
-        $this->files->put($this->path.'/resources/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php', $content);
+        $this->files->put(
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php'), $content
+        );
     }
 
     /**
@@ -477,23 +503,24 @@ class ExtensionGenerator extends AbstractGenerator
      *
      * @return void
      */
-    protected function databaseDirs()
+    protected function databaseDirs(): void
     {
-        $this->ensureDirectory($this->path.'/resources/database/migrations');
-        $this->ensureDirectory($this->path.'/resources/database/seeds');
+        $this->ensureDirectory(getFullPath('resources/database/migrations'));
+        $this->ensureDirectory(getFullPath('resources/database/seeds'));
 
-        $this->files->put($this->path.'/resources/database/migrations/.gitkeep', '');
-        $this->files->put($this->path.'/resources/database/seeds/.gitkeep', '');
+        $this->files->put(getFullPath('resources/database/migrations/.gitkeep'), '');
+        $this->files->put(getFullPath('resources/database/seeds/.gitkeep'), '');
     }
 
     /**
      * Check if the new content already exists.
      *
-     * @param  string  $oldContent
-     * @param  string  $newContent
+     * @param string $oldContent
+     * @param string $newContent
+     *
      * @return bool
      */
-    protected function alreadyExists($oldContent, $newContent)
+    protected function alreadyExists(string $oldContent, string $newContent): bool
     {
         if (strpos($oldContent, $newContent) !== false) {
             return true;

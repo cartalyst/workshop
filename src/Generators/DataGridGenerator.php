@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -20,26 +20,30 @@
 
 namespace Cartalyst\Workshop\Generators;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Collective\Html\FormBuilder;
+use Collective\Html\HtmlBuilder;
+use Illuminate\Filesystem\Filesystem;
 
 class DataGridGenerator extends AbstractGenerator
 {
     /**
-     * Html builder instance.
+     * The Illuminate Html builder instance.
      *
      * @var \Illuminate\Html\HtmlBuilder
      */
     protected $html;
 
     /**
-     * Form builder instance.
+     * The Illuminate Form Builder instance.
      *
      * @var \Illuminate\Html\FormBuilder
      */
     protected $form;
 
     /**
-     * Data grid templates.
+     * The Data grid templates.
      *
      * @var array
      */
@@ -51,7 +55,7 @@ class DataGridGenerator extends AbstractGenerator
     ];
 
     /**
-     * Data grid columns.
+     * The Data grid columns.
      *
      * @var array
      */
@@ -68,13 +72,14 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * Constructor.
      *
-     * @param  string  $slug
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  \Illuminate\Html\HtmlBuilder  $html
-     * @param  \Illuminate\Html\FormBuilder  $form
+     * @param string                            $slug
+     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param \Illuminate\Html\HtmlBuilder      $html
+     * @param \Illuminate\Html\FormBuilder      $form
+     *
      * @return void
      */
-    public function __construct($slug, $files, $html, $form)
+    public function __construct(string $slug, Filesystem $files, HtmlBuilder $html, FormBuilder $form)
     {
         parent::__construct($slug, $files);
 
@@ -85,20 +90,24 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * Create a new data grid.
      *
-     * @param  string  $name
-     * @param  string  $themeArea
-     * @param  string  $theme
-     * @param  string  $viewName
-     * @param  array  $columns
-     * @param  string  $model
+     * @param string      $name
+     * @param string      $themeArea
+     * @param string      $theme
+     * @param string      $viewName
+     * @param array       $columns
+     * @param string|null $model
+     *
      * @return void
      */
-    public function create($name, $themeArea = 'admin', $theme = 'default', $viewName = 'index', $columns = [], $model = null)
+    public function create(string $name, $themeArea = 'admin', $theme = 'default', string $viewName = 'index', array $columns = [], ?string $model = null): void
     {
         $model = $model ?: $name;
 
         $name  = $this->sanitize($name);
         $model = $this->sanitize($model);
+
+        $lowerModel       = Str::lower($model);
+        $pluralLowerModel = Str::plural($lowerModel);
 
         $this->writeLangFiles($columns, $model, $name);
 
@@ -152,7 +161,7 @@ class DataGridGenerator extends AbstractGenerator
         $headers = '<th><input data-grid-checkbox="all" type="checkbox"></th>';
 
         foreach ($columns as $column) {
-            $trans = "{{{ trans('".$this->extension->lowerVendor.'/'.$this->extension->lowerName.'::'.Str::lower(Str::plural($model))."/model.general.{$column['content']}') }}}";
+            $trans = "{{{ trans('".$this->extension->lowerVendor.'/'.$this->extension->lowerName.'::'.$pluralLowerModel."/model.general.{$column['content']}') }}}";
 
             $headers .= "\n\t\t\t\t\t".'<th class="sortable" data-grid-sort="'.$column['content'].'">'.$trans.'</th>';
         }
@@ -161,14 +170,12 @@ class DataGridGenerator extends AbstractGenerator
 
         $includes = implode("\n", $includes);
 
-        $lowerModel = Str::lower($model);
-
         $view = $this->prepare($stub, [
             'headers'            => $headers,
             'includes'           => $includes,
             'grid_name'          => $name,
             'lower_model'        => $lowerModel,
-            'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
+            'plural_lower_model' => $pluralLowerModel,
         ]);
 
         $lowerModel = $lowerModel ?: $name;
@@ -199,7 +206,7 @@ class DataGridGenerator extends AbstractGenerator
 
         $help = $this->prepare($helpStub, [
             'lower_model'        => $lowerModel,
-            'plural_lower_model' => Str::lower(Str::plural($lowerModel)),
+            'plural_lower_model' => $pluralLowerModel,
         ]);
 
         $helpPath = $this->getPath($themeArea, $theme, $model);
@@ -216,12 +223,13 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * Process data grid templates.
      *
-     * @param  string $name
-     * @param  string $stub
-     * @param  string $model
+     * @param string $name
+     * @param string $stub
+     * @param string $model
+     *
      * @return string
      */
-    protected function processDataGridTemplate($name, $stub, $model)
+    protected function processDataGridTemplate(string $name, string $stub, string $model): string
     {
         $el = $this->prepareColumns($model);
 
@@ -239,19 +247,18 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * Prepare data grid columns.
      *
-     * @param  bool  $results
      * @return array
      */
-    protected function prepareColumns($model)
+    protected function prepareColumns(): array
     {
         $el = [];
 
         foreach ($this->dataGridColumns as $attributes) {
-            $type = array_pull($attributes, 'type');
+            $type = Arr::pull($attributes, 'type');
 
             if ($type) {
                 if ($type === 'a') {
-                    $elementContent = '<%= r.'.array_pull($attributes, 'content').' %>';
+                    $elementContent = '<%= r.'.Arr::pull($attributes, 'content').' %>';
 
                     $link = ($this->html->decode($this->html->link('#', $elementContent, $attributes)));
 
@@ -259,16 +266,16 @@ class DataGridGenerator extends AbstractGenerator
 
                     $el[] = $link;
                 } elseif ($type === 'checkbox') {
-                    $checkBoxName = array_pull($attributes, 'name');
+                    $checkBoxName = Arr::pull($attributes, 'name');
 
-                    $value = array_pull($attributes, 'value');
+                    $value = Arr::pull($attributes, 'value');
 
                     $value = '<%= r.'.$value.' %>';
 
                     $el[] = ($this->html->decode($this->form->checkbox($checkBoxName, $value, null, $attributes)));
                 }
             } else {
-                $el[] = '<%= r.'.array_pull($attributes, 'content').' %>';
+                $el[] = '<%= r.'.Arr::pull($attributes, 'content').' %>';
             }
         }
 
@@ -278,17 +285,20 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * Writes the data grid language file.
      *
-     * @param  array  $columns
+     * @param array       $columns
+     * @param string      $model
+     * @param string|null $name
+     *
      * @return void
      */
-    protected function writeLangFiles($columns, $model, $name = null)
+    protected function writeLangFiles(array $columns, string $model, ?string $name = null): void
     {
         $model = $model ?: $name;
         $model = Str::lower(Str::plural($model));
 
         $stub = $this->getStub('lang/en/model.stub');
 
-        $filePath = $this->path.'/resources/lang/en/'.Str::lower(Str::plural($model)).'/';
+        $filePath = $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($model)).'/');
 
         $this->ensureDirectory($filePath);
 
@@ -305,7 +315,7 @@ class DataGridGenerator extends AbstractGenerator
         if ($this->files->exists($filePath)) {
             $trans = $this->files->getRequire($filePath);
 
-            $values = array_merge($values, array_get($trans, 'general'));
+            $values = array_merge($values, Arr::get($trans, 'general'));
         }
 
         $trans = $this->wrapArray($values, "\t");
@@ -320,11 +330,29 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * Returns the workbench dir path.
      *
-     * @param  string  $dir
+     * @param string $themeArea
+     * @param string $themeName
+     * @param string $model
+     * @param string $dir
+     *
      * @return string
      */
-    protected function getPath($themeArea, $theme, $model, $dir = 'views')
+    protected function getPath(string $themeArea, string $themeName, string $model, string $dir = 'views'): string
     {
-        return $this->path.'/resources/themes/'.$themeArea.'/'.$theme.'/packages/'.$this->extension->lowerVendor.'/'.$this->extension->lowerName.'/'.$dir.'/'.Str::lower(Str::plural($model)).'/';
+        $lowerPluralModel = Str::lower(Str::plural($model));
+
+        $paths = [
+            'resources',
+            'themes',
+            $themeArea,
+            $themeName,
+            'packages',
+            $this->extension->lowerVendor,
+            $this->extension->lowerName,
+            $dir,
+            $lowerPluralModel,
+        ];
+
+        return $this->getFullPath(implode('/', $paths).'/');
     }
 }

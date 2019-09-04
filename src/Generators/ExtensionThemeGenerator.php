@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -25,11 +25,12 @@ class ExtensionThemeGenerator extends AbstractGenerator
     /**
      * Writes the theme directories.
      *
-     * @param  string  $area
-     * @param  string  $theme
+     * @param string $area
+     * @param string $theme
+     *
      * @return void
      */
-    public function create($area, $theme = 'default')
+    public function create(string $area, string $theme = 'default'): void
     {
         $base = [
             'assets/js'  => 'script.js',
@@ -37,7 +38,7 @@ class ExtensionThemeGenerator extends AbstractGenerator
             'views'      => '.gitkeep',
         ];
 
-        $themeDirectory = $this->path.'/'."resources/themes/{$area}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/";
+        $themeDirectory = $this->getFullPath("resources/themes/{$area}/{$theme}/packages/{$this->extension->lowerVendor}/{$this->extension->lowerName}/");
 
         foreach ($base as $dir => $file) {
             $this->ensureDirectory($themeDirectory.$dir);

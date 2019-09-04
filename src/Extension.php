@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -102,14 +102,15 @@ class Extension
     public $require;
 
     /**
-     * Create a new package instance.
+     * Constructor.
      *
-     * @param  string  $slug
-     * @param  string  $author
-     * @param  string  $email
+     * @param string      $slug
+     * @param string|null $author
+     * @param string|null $email
+     *
      * @return void
      */
-    public function __construct($slug, $author = null, $email = null)
+    public function __construct(string $slug, string $author = null, string $email = null)
     {
         $slug   = explode('/', $slug);
         $vendor = head($slug);
@@ -130,7 +131,7 @@ class Extension
      *
      * @return string
      */
-    public function getFullName()
+    public function getFullName(): string
     {
         return $this->lowerVendor.'/'.$this->lowerName;
     }
