@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -11,20 +11,20 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Cartalyst\Workshop\Generators\MigrationsGenerator;
 
-class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
+class MigrationsGeneratorTest extends TestCase
 {
     /**
      * Generator instance.
@@ -45,8 +45,10 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(1);
+
         m::close();
     }
 
@@ -78,7 +80,7 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->create('foo');
 
-        $this->assertEquals('AlterFooTable', $this->generator->getMigrationClass());
+        $this->assertSame('AlterFooTable', $this->generator->getMigrationClass());
     }
 
     /** @test */
@@ -111,9 +113,9 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->generator->seeder();
 
-        $this->assertContains('foo/bar/resources/database/migrations', $this->generator->getMigrationPath());
-        $this->assertEquals('CreateBarTable', $this->generator->getMigrationClass());
-        $this->assertEquals('Foo\Bar\Database\Seeds\BarTableSeeder', $this->generator->getSeederClass());
+        $this->assertStringContainsString('foo/bar/resources/database/migrations', $this->generator->getMigrationPath());
+        $this->assertSame('CreateBarTable', $this->generator->getMigrationClass());
+        $this->assertSame('Foo\Bar\Database\Seeds\BarTableSeeder', $this->generator->getSeederClass());
     }
 
     /** @test */
@@ -156,10 +158,11 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
      */
     public function it_throws_a_logic_exception_if_seeder_class_already_exists()
     {
+        $this->expectException('LogicException');
+
         require_once __DIR__.'/stubs/seeder.php';
 
         $files = m::mock('Illuminate\Filesystem\Filesystem');
@@ -178,10 +181,11 @@ class MigrationsGeneratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
      */
     public function it_throws_a_logic_exception_if_the_extension_does_not_exist()
     {
+        $this->expectException('LogicException');
+
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
         $files->shouldReceive('exists')->once()->andReturn(true);

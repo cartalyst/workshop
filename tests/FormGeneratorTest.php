@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -11,19 +11,19 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FormGeneratorTest extends PHPUnit_Framework_TestCase
+class FormGeneratorTest extends TestCase
 {
     /**
      * Generator instance.
@@ -44,8 +44,10 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(1);
+
         m::close();
     }
 
@@ -54,7 +56,7 @@ class FormGeneratorTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
         $files->shouldReceive('isDirectory')->atLeast()->once()->andReturn(true);

@@ -11,11 +11,11 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Generators;
@@ -31,14 +31,14 @@ class DataGridGenerator extends AbstractGenerator
     /**
      * The Illuminate Html builder instance.
      *
-     * @var \Illuminate\Html\HtmlBuilder
+     * @var \Collective\Html\HtmlBuilder
      */
     protected $html;
 
     /**
      * The Illuminate Form Builder instance.
      *
-     * @var \Illuminate\Html\FormBuilder
+     * @var \Collective\Html\FormBuilder
      */
     protected $form;
 
@@ -74,8 +74,8 @@ class DataGridGenerator extends AbstractGenerator
      *
      * @param string                            $slug
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @param \Illuminate\Html\HtmlBuilder      $html
-     * @param \Illuminate\Html\FormBuilder      $form
+     * @param \Collective\Html\HtmlBuilder      $html
+     * @param \Collective\Html\FormBuilder      $form
      *
      * @return void
      */

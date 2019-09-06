@@ -11,11 +11,11 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Generators;
@@ -204,7 +204,7 @@ class ExtensionGenerator extends AbstractGenerator
      */
     public function writeRoutes(string $resource, bool $adminRoutes = false, bool $frontendRoutes = false): void
     {
-        $routes = 'null';
+        $routes = null;
 
         $resource = $this->sanitize($resource);
 
@@ -505,11 +505,11 @@ class ExtensionGenerator extends AbstractGenerator
      */
     protected function databaseDirs(): void
     {
-        $this->ensureDirectory(getFullPath('resources/database/migrations'));
-        $this->ensureDirectory(getFullPath('resources/database/seeds'));
+        $this->ensureDirectory($this->getFullPath('resources/database/migrations'));
+        $this->ensureDirectory($this->getFullPath('resources/database/seeds'));
 
-        $this->files->put(getFullPath('resources/database/migrations/.gitkeep'), '');
-        $this->files->put(getFullPath('resources/database/seeds/.gitkeep'), '');
+        $this->files->put($this->getFullPath('resources/database/migrations/.gitkeep'), '');
+        $this->files->put($this->getFullPath('resources/database/seeds/.gitkeep'), '');
     }
 
     /**
@@ -522,6 +522,8 @@ class ExtensionGenerator extends AbstractGenerator
      */
     protected function alreadyExists(string $oldContent, string $newContent): bool
     {
+        if (! $newContent) return false;
+
         if (strpos($oldContent, $newContent) !== false) {
             return true;
         }

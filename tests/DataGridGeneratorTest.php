@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -11,28 +11,30 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Cartalyst\Workshop\Generators\DataGridGenerator;
 
-class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
+class DataGridGeneratorTest extends TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(1);
+
         m::close();
     }
 
@@ -41,8 +43,8 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
-        $html = m::mock('Illuminate\Html\HtmlBuilder');
-        $form = m::mock('Illuminate\Html\FormBuilder');
+        $html = m::mock('Collective\Html\HtmlBuilder');
+        $form = m::mock('Collective\Html\FormBuilder');
 
         $generator = new DataGridGenerator('foo/bar', $files, $html, $form);
 
@@ -60,11 +62,11 @@ class DataGridGeneratorTest extends PHPUnit_Framework_TestCase
         $files->shouldReceive('get')->times(8);
         $files->shouldReceive('put')->times(9);
 
-        $html = m::mock('Illuminate\Html\HtmlBuilder');
+        $html = m::mock('Collective\Html\HtmlBuilder');
         $html->shouldReceive('decode');
         $html->shouldReceive('link');
 
-        $form = m::mock('Illuminate\Html\FormBuilder');
+        $form = m::mock('Collective\Html\FormBuilder');
         $form->shouldReceive('checkbox')->times(4);
 
         $generator = new DataGridGenerator('foo/bar', $files, $html, $form);

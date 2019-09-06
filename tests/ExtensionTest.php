@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -11,31 +11,31 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Cartalyst\Workshop\Extension;
 
-class ExtensionTest extends PHPUnit_Framework_TestCase
+class ExtensionTest extends TestCase
 {
     /** @test */
     public function it_can_be_instantiated()
     {
         $extension = new Extension('foo_bar/baz');
 
-        $this->assertEquals('Baz', $extension->name);
-        $this->assertEquals('Foo_bar', $extension->vendor);
+        $this->assertSame('Baz', $extension->name);
+        $this->assertSame('Foo_bar', $extension->vendor);
 
-        $this->assertEquals('baz', $extension->lowerName);
-        $this->assertEquals('foo_bar', $extension->lowerVendor);
-        $this->assertEquals('Baz', $extension->studlyName);
-        $this->assertEquals('FooBar', $extension->studlyVendor);
+        $this->assertSame('baz', $extension->lowerName);
+        $this->assertSame('foo_bar', $extension->lowerVendor);
+        $this->assertSame('Baz', $extension->studlyName);
+        $this->assertSame('FooBar', $extension->studlyVendor);
     }
 }

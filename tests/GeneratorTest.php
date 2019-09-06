@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Workshop package.
  *
  * NOTICE OF LICENSE
@@ -11,28 +11,30 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    3.0.9
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2019, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Workshop\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Cartalyst\Workshop\Generators\AbstractGenerator;
 
-class GeneratorTest extends PHPUnit_Framework_TestCase
+class GeneratorTest extends TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(1);
+
         m::close();
     }
 
@@ -49,7 +51,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      * @runInSeparateProcess
-    */
+     */
     public function it_can_set_and_retrieve_the_stubs_dir()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem');
@@ -58,7 +60,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
 
         $generator->setStubsDir('test');
 
-        $this->assertEquals('test', $generator->getStubsDir());
+        $this->assertSame('test', $generator->getStubsDir());
     }
 
     /** @test */
@@ -70,15 +72,16 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
 
         $generator = new GeneratorStub('foo/bar', $files);
 
-        $this->assertEquals('Foobar', $generator->prepare('foo.stub', ['new_arg' => 'bar']));
+        $this->assertSame('Foobar', $generator->prepare('foo.stub', ['new_arg' => 'bar']));
     }
 
     /**
      * @test
-     * @expectedException \LogicException
      */
     public function it_throws_an_exception_if_the_extension_does_not_exist()
     {
+        $this->expectException('LogicException');
+
         $files = m::mock('Illuminate\Filesystem\Filesystem');
 
         $generator = new GeneratorStub('foo/bar', $files);
