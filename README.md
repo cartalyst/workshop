@@ -1,46 +1,42 @@
 # Workshop
 
-[![Build Status](https://travis-ci.com/cartalyst/workshop.svg?token=98Zt8zYdwyheTKqziswS&branch=3.0)](https://travis-ci.com/cartalyst/workshop)
+[![Build Status][icon-travis]][link-travis]
 
 A workshop package for platform extensions and resources.
 
 Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, rock on.
 
+## Version Matrix
+
+Version | Laravel   | PHP Version
+------- | --------- | ------------
+4.x     | 6.x       | >= 7.2
+3.x     | 5.x       | >= 5.6.4
+2.x     | 4.0 - 5.8 | >= 5.4.0
+1.x     | 4.1 - 4.2 | >= 5.4.0
+
 ## Documentation
 
-Reader-friendly Documentation can be found here. [Workshop Manual](https://cartalyst.com/manual/workshop).
+Reader-friendly documentation can be found [here][link-docs].
 
-Raw files can be found via this projects docs/version branch.
+Using the package, but you're stuck? Found a bug? Have a question or suggestion for improving this package? Feel free to create an issue on GitHub, we'll try to address it as soon as possible.
 
-- [3.0](https://github.com/cartalyst/workshop/tree/docs/3.0)
-- [2.0](https://github.com/cartalyst/workshop/tree/docs/2.0)
-- [1.0](https://github.com/cartalyst/workshop/tree/docs/1.0)
+## Contributing
 
-## Changelog
+Thank you for your interest, here are some of the many ways to contribute.
 
-Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
+- Check out our [contributing guide](/.github/CONTRIBUTING.md)
+- Look at our [code of conduct](/.github/CODE_OF_CONDUCT.md)
 
-- [3.0](CHANGELOG.md) - 2017-02-24
-- [2.0](CHANGELOG.md) - 2015-02-17
-- [1.0](CHANGELOG.md) - 2015-01-28
+## Security
 
-## Support
-
-The following support channels can be used for contact.
-
-- [Twitter](https://cartalyst.com/@twitter)
-- [Email](mailto:help@cartalyst.com)
-
-Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
-
-## Contributing & Protocols
-
-- [Versioning](CONTRIBUTING.md#versioning)
-- [Coding Standards](CONTRIBUTING.md#coding-standards)
-- [Pull Requests](CONTRIBUTING.md#pull-requests)
+If you discover any security related issues, please email help@cartalyst.com instead of using the issue tracker.
 
 ## License
 
 This software is released under the [Cartalyst PSL](LICENSE) License.
 
-© 2011-2019 Cartalyst LLC, All rights reserved.
+[link-docs]:   https://cartalyst.com/manual/workshop
+[link-travis]: https://travis-ci.com/cartalyst/workshop
+
+[icon-travis]: https://travis-ci.com/cartalyst/workshop.svg?token=98Zt8zYdwyheTKqziswS&branch=4.0
