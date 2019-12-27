@@ -194,7 +194,7 @@ class MigrationsGenerator extends AbstractGenerator
 
             $seeders[] = '$this->call(\''.$this->seederClass.'\');';
 
-            $seeders = implode($seeders, "\t\t");
+            $seeders = implode("\t\t", $seeders);
 
             $stub = $this->getStub('database_seeder.stub');
 
