@@ -1,5 +1,11 @@
 # Changelog
 
+### v4.0.1 - 2019-12-27
+
+`FIXED`
+
+- Implode parameters order on Migrations Generator class.
+
 ### v4.0.0 - 2019-09-11
 
 - BC Break: PHP 7.2 is the minimum required PHP version
