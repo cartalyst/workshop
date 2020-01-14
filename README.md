@@ -10,6 +10,7 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, ro
 
 Version | Laravel   | PHP Version
 ------- | --------- | ------------
+5.x     | 7.x       | >= 7.2.5
 4.x     | 6.x       | >= 7.2
 3.x     | 5.x       | >= 5.6.4
 2.x     | 4.0 - 5.8 | >= 5.4.0
@@ -39,4 +40,4 @@ This software is released under the [Cartalyst PSL](LICENSE) License.
 [link-docs]:   https://cartalyst.com/manual/workshop
 [link-travis]: https://travis-ci.com/cartalyst/workshop
 
-[icon-travis]: https://travis-ci.com/cartalyst/workshop.svg?token=98Zt8zYdwyheTKqziswS&branch=4.0
+[icon-travis]: https://travis-ci.com/cartalyst/workshop.svg?token=98Zt8zYdwyheTKqziswS&branch=5.x

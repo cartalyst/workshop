@@ -12,9 +12,9 @@
         { "type": "composer", "url": "https://packages.cartalyst.com" }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2.5",
         "cartalyst/composer-installers": "^2.0",
-        "cartalyst/support": "^3.0",
+        "cartalyst/support": "^4.0",
         "platform/foundation": "^8.0"
     },
     "autoload": {
