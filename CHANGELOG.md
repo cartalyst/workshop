@@ -1,5 +1,11 @@
 # Changelog
 
+### v5.0.1 - 2020-05-31
+
+`FIXED`
+
+- Issue with duplicated route names after scaffolding on Laravel 7.
+
 ### v5.0.0 - 2020-03-07
 
 - Updated for Laravel 7.

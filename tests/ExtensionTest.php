@@ -11,10 +11,10 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    5.0.0
+ * @version    5.0.1
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @copyright  (c) 2011-2020, Cartalyst LLC
  * @link       https://cartalyst.com
  */
 
