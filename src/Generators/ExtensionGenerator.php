@@ -11,7 +11,7 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Workshop
- * @version    5.0.1
+ * @version    6.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2020, Cartalyst LLC
