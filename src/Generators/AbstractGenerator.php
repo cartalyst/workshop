@@ -139,14 +139,18 @@ abstract class AbstractGenerator
         $content = $this->files->get($path);
 
         foreach ((array) $this->extension as $key => $value) {
-            $content = str_replace('{{'.Str::snake($key).'}}', $value, $content);
+            if (! is_null($content) && ! is_null($value)) {
+                $content = str_replace('{{'.Str::snake($key).'}}', $value, $content);
+            }
         }
 
         foreach ($args as $key => $value) {
-            $content = str_replace('{{'.Str::snake($key).'}}', $value, $content);
+            if (! is_null($content) && ! is_null($value)) {
+                $content = str_replace('{{'.Str::snake($key).'}}', $value, $content);
+            }
         }
 
-        return $content;
+        return $content ?? '';
     }
 
     /**

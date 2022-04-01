@@ -175,7 +175,8 @@ class ExtensionGenerator extends AbstractGenerator
         }, $autoloads)), $content);
 
         $this->files->put(
-            $this->getFullPath('composer.json'), $content
+            $this->getFullPath('composer.json'),
+            $content
         );
     }
 
@@ -189,7 +190,8 @@ class ExtensionGenerator extends AbstractGenerator
         $content = $this->prepare($this->getStub('extension.stub'));
 
         $this->files->put(
-            $this->getFullPath('extension.php'), $content
+            $this->getFullPath('extension.php'),
+            $content
         );
     }
 
@@ -231,7 +233,7 @@ class ExtensionGenerator extends AbstractGenerator
         }
 
         $newRoutes = $this->prepare($this->getStub('routes.stub'), [
-            'routes' => rtrim($routes),
+            'routes' => $routes ? rtrim($routes) : null,
         ]);
 
         preg_match('/'.'\'routes\' => function\(.*?\)\s*\s*{(.*?)\s*},/s', $content, $oldRoutes);
@@ -472,7 +474,8 @@ class ExtensionGenerator extends AbstractGenerator
         ]);
 
         $this->files->put(
-            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/common.php'), $content
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/common.php'),
+            $content
         );
 
         $stub = $this->getStub('lang/en/message.stub');
@@ -483,7 +486,8 @@ class ExtensionGenerator extends AbstractGenerator
         ]);
 
         $this->files->put(
-            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/message.php'), $content
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/message.php'),
+            $content
         );
 
         $stub = $this->getStub('lang/en/permissions.stub');
@@ -494,7 +498,8 @@ class ExtensionGenerator extends AbstractGenerator
         ]);
 
         $this->files->put(
-            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php'), $content
+            $this->getFullPath('resources/lang/en/'.Str::lower(Str::plural($resource)).'/permissions.php'),
+            $content
         );
     }
 

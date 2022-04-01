@@ -111,7 +111,7 @@ class MigrationsGenerator extends AbstractGenerator
 
         $content = $this->prepare($stub, [
             'class_name' => $this->migrationClass,
-            'table'      => Str::lower($table),
+            'table'      => Str::lower($table ?? ''),
             'columns'    => $columns,
         ]);
 
@@ -161,7 +161,7 @@ class MigrationsGenerator extends AbstractGenerator
             'class_name' => $seederClass,
             'namespace'  => 'namespace '.$namespace.';',
             'records'    => $records,
-            'table'      => Str::lower($table),
+            'table'      => Str::lower($table ?? ''),
             'columns'    => $columns,
         ]);
 
